@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+	<head>
+		<title>ASHES Online</title>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.25/vue.js"></script>
+		<script src="https://cdn.jsdelivr.net/vue.resource/0.9.1/vue-resource.min.js"></script>
+		<script type="text/javascript">
+	  WebFontConfig = {
+	    google: { families: [ 'Marcellus::latin' ] }
+	  };
+	  (function() {
+	    var wf = document.createElement('script');
+	    wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+	    wf.type = 'text/javascript';
+	    wf.async = 'true';
+	    var s = document.getElementsByTagName('script')[0];
+	    s.parentNode.insertBefore(wf, s);
+	  })(); </script>
+		<link rel="stylesheet" href="build.css" type="text/css" media="all">
+
+	</head>
+	<body>
+		<app></app>
+
+		<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+		<script src="build.js"></script>
+	</body>
+</html>

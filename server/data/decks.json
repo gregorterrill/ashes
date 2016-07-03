@@ -1,0 +1,178 @@
+{
+	"aradel": {
+		"name": "The Mist Guardian",
+		"pheonixborn": "Aradel Summergaard",
+		"deck": {
+			"Shifting Mist": 3,
+			"Summon Mist Spirit": 3,
+			"Summon Blue Jaguar": 3,
+			"Reflections in the Water": 3,
+			"Mist Typhoon": 3,
+			"Out of the Mist": 3,
+			"Root Armor": 3,
+			"Steady Gaze": 3,
+			"Massive Growth": 3,
+			"Summon Butterfly Monk": 3
+		},
+		"dice": {
+			"nat": 5,
+			"ill": 5,
+			"cer": 0,
+			"cha": 0
+		}
+	},
+	"noah": {
+		"name": "The Shadows of Viros",
+		"pheonixborn": "Noah Redmoon",
+		"deck": {
+			"Small Sacrifice": 3,
+			"Summon False Demon": 3,
+			"Summon Masked Wolf": 3,
+			"Bring Forth": 3,
+			"Fade Away": 3,
+			"Shadow Counter": 3,
+			"Sleight of Hand": 3,
+			"Summon Sleeping Widows": 3,
+			"Bound Soul": 3,
+			"Stormwind Sniper": 3
+		},
+		"dice": {
+			"nat": 0,
+			"ill": 5,
+			"cer": 5,
+			"cha": 0
+		}
+	},
+	"jessa": {
+		"name": "The Bloodwoods Queen",
+		"pheonixborn": "Jessa Na Ni",
+		"deck": {
+			"Blood Transfer": 3,
+			"Cut the Strings": 3,
+			"Summon Blood Puppet": 3,
+			"Fear": 3,
+			"Final Cry": 3,
+			"Redirect": 3,
+			"Undying Heart": 3,
+			"Leech Warrior": 3,
+			"Living Doll": 3,
+			"Blood Archer": 3
+		},
+		"dice": {
+			"nat": 0,
+			"ill": 0,
+			"cer": 5,
+			"cha": 5
+		}
+	},
+	"saria": {
+		"name": "The Cloudsea Siren",
+		"pheonixborn": "Saria Guideman",
+		"deck": {
+		"Summon Three-Eyed Owl": 3,
+		"Summon Seaside Raven": 3,
+		"Purge": 3,
+		"Abundance": 3,
+		"Sympathy Pain": 3,
+		"Strange Copy": 3,
+		"Seal": 3,
+		"Hidden Power": 3,
+		"Rose Fire Dancer": 3,
+		"Enchanted Violinist": 3
+		},
+		"dice": {
+			"nat": 0,
+			"ill": 5,
+			"cer": 0,
+			"cha": 5
+		}
+	},
+	"maeoni": {
+		"name": "The Snakes in Silver",
+		"pheonixborn": "Maeoni Viper",
+		"deck": {
+			"Golden Veil": 3,
+			"Hypnotize": 3,
+			"Molten Gold": 3,
+			"Refresh": 3,
+			"Summon Gilder": 3,
+			"Transfer": 3,
+			"Empower": 3,
+			"Open Memories": 3,
+			"Summon Silver Snake": 3,
+			"Call Upon the Realms": 3
+		},
+		"dice": {
+			"nat": 5,
+			"ill": 0,
+			"cer": 0,
+			"cha": 5
+		}
+	},
+	"coal": {
+		"name": "The Iron Men",
+		"pheonixborn": "Coal Roarkwin",
+		"deck": {
+			"Summon Iron Rhino": 3,
+			"Expand Energy": 3,
+			"Strengthen": 3,
+			"Protect": 3,
+			"Chant of Revenge": 3,
+			"Spiked Armor": 3,
+			"One Hundred Blades": 3,
+			"Hammer Knight": 3,
+			"Iron Worker": 3,
+			"Anchornaut": 3
+		},
+		"dice": {
+			"nat": 5,
+			"ill": 0,
+			"cer": 5,
+			"cha": 0
+		}
+	},
+	"brennen": {
+		"name": "The Children of Blackcloud",
+		"pheonixborn": "Brennen Blackcloud",
+		"deck": {
+			"Chant of the Dead": 3,
+			"Summon Dread Wraith": 3,
+			"Chant of Protection": 3,
+			"Poison": 3,
+			"Regress": 3,
+			"Blood Chains": 3,
+			"Choke": 3,
+			"Blackcloud Ninja": 3,
+			"Crimson Bomber": 3,
+			"Fire Archer": 3
+		},
+		"dice": {
+			"nat": 0,
+			"ill": 0,
+			"cer": 10,
+			"cha": 0
+		}
+	},
+	"rin": {
+		"name": "The Frostdale Giants",
+		"pheonixborn": "Rin Northfell",
+		"deck": {
+			"Summon Ice Golem": 3,
+			"Summon Frostback Bear": 3,
+			"Frost Bite": 3,
+			"Rin's Fury": 3,
+			"Crystal Shield": 3,
+			"Frozen Crown": 3,
+			"Deep Freeze": 3,
+			"Ice Trap": 3,
+			"Freezing Blast": 3,
+			"Frost Fang": 3
+		},
+		"dice": {
+			"nat": 10,
+			"ill": 0,
+			"cer": 0,
+			"cha": 0
+		}
+	}
+}

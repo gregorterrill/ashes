@@ -1,0 +1,258 @@
+{
+	"Aradel Summergaard": {
+		"type": "pheonixborn",
+		"life": 16,
+		"battlefield": 8,
+		"spellboard": 4,
+		"abilities": [
+			{
+				"name": "Water Blast",
+				"cost": ["side","exhaust","nat-class"],
+				"text": "Deal 2 damage to a target unit.",
+				"type": "damageToTargetUnit",
+				"quantity": 2
+			}
+		]
+	},
+	"Shifting Mist":	{
+		"type": "readySpell",
+		"location": "spellboard",
+		"cost": ["main","ill-class"],
+		"abilities": [
+			{
+				"cost": ["side","exhaust"],
+				"text": "Change 2 dice in your active pool to a side of your choice.",
+				"type": "changeActiveDice",
+				"quantity": 2
+			}
+		]
+	},
+	"Summon Mist Spirit": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"conjurations": {
+			"Mist Spirit": 10
+		},
+		"cost": ["main"],
+		"abilities": [
+			{
+				"cost": ["main","exhaust","ill-class"],
+				"text": "Place a Mist Spirit conjuration onto your battlefield. You may spend an additional 1 [basic] when activating this spell to place an additional Mist Spirit conjuration onto your battlefield.",
+				"type": "summonConjuration",
+				"conjuration": "Mist Spirit",
+				"quantity": 1,
+				"optionalCost": ["basic"],
+				"optionalEffect": "repeatEffect"
+			}
+		]
+	},
+	"Summon Blue Jaguar": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"characterBound": "Aradel Summergaard",
+		"conjurations": {
+			"Blue Jaguar": 5
+		},
+		"cost": ["main"],
+		"abilities": [
+			{
+				"cost": ["main","exhaust","ill-class","ill-class"],
+				"text": "Place a Blue Jaguar conjuration onto your battlefield.",
+				"type": "summonConjuration",
+				"conjuration": "Blue Jaguar",
+				"quantity": 1
+			}
+		]
+	},
+	"Reflections in the Water":	{
+		"type": "alterationSpell",
+		"location": "unit",
+		"cost": ["main","ill-class"],
+		"abilities": [
+			{
+				"text": "As long as this spell is attached to this unit it is considered to have no abilities other than inexhaustible abilities.",
+				"type": "blankExhaustibleAbilities"
+			},
+			{
+				"cost": ["basic"],
+				"type": "respark",
+				"inexhaustible": true
+			}
+		]
+	},
+	"Mist Typhoon":	{
+		"type": "actionSpell",
+		"location": "discard",
+		"cost": ["main","ill-class","nat-class"],
+		"abilities": [
+			{
+				"text": "Deal 1 damage to all opponents' units.",
+				"type": "damageToAllUnits",
+				"quantity": 1
+			},
+			{
+				"text": "You may draw 1 card.",
+				"type": "drawCard",
+				"quantity": 1,
+				"optional": true
+			}
+		]
+	},
+	"Out of the Mist": {
+		"type": "actionSpell",
+		"location": "discard",
+		"cost": ["side","ill-power","nat-power"],
+		"abilities": [
+			{
+				"text": "Deal X amount of damage to a target unit.",
+				"type": "damageToTargetUnit",
+				"quantity": "unitsInBattlefield"
+			},
+			{
+				"text": "You may draw 1 card.",
+				"type": "drawCard",
+				"quantity": 1,
+				"optional": true
+			}
+		]
+	},
+	"Root Armor": {
+		"type": "alterationSpell",
+		"location": "unit",
+		"cost": ["side","nat-class"],
+		"abilities": [
+			{
+				"text": "Life +2",
+				"type": "increaseLife",
+				"quantity": 2
+			},
+			{
+				"cost": ["basic"],
+				"type": "respark",
+				"inexhaustible": true
+			}
+		]
+	},
+	"Steady Gaze": {
+		"type": "actionSpell",
+		"location": "discard",
+		"cost": ["main","ill-class","ill-class"],
+		"abilities": [
+			{
+				"text": "Place 2 exhaustion tokens on a target unit.",
+				"type": "exhaustTargetUnit",
+				"quantity": 2
+			}
+		]
+	},
+	"Massive Growth": {
+		"type": "alterationSpell",
+		"location": "unit",
+		"cost": ["main","nat-class","basic"],
+		"restrictions": [
+			{
+				"text": "This spell can only be attached to a unit with an attack value of 2 or less",
+				"type": "unitMaxAttack",
+				"quantity": 2,
+				"inexhaustible": true
+			}
+		],
+		"abilities": [
+			{
+				"text": "Attack +4",
+				"type": "increaseAttack",
+				"quantity": 4
+			},
+			{
+				"text": "Life +4",
+				"type": "increaseLife",
+				"quantity": 4
+			},
+			{
+				"text": "Spell Guard: This spell cannot be affected by an opponent's spell.",
+				"type": "spellGuard",
+				"inexhaustible": true
+			},
+			{
+				"text": "Fleeting: Discard this card at the end of the round.",
+				"type": "fleeting",
+				"inexhaustible": true
+			}
+		]
+	},
+	"Summon Butterfly Monk": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"cost": ["main"],
+		"conjurations": {
+			"Butterfly Monk": 5
+		},
+		"abilities": [
+			{
+				"cost": ["main","exhaust","nat-power"],
+				"text": "Place a Butterfly Monk conjuration onto your battlefield.",
+				"type": "summonConjuration",
+				"conjuration": "Butterfly Monk",
+				"quantity": 1
+			}
+		]
+	},
+	"Blue Jaguar": {
+		"type": "conjuration",
+		"location": "battlefield",
+		"attack": 2,
+		"life": 2,
+		"recover": 0,
+		"cap": 5,
+		"abilities": [
+			{
+				"text": "Gaze 1: After a unit comes into play on an opponent's battlefield, you may spend 1 [basic] to place 1 exhaustion token on that unit.",
+				"type": "gaze",
+				"quantity": 1
+			}
+		]
+	},
+	"Mist Spirit": {
+		"type": "conjuration",
+		"location": "battlefield",
+		"attack": 1,
+		"life": 1,
+		"recover": 0,
+		"cap": 10,
+		"abilities": []
+	},
+	"Butterfly Monk": {
+		"type": "conjuration",
+		"location": "battlefield",
+		"attack": 1,
+		"life": "numberOfSummonSpells",
+		"recover": 1,
+		"cap": 5,
+		"abilities": [
+			{
+				"text": "Unit Guard: This unit may guard a unit that is being attacked.",
+				"type": "unitGuard"
+			},
+			{
+				"text": "Last Blessing 1: When this unit is destroyed, remove 1 wound token from a target unit or Pheonixborn.",
+				"type": "lastBlessing",
+				"quantity": 1,
+				"inexhaustible": true
+			}
+		]
+	},
+	"Noah Redmoon": {
+		"type": "pheonixborn",
+		"life": 20,
+		"battlefield": 6,
+		"spellboard": 3,
+		"abilities": [
+			{
+				"name": "Shadow Target",
+				"cost": ["side","exhaust","cer-class"],
+				"type": "exhaustOpponentReadySpell",
+				"quantity": 1
+			}
+		]
+	}
+}
