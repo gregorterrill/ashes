@@ -14,18 +14,17 @@ label {
 </style>
 
 <template>
-	<div class="deck-loader">
-		<h2>Deck Loader</h2>
+	<div v-if="(playerType === 'you')" class="deck-loader">
 
 		<div v-if="!decklistValid">
-			<label for="prebuilt-{{ player }}">Choose a prebuilt deck</label>
-			<select id="prebuilt-{{ player }}" name="prebuilt" v-model="prebuiltSelection" @change="populateDecklist">
+			<label for="prebuilt-{{ playerId }}">Choose a prebuilt deck</label>
+			<select id="prebuilt-{{ playerId }}" name="prebuilt" v-model="prebuiltSelection" @change="populateDecklist">
 				<option value="">Choose...</option>
 				<option v-for="(key, list) in prebuiltLists" value="{{ key }}">{{ list.pheonixborn }} - {{ list.name }}</option>
 			</select>
 			
-			<label for="decklist-{{ player }}">Or paste your list here</label>
-			<textarea rows="5" name="decklist" id="decklist-{{ player }}" v-model="decklist"></textarea>
+			<label for="decklist-{{ playerId }}">Or paste your list here</label>
+			<textarea rows="5" name="decklist" id="decklist-{{ playerId }}" v-model="decklist"></textarea>
 
 			<button class="btn btn--block" @click="submitDecklistForValidation">Submit</button>
 
@@ -33,9 +32,12 @@ label {
 		</div>
 
 		<div v-if="decklistValid">
-			<p class="alert alert--success">Your decklist is valid and locked in!</p>
+			<p class="alert alert--success">Your decklist is valid and locked in! Waiting for opponents.</p>
 		</div>
 
+	</div>
+	<div v-else>
+		<p class="alert alert--success">Your opponent is choosing their deck.</p>
 	</div>
 </template>
 
@@ -43,7 +45,7 @@ label {
 import store from '../../store.js';
 
 export default {
-	props: ['player'],
+	props: ['player-type', 'player-id'],
 	data: function() {
 		return {
 			prebuiltLists: {},
@@ -86,15 +88,7 @@ export default {
 				} else if (!valid) {
 					this.validationError = 'Unspecified validation error.';
 				}
-			} else {
-				//TODO - was the validation for my opponent?
-				
 			}
-
-			//TODO - if all players decklists are now validated, time to start the game!
-			store.state.gameRound = 0;
-
-			store.socket.emit('requestGameState', store.state.gameId);
 		}
 	}
 }

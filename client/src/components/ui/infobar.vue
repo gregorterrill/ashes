@@ -8,6 +8,10 @@
 	justify-content: space-between;
 }
 
+.infobar__playerlist, .infobar__title, .infobar__round {
+	flex:1;
+}
+
 .infobar__title {
 	font-size:1rem;
 	font-weight:normal;

@@ -1,5 +1,11 @@
 <style lang="sass">
 @import 'main.scss';
+
+.boards {
+	display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
 </style>
 
 <template>
@@ -13,8 +19,8 @@
 		<div class="container">
 
 			<div class="boards">
-				<board player-type="opponent"></board>
-				<board player-type="you"></board>
+				<board v-for="playerId in otherPlayerIds" :player-id="playerId" player-type="opponent"></board>
+				<board :player-id="store.socketId" player-type="you"></board>
 			</div>
 
 			<sidebar></sidebar>
@@ -62,6 +68,17 @@ export default {
 	data: function() {
 		return {
 			store: store
+		}
+	},
+	computed: {
+		otherPlayerIds: function() {
+			var playerIds = [];
+			for (var playerId in store.state.players) {
+				if (playerId !== store.socketId) {
+					playerIds.push(playerId);
+				}
+			}
+			return playerIds;
 		}
 	}
 }

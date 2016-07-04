@@ -20,8 +20,11 @@
   justify-content:space-around;
 }
 
+.board--opponent {
+	border-bottom:1px dashed #CCC;
+}
+
 .board--you {
-	border-top:1px dashed #CCC;
 	.board__areas {
 		flex-direction: column-reverse;
 	}
@@ -29,9 +32,9 @@
 </style>
 
 <template>
-	<div class="board board--{{ playerType }}">
+	<div class="board board--{{ playerType }}" id="board-{{ playerId }}">
 		
-		<deck-loader v-if="(gameRound < 0)" :player="playerType"></deck-loader>
+		<deck-loader v-if="(gameRound < 0)" :player-type="playerType" :player-id="playerId"></deck-loader>
 		
 		<div v-if="(gameRound >= 0)" class="board__player">
 			<div class="board__row">
@@ -81,7 +84,7 @@ import deckLoader from '../ui/deckloader.vue';
 import store from '../../store.js';
 
 export default {
-	props: ['player-type'],
+	props: ['player-type', 'player-id'],
 	components: {
 		die,
 		card,
