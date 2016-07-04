@@ -13,8 +13,8 @@
 		<div class="container">
 
 			<div class="boards">
-				<board player="opponent"></board>
-				<board player="you"></board>
+				<board player-type="opponent"></board>
+				<board player-type="you"></board>
 			</div>
 
 			<sidebar></sidebar>

@@ -26,15 +26,12 @@
 </template>
 
 <script>
+import store from '../../store.js';
 
 export default {
-	props: ['type'],
+	props: ['type', 'cards'],
 	data: function() {
 		return {
-			cards: [ 
-				'Summwwrefd',
-				'dfdgfdgfd'
-			],
 			contextActions: [ {
 				text: "Shuffle",
 				action: this.shuffle
@@ -72,7 +69,7 @@ export default {
 		},
 
 		peekAtCards: function() {
-			this.$root.socket.emit('chat', 'DEBUG', this.cards);
+			store.socket.emit('chat', 'DEBUG', this.cards);
 		}
 	}
 }

@@ -93,6 +93,8 @@ export default {
 
 			//TODO - if all players decklists are now validated, time to start the game!
 			store.state.gameRound = 0;
+
+			store.socket.emit('requestGameState', store.state.gameId);
 		}
 	}
 }

@@ -42,9 +42,10 @@ store.socket.on('chat', function(sender, msg, className){
 });
 
 // recieve game ID (this is only sent to the specific room)
-store.socket.on('gamePlayersUpdated', function(gameId) {
+store.socket.on('gameStateUpdated', function(gameId, gameState) {
 	store.state.gameId = gameId;
-	vm.$broadcast('gamePlayersUpdated', gameId);
+	console.log(gameState);
+	store.state.players = gameState.players;
 });
 
 // recieve game list

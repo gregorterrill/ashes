@@ -29,22 +29,22 @@
 </style>
 
 <template>
-	<div class="board board--{{ player }}">
+	<div class="board board--{{ playerType }}">
 		
-		<deck-loader v-if="(gameRound < 0)" :player="player"></deck-loader>
+		<deck-loader v-if="(gameRound < 0)" :player="playerType"></deck-loader>
 		
 		<div v-if="(gameRound >= 0)" class="board__player">
 			<div class="board__row">
-				<stack type="discard"></stack>
-				<stack type="deck"></stack>
+				<stack type="discard" :cards="player.discard"></stack>
+				<stack type="deck" :cards="player.deck"></stack>
 			</div>
 			<div class="board__row">
-				<stack type="conjurations"></stack>
-				<card card-name="Aradel Summergaard" card-type="pheonixborn"></card>
+				<stack type="conjurations" :cards="player.conjurations"></stack>
+				<card :card-name="player.pheonixborn" card-type="pheonixborn"></card>
 			</div>
 			<div class="board__row">						
 				<div class="dice-pool">
-					<die v-for="die in dice" :type="die.type" :face="die.face" :exhausted="die.exhausted"></die>
+					<die v-for="die in player.dice" :type="die.type" :face="die.face" :exhausted="die.exhausted"></die>
 				</div>
 			</div>
 		</div>
@@ -81,7 +81,7 @@ import deckLoader from '../ui/deckloader.vue';
 import store from '../../store.js';
 
 export default {
-	props: ['player'],
+	props: ['player-type'],
 	components: {
 		die,
 		card,
@@ -97,60 +97,9 @@ export default {
 	computed: {
 		gameRound: function() {
 			return store.state.gameRound;
-		}
-	},
-	data: function() {
-		return {
-			dice: [{
-				type: 'nat',
-				face: 'basic',
-				exhausted: false,
-			},
-			{
-				type: 'nat',
-				face: 'class',
-				exhausted: false,
-			},
-			{
-				type: 'nat',
-				face: 'power',
-				exhausted: false,
-			},
-			{
-				type: 'nat',
-				face: 'basic',
-				exhausted: false,
-			},
-			{
-				type: 'ill',
-				face: 'power',
-				exhausted: false,
-			},
-			{
-				type: 'ill',
-				face: 'basic',
-				exhausted: false,
-			},
-			{
-				type: 'ill',
-				face: 'class',
-				exhausted: false,
-			},
-			{
-				type: 'ill',
-				face: 'basic',
-				exhausted: true,
-			},
-			{
-				type: 'ill',
-				face: 'class',
-				exhausted: true,
-			},
-			{
-				type: 'ill',
-				face: 'class',
-				exhausted: true,
-			} ]
+		},
+		player: function() {
+			return store.state.players[store.socketId];
 		}
 	}
 }
