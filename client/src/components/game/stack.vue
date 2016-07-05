@@ -62,9 +62,12 @@ export default {
 				//set aside the last unshuffled card
 				lastUnshuffledCard = this.cards[unshuffledCards];
 				//put the random card at the end of the unshuffled cards (from the next iteration on, this card will never be shuffled again)
-				this.cards[unshuffledCards] = this.cards[randomPick];
+				//NORMAL JS VERSION: this.cards[unshuffledCards] = this.cards[randomPick];
+				this.cards.$set(unshuffledCards, this.cards[randomPick]); //TO TRIGGER VUE UPDATE
+
 				//put the set aside card where the random card was (a future iteration will eventually shuffle this card again)
-				this.cards[randomPick] = lastUnshuffledCard;
+				//NORMAL JS VERSION: this.cards[randomPick] = lastUnshuffledCard;
+				this.cards.$set(randomPick, lastUnshuffledCard); //TO TRIGGER VUE UPDATE
 			}
 		},
 
