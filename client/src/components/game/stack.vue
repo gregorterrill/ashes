@@ -69,7 +69,8 @@ export default {
 		},
 
 		peekAtCards: function() {
-			store.socket.emit('chat', 'DEBUG', this.cards);
+			console.log('stack:' + this.cards);
+			this.$dispatch('openBrowser', this.cards);
 		}
 	}
 }

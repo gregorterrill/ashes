@@ -4,6 +4,50 @@
 		"selected_items":
 		[
 			[
+				"info",
+				"infobar__title"
+			],
+			[
+				"num",
+				"numReadyPlayers"
+			],
+			[
+				"check",
+				"checkGameStatus"
+			],
+			[
+				"pla",
+				"playerId"
+			],
+			[
+				"activ",
+				"activeGames"
+			],
+			[
+				"ma",
+				"maxPlayers"
+			],
+			[
+				"get",
+				"getGameState"
+			],
+			[
+				"deck",
+				"decklist"
+			],
+			[
+				"de",
+				"decklist"
+			],
+			[
+				"cahra",
+				"characterBound"
+			],
+			[
+				"card",
+				"cardBeingChecked"
+			],
+			[
 				"text",
 				"text-decoration"
 			],
@@ -284,18 +328,82 @@
 	"buffers":
 	[
 		{
-			"file": "client/src/components/app.vue",
+			"file": "client/src/components/game/board.vue",
 			"settings":
 			{
-				"buffer_size": 1235,
+				"buffer_size": 2575,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "client/src/components/game/board.vue",
+			"file": "client/src/components/ui/sidebar.vue",
 			"settings":
 			{
-				"buffer_size": 2747,
+				"buffer_size": 1254,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "client/src/components/ui/deckloader.vue",
+			"settings":
+			{
+				"buffer_size": 2315,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "client/src/components/ui/infobar.vue",
+			"settings":
+			{
+				"buffer_size": 1529,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "client/src/components/app.vue",
+			"settings":
+			{
+				"buffer_size": 1636,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "server/app.js",
+			"settings":
+			{
+				"buffer_size": 12844,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "client/src/components/ui/lobby.vue",
+			"settings":
+			{
+				"buffer_size": 2763,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "client/src/store.js",
+			"settings":
+			{
+				"buffer_size": 177,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "client/src/sass/main.scss",
+			"settings":
+			{
+				"buffer_size": 3541,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "client/src/entry.js",
+			"settings":
+			{
+				"buffer_size": 1755,
 				"line_ending": "Unix"
 			}
 		}
@@ -308,9 +416,13 @@
 	"command_palette":
 	{
 		"height": 375.0,
-		"last_filter": "pack",
+		"last_filter": "f",
 		"selected_items":
 		[
+			[
+				"f",
+				"Figlet: Add Text"
+			],
 			[
 				"pack",
 				"Package Control: Install Package"
@@ -521,44 +633,51 @@
 	[
 		"/Users/gregorterrill/Documents/projects/ashes",
 		"/Users/gregorterrill/Documents/projects/ashes/client",
-		"/Users/gregorterrill/Documents/projects/ashes/client/public",
 		"/Users/gregorterrill/Documents/projects/ashes/client/public/sound",
 		"/Users/gregorterrill/Documents/projects/ashes/client/src",
 		"/Users/gregorterrill/Documents/projects/ashes/client/src/components",
 		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/game",
 		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/ui",
+		"/Users/gregorterrill/Documents/projects/ashes/client/src/helpers",
 		"/Users/gregorterrill/Documents/projects/ashes/client/src/sass",
-		"/Users/gregorterrill/Documents/projects/ashes/server",
 		"/Users/gregorterrill/Documents/projects/ashes/server/data"
 	],
 	"file_history":
 	[
-		"/Users/gregorterrill/Documents/projects/ashes/client/public/index.html",
 		"/Users/gregorterrill/Documents/projects/ashes/server/app.js",
-		"/Users/gregorterrill/Documents/projects/ashes/client/src/sampleGameState.json",
-		"/Users/gregorterrill/Documents/projects/ashes/client/src/sass/main.scss",
-		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/ui/lobby.vue",
-		"/Users/gregorterrill/Documents/projects/ashes/client/src/entry.js",
-		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/app.vue",
-		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/ui/infobar.vue",
-		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/ui/sidebar.vue",
+		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/ui/deckloader.vue",
+		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/game/card.vue",
 		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/game/stack.vue",
+		"/Users/gregorterrill/Documents/projects/ashes/client/src/sampleGameState.json",
+		"/Users/gregorterrill/Documents/projects/ashes/client/src/entry.js",
+		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/ui/infobar.vue",
+		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/app.vue",
+		"/Users/gregorterrill/Documents/projects/ashes/client/src/store.js",
+		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/ui/sidebar.vue",
+		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/ui/lobby.vue",
+		"/Users/gregorterrill/Documents/projects/ashes/.gitignore",
+		"/Users/gregorterrill/Documents/projects/ashes/server/.gitignore",
+		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/ui/contextmenu.vue",
+		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/game/board.vue",
+		"/Users/gregorterrill/Documents/projects/ashes/server/data/decks.json",
+		"/Users/gregorterrill/Documents/projects/ashes/client/public/testpage.html",
+		"/Users/gregorterrill/Documents/projects/ashes/server/data/cards.json",
+		"/Users/gregorterrill/Documents/projects/ashes/client/src/sass/main.scss",
+		"/Users/gregorterrill/Documents/projects/ashes/client/public/index.html",
+		"/Users/gregorterrill/Documents/projects/ashes/server/data/conjurations.json",
+		"/Users/gregorterrill/Documents/projects/ashes/server/data/pheonixborn.json",
+		"/Users/gregorterrill/Documents/projects/ashes/client/src/helpers/game.js",
+		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/game/die.vue",
+		"/Users/gregorterrill/Downloads/gabriel-vue-develop-4222d0eca728937cf51c397b7ec5260f1e97ae8d/src/main.js",
+		"/Users/gregorterrill/Downloads/gabriel-vue-develop-4222d0eca728937cf51c397b7ec5260f1e97ae8d/src/App.vue",
+		"/Users/gregorterrill/Documents/projects/ashes/client/src/state.js",
 		"/Users/gregorterrill/Documents/projects/ashes/client/public/game.html",
 		"/Users/gregorterrill/Documents/projects/ashes/client/public/build.css",
 		"/Users/gregorterrill/Documents/projects/ashes/gulpfile.js",
 		"/Users/gregorterrill/Documents/projects/ashes/client/public/build.js.map",
 		"/Users/gregorterrill/Documents/projects/ashes/client/public/build.js",
 		"/Users/gregorterrill/Documents/projects/ashes/package.json",
-		"/Users/gregorterrill/Documents/projects/ashes/client/src/state.js",
-		"/Users/gregorterrill/Documents/projects/ashes/client/src/helpers/game.js",
-		"/Users/gregorterrill/Documents/projects/ashes/server/data/cards.json",
-		"/Users/gregorterrill/Documents/projects/ashes/server/data/conjurations.json",
-		"/Users/gregorterrill/Documents/projects/ashes/server/data/decks.json",
-		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/game/card.vue",
 		"/Users/gregorterrill/Documents/projects/ashes/server/effects.js",
-		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/game/board.vue",
-		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/ui/contextmenu.vue",
-		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/game/die.vue",
 		"/Users/gregorterrill/Documents/projects/cyanogen-site/gulpfile.js",
 		"/Users/gregorterrill/Documents/projects/ashes/client/js/components/app.vue",
 		"/Users/gregorterrill/Documents/projects/ashes/client/js/helpers/game.js",
@@ -652,15 +771,7 @@
 		"/Users/gregorterrill/Documents/projects/mihr-site/craft/templates/news/_entry.twig",
 		"/Users/gregorterrill/Documents/projects/mihr-site/public/sass/partials/_fx.scss",
 		"/Users/gregorterrill/Documents/projects/schulich-site/wp-content/themes/schulich/js/scripts.js",
-		"/Users/gregorterrill/Documents/projects/schulich-site/wp-content/themes/schulich/sass/base/_effects.scss",
-		"/Users/gregorterrill/Documents/projects/mihr-site/public/sass/components/_link-list.scss",
-		"/Users/gregorterrill/Documents/projects/mihr-site/craft/templates/partials/_lang-toggle.twig",
-		"/Users/gregorterrill/Documents/projects/mihr-site/craft/templates/partials/_icons.twig",
-		"/Users/gregorterrill/Documents/projects/mihr-site/craft/templates/_lang-toggle.html",
-		"/Users/gregorterrill/Documents/projects/mihr-site/craft/templates/pages/_entry.html",
-		"/Users/gregorterrill/Documents/projects/mihr-site/craft/templates/partials/_lang-toggle.html",
-		"/Users/gregorterrill/Documents/projects/mihr-site/craft/templates/_layout.html",
-		"/Users/gregorterrill/Documents/projects/mihr-site/public/sass/components/_buttons.scss"
+		"/Users/gregorterrill/Documents/projects/schulich-site/wp-content/themes/schulich/sass/base/_effects.scss"
 	],
 	"find":
 	{
@@ -671,6 +782,9 @@
 		"height": 93.0,
 		"where_history":
 		[
+			"/Users/gregorterrill/Documents/projects/ashes/client/src",
+			"/Users/gregorterrill/Documents/projects/ashes",
+			"/Users/gregorterrill/Documents/projects/ashes/client/src",
 			"/Users/gregorterrill/Documents/projects/ashes/client/src/components",
 			"/Users/gregorterrill/Documents/projects/just-balance/wp-content/themes/osgoode-jb",
 			"/Users/gregorterrill/Documents/projects/soshal-site/craft/templates",
@@ -799,6 +913,20 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"gameRound",
+			"100%",
+			"status",
+			"console",
+			"getGameState",
+			"[0]",
+			"gameList",
+			"gamePlayersUpdated",
+			"gameStateUpdate",
+			"gamePlayersUpdated",
+			"lists",
+			"key",
+			"store.state",
+			"console.log",
 			"buildDeck",
 			"connected",
 			"connexted",
@@ -912,21 +1040,7 @@
 			"search",
 			"262e33",
 			"25em",
-			"2em",
-			"lang",
-			"\"st1\"",
-			"\"st0\"",
-			"grey-dark",
-			"menu",
-			"brochure",
-			"title-box",
-			"section-title",
-			"acsa_get_section_nav",
-			"width:1",
-			"sa-logo",
-			"toggle-controls",
-			"masthead",
-			"acsa_get_section_title"
+			"2em"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -979,16 +1093,123 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 6,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "client/src/components/app.vue",
+					"file": "client/src/components/game/board.vue",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1235,
+						"buffer_size": 2575,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								565,
+								565
+							]
+						],
+						"settings":
+						{
+							"bracket_highlighter.busy": false,
+							"bracket_highlighter.locations":
+							{
+								"close":
+								{
+									"1":
+									[
+										565,
+										566
+									]
+								},
+								"open":
+								{
+									"1":
+									[
+										556,
+										557
+									]
+								}
+							},
+							"bracket_highlighter.regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"syntax": "Packages/Vuejs Complete Package/vue.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 3.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "client/src/components/ui/sidebar.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1254,
 						"regions":
 						{
 						},
@@ -1074,18 +1295,544 @@
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "client/src/components/ui/deckloader.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2315,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								203,
+								203
+							]
+						],
+						"settings":
+						{
+							"bracket_highlighter.busy": false,
+							"bracket_highlighter.locations":
+							{
+								"close":
+								{
+								},
+								"open":
+								{
+								}
+							},
+							"bracket_highlighter.regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"syntax": "Packages/Vuejs Complete Package/vue.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "client/src/components/ui/infobar.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1529,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								227,
+								227
+							]
+						],
+						"settings":
+						{
+							"bracket_highlighter.busy": false,
+							"bracket_highlighter.locations":
+							{
+								"close":
+								{
+									"1":
+									[
+										228,
+										229
+									]
+								},
+								"open":
+								{
+									"1":
+									[
+										217,
+										218
+									]
+								}
+							},
+							"bracket_highlighter.regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"syntax": "Packages/Vuejs Complete Package/vue.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 449.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "client/src/components/app.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1636,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								96,
+								96
+							]
+						],
+						"settings":
+						{
+							"bracket_highlighter.busy": false,
+							"bracket_highlighter.locations":
+							{
+								"close":
+								{
+									"1":
+									[
+										123,
+										124
+									]
+								},
+								"open":
+								{
+									"1":
+									[
+										50,
+										51
+									]
+								}
+							},
+							"bracket_highlighter.regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"syntax": "Packages/Vuejs Complete Package/vue.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 687.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "server/app.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 12844,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								8705,
+								8705
+							]
+						],
+						"settings":
+						{
+							"bracket_highlighter.busy": false,
+							"bracket_highlighter.locations":
+							{
+								"close":
+								{
+									"1":
+									[
+										9049,
+										9050
+									]
+								},
+								"open":
+								{
+									"1":
+									[
+										8704,
+										8705
+									]
+								}
+							},
+							"bracket_highlighter.regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"color_scheme": "Packages/User/Color Highlighter/themes/Aurora (SL).tmTheme",
+							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 2.0,
+						"translation.y": 4300.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
 					"type": "text"
 				},
 				{
-					"buffer": 1,
-					"file": "client/src/components/game/board.vue",
+					"buffer": 6,
+					"file": "client/src/components/ui/lobby.vue",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2747,
+						"buffer_size": 2763,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2141,
+								2141
+							]
+						],
+						"settings":
+						{
+							"bracket_highlighter.busy": false,
+							"bracket_highlighter.locations":
+							{
+								"close":
+								{
+									"1":
+									[
+										2141,
+										2142
+									]
+								},
+								"open":
+								{
+									"1":
+									[
+										2106,
+										2107
+									]
+								}
+							},
+							"bracket_highlighter.regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"syntax": "Packages/Vuejs Complete Package/vue.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 8.0,
+						"translation.y": 1236.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "client/src/store.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 177,
 						"regions":
 						{
 						},
@@ -1166,14 +1913,231 @@
 								"bh_tag_close",
 								"bh_tag_content"
 							],
-							"syntax": "Packages/Vuejs Complete Package/vue.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"color_scheme": "Packages/User/Color Highlighter/themes/Aurora (SL).tmTheme",
+							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "client/src/sass/main.scss",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3541,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2034,
+								2034
+							]
+						],
+						"settings":
+						{
+							"bracket_highlighter.busy": false,
+							"bracket_highlighter.locations":
+							{
+								"close":
+								{
+									"1":
+									[
+										2062,
+										2063
+									]
+								},
+								"open":
+								{
+									"1":
+									[
+										2016,
+										2017
+									]
+								}
+							},
+							"bracket_highlighter.regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"color_scheme": "Packages/User/Color Highlighter/themes/Aurora (SL).tmTheme",
+							"syntax": "Packages/SCSS/SCSS.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1686.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "client/src/entry.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1755,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1106,
+								1122
+							]
+						],
+						"settings":
+						{
+							"bracket_highlighter.busy": false,
+							"bracket_highlighter.locations":
+							{
+								"close":
+								{
+									"1":
+									[
+										1122,
+										1123
+									]
+								},
+								"open":
+								{
+									"1":
+									[
+										1105,
+										1106
+									]
+								}
+							},
+							"bracket_highlighter.regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"color_scheme": "Packages/User/Color Highlighter/themes/Aurora (SL).tmTheme",
+							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 313.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
 					"type": "text"
 				}
 			]

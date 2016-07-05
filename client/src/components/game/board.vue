@@ -72,6 +72,7 @@
 			</div>
 		</div>
 		<context-menu v-ref:context></context-menu>
+		<card-browser v-ref:browser></card-browser>
 	</div>
 </template>
 
@@ -80,6 +81,7 @@ import die from './die.vue';
 import card from './card.vue';
 import stack from './stack.vue';
 import contextMenu from '../ui/contextmenu.vue';
+import cardBrowser from '../ui/cardbrowser.vue';
 import deckLoader from '../ui/deckloader.vue';
 import store from '../../store.js';
 
@@ -90,11 +92,16 @@ export default {
 		card,
 		stack,
 		contextMenu,
+		cardBrowser,
 		deckLoader
 	},
 	events: {
-		'openContext': function(contextActions, event) {
+		openContext: function(contextActions, event) {
 			this.$refs.context.openMenu(contextActions, event);
+		},
+		openBrowser: function(cards) {
+			console.log('board: ' + cards);
+			this.$refs.browser.openBrowser(cards);
 		}
 	},
 	computed: {

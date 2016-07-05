@@ -271,10 +271,10 @@ function checkGameStatus(roomId) {
 			}
 		});
 
-		console.log('there are ' + numPlayers + ' out of ' + activeGames[roomId].maxPlayers + '. ' + numReadyPlayers + ' of them have valid lists.');
+		//console.log('there are ' + numPlayers + ' out of ' + activeGames[roomId].maxPlayers + '. ' + numReadyPlayers + ' of them have valid lists.');
 
 		if (numReadyPlayers === numPlayers) {
-			console.log('all players are ready');
+			//console.log('all players are ready');
 			
 			//initialize first five phase
 			if (activeGames[roomId].gameRound === -1) {

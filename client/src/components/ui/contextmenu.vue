@@ -83,7 +83,7 @@ export default {
 			this.positionMenu(e.x, e.y);
 		},
 
-		closeMenu: function(e) {
+		closeMenu: function() {
 			this.viewMenu = false;
 		},
 
