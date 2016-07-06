@@ -69,16 +69,16 @@
 		"name": "The Cloudsea Siren",
 		"pheonixborn": "Saria Guideman",
 		"deck": {
-		"Summon Three-Eyed Owl": 3,
-		"Summon Seaside Raven": 3,
-		"Purge": 3,
-		"Abundance": 3,
-		"Sympathy Pain": 3,
-		"Strange Copy": 3,
-		"Seal": 3,
-		"Hidden Power": 3,
-		"Rose Fire Dancer": 3,
-		"Enchanted Violinist": 3
+			"Summon Three-Eyed Owl": 3,
+			"Summon Seaside Raven": 3,
+			"Purge": 3,
+			"Abundance": 3,
+			"Sympathy Pain": 3,
+			"Strange Copy": 3,
+			"Seal": 3,
+			"Hidden Power": 3,
+			"Rose Fire Dancer": 3,
+			"Enchanted Violinist": 3
 		},
 		"dice": {
 			"nat": 0,

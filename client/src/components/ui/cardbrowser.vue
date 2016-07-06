@@ -23,6 +23,7 @@
 }
 
 .card-browser__overlay {
+	cursor:pointer;
 	position:fixed;
 	top:0;
 	right:0;
@@ -43,7 +44,7 @@
 <template>
 	<div class="card-browser__overlay" v-show="viewBrowser" @click="closeBrowser"></div>
 	<div class="card-browser" v-show="viewBrowser">
-		<ul class="card-browser__list">
+		<ul class="card-browser__list" :style="{ width: listWidth + 'px' }">
 			<li v-for="cardName in cards" track-by="$index" class="card-browser__item">
 				<card :card-name="cardName"></card>
 			</li>
@@ -64,11 +65,14 @@ export default {
 			cards: []
 		}
 	},
+	computed: {
+		listWidth: function() {
+			return this.cards.length * 332;
+		}
+	},
 	methods: {
 		openBrowser: function(cards) {
-			console.log('browser: ' + cards);
 			this.cards = cards;
-			console.log('browser own: ' + this.cards);
 			this.viewBrowser = true;
 		},
 		closeBrowser: function() {

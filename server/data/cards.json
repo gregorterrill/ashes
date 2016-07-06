@@ -30,9 +30,6 @@
 	"Summon Mist Spirit": {
 		"type": "readySpell",
 		"location": "spellboard",
-		"conjurations": {
-			"Mist Spirit": 10
-		},
 		"cost": ["main"],
 		"abilities": [
 			{
@@ -44,15 +41,15 @@
 				"optionalCost": ["basic"],
 				"optionalEffect": "repeatEffect"
 			}
-		]
+		],
+		"conjurations": {
+			"Mist Spirit": 10
+		}
 	},
 	"Summon Blue Jaguar": {
 		"type": "readySpell",
 		"location": "spellboard",
-		"characterBound": "Aradel Summergaard",
-		"conjurations": {
-			"Blue Jaguar": 5
-		},
+		"exclusive": "Aradel Summergaard",
 		"cost": ["main"],
 		"abilities": [
 			{
@@ -62,7 +59,10 @@
 				"conjuration": "Blue Jaguar",
 				"quantity": 1
 			}
-		]
+		],
+		"conjurations": {
+			"Blue Jaguar": 5
+		}
 	},
 	"Reflections in the Water":	{
 		"type": "alterationSpell",
@@ -184,9 +184,6 @@
 		"type": "readySpell",
 		"location": "spellboard",
 		"cost": ["main"],
-		"conjurations": {
-			"Butterfly Monk": 5
-		},
 		"abilities": [
 			{
 				"cost": ["main","exhaust","nat-power"],
@@ -195,7 +192,10 @@
 				"conjuration": "Butterfly Monk",
 				"quantity": 1
 			}
-		]
+		],
+		"conjurations": {
+			"Butterfly Monk": 5
+		}
 	},
 	"Blue Jaguar": {
 		"type": "conjuration",
@@ -203,7 +203,6 @@
 		"attack": 2,
 		"life": 2,
 		"recover": 0,
-		"cap": 5,
 		"abilities": [
 			{
 				"text": "Gaze 1: After a unit comes into play on an opponent's battlefield, you may spend 1 [basic] to place 1 exhaustion token on that unit.",
@@ -218,7 +217,6 @@
 		"attack": 1,
 		"life": 1,
 		"recover": 0,
-		"cap": 10,
 		"abilities": []
 	},
 	"Butterfly Monk": {
@@ -227,7 +225,6 @@
 		"attack": 1,
 		"life": "numberOfSummonSpells",
 		"recover": 1,
-		"cap": 5,
 		"abilities": [
 			{
 				"text": "Unit Guard: This unit may guard a unit that is being attacked.",
@@ -254,5 +251,714 @@
 				"quantity": 1
 			}
 		]
+	},
+	"Small Sacrifice": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"cost": ["main"],
+		"abilities": []
+	},
+	"Summon False Demon": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"cost": ["main"],
+		"abilities": [],
+		"conjurations": {
+			"False Demon": 5
+		}
+	},
+	"Summon Masked Wolf": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"exclusive": "Noah Redmoon",
+		"cost": ["main"],
+		"abilities": [],
+		"conjurations": {
+			"Masked Wolf": 5
+		}
+	},
+	"Bring Forth": {
+		"type": "alterationSpell",
+		"location": "unit",
+		"cost": ["main","cer-class","cer-class"],
+		"abilities": []
+	},
+	"Fade Away": {
+		"type": "alterationSpell",
+		"location": "unit",
+		"cost": ["main","ill-class"],
+		"abilities": []
+	},
+	"Shadow Counter": {
+		"type": "reactionSpell",
+		"location": "discard",
+		"cost": ["ill-class","basic"],
+		"abilities": []
+	},
+	"Sleight of Hand": {
+		"type": "actionSpell",
+		"location": "discard",
+		"cost": ["main","ill-power","basic"],
+		"abilities": []
+	},
+	"Summon Sleeping Widows": {
+		"type": "reactionSpell",
+		"location": "discard",
+		"cost": ["cer-class","cer-class"],
+		"abilities": [],
+		"conjurations": {
+			"Sleeping Widow": 6
+		}
+	},
+	"Bound Soul": {
+		"type": "actionSpell",
+		"location": "discard",
+		"cost": ["main","cer-class"],
+		"abilities": []
+	},
+	"Stormwind Sniper": {
+		"type": "ally",
+		"location": "battlefield",
+		"cost": ["main", "ill-class", "cer-class", "basic"],
+		"attack": 2,
+		"life": 1,
+		"recover": 1,
+		"abilities": []
+	},
+	"False Demon": {
+		"type": "conjuration",
+		"location": "battlefield",
+		"attack": 1,
+		"life": 4,
+		"recover": 0,
+		"abilities": []
+	},
+	"Masked Wolf": {
+		"type": "conjuration",
+		"location": "battlefield",
+		"attack": 2,
+		"life": 1,
+		"recover": 0,
+		"abilities": []
+	},
+	"Sleeping Widow": {
+		"type": "conjuration",
+		"location": "battlefield",
+		"attack": 2,
+		"life": 1,
+		"recover": 0,
+		"abilities": []
+	},
+	"Saria Guideman": {
+		"type": "pheonixborn",
+		"life": 20,
+		"battlefield": 5,
+		"spellboard": 4,
+		"abilities": [
+			{
+				"name": "Heart's Pull",
+				"cost": ["side","exhaust","cha-class"]
+			}
+		]
+	},
+	"Summon Three-Eyed Owl": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"cost": ["main"],
+		"abilities": [],
+		"conjurations": {
+			"Three-Eyed Owl": 5
+		}
+	},
+	"Summon Seaside Raven": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"exclusive": "Saria Guideman",
+		"cost": ["main"],
+		"abilities": [],
+		"conjurations": {
+			"Seaside Raven": 2
+		}
+	},
+	"Purge": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"cost": ["main"],
+		"abilities": []
+	},
+	"Abundance": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"cost": ["main","ill-class"],
+		"abilities": []
+	},
+	"Sympathy Pain": {
+		"type": "reactionSpell",
+		"location": "discard",
+		"cost": ["cha-class","cha-class"],
+		"abilities": []
+	},
+	"Strange Copy": {
+		"type": "actionSpell",
+		"location": "discard",
+		"cost": ["main","ill-class","ill-class"],
+		"abilities": []
+	},
+	"Seal": {
+		"type": "actionSpell",
+		"location": "discard",
+		"cost": ["main","ill-class","cha-class"],
+		"abilities": []
+	},
+	"Hidden Power": {
+		"type": "actionSpell",
+		"location": "discard",
+		"cost": ["main","ill-class"],
+		"abilities": []
+	},
+	"Rose Fire Dancer": {
+		"type": "ally",
+		"location": "battlefield",
+		"cost": ["main","ill-class","basic"],
+		"attack": 3,
+		"life": 1,
+		"recover": 0,
+		"abilities": []
+	},
+	"Enchanted Violinist": {
+		"type": "ally",
+		"location": "battlefield",
+		"cost": ["main"],
+		"attack": 1,
+		"life": 2,
+		"recover": 0,
+		"abilities": []
+	},
+	"Three-Eyed Owl": {
+		"type": "conjuration",
+		"location": "battlefield",
+		"attack": 1,
+		"life": 2,
+		"recover": 0,
+		"abilities": []
+	},
+	"Seaside Raven": {
+		"type": "conjuration",
+		"location": "battlefield",
+		"attack": 3,
+		"life": 2,
+		"recover": 0,
+		"abilities": []
+	},
+	"Maeoni Viper": {
+		"type": "pheonixborn",
+		"life": 22,
+		"battlefield": 3,
+		"spellboard": 4,
+		"abilities": []
+	},
+	"Golden Veil": {
+		"type": "reactionSpell",
+		"location": "discard",
+		"cost": ["nat-class","cha-class"],
+		"abilities": []
+	},
+	"Hypnotize": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"cost": ["main"],
+		"abilities": []
+	},
+	"Molten Gold": {
+		"type": "actionSpell",
+		"location": "discard",
+		"cost": ["main","nat-power","nat-power"],
+		"abilities": []
+	},
+	"Refresh": {
+		"type": "actionSpell",
+		"location": "discard",
+		"cost": ["main","cha-class","basic"],
+		"abilities": []
+	},
+	"Summon Gilder": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"cost": ["main","cha-class"],
+		"conjurations": {
+			"Gilder": 5
+		}
+	},
+	"Transfer": {
+		"type": "actionSpell",
+		"location": "discard",
+		"cost": ["main","cha-class","basic"],
+		"abilities": []
+	},
+	"Empower": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"cost": ["main","nat-class","nat-class"],
+		"abilities": []
+	},
+	"Open Memories": {
+		"type": "actionSpell",
+		"location": "discard",
+		"cost": ["main","cha-class","basic"],
+		"abilities": []
+	},
+	"Summon Silver Snake": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"exclusive": "Maeoni Viper",
+		"cost": ["main"],
+		"abilities": [],
+		"conjurations": {
+			"Silver Snake": 3
+		}
+	},
+	"Call Upon the Realms": {
+		"type": "actionSpell",
+		"location": "discard",
+		"cost": ["main"],
+		"abilities": []
+	},
+	"Gilder": {
+		"type": "conjuration",
+		"location": "battlefield",
+		"attack": 1,
+		"life": 2,
+		"recover": 0,
+		"abilities": []
+	},
+	"Silver Snake": {
+		"type": "conjuration",
+		"location": "battlefield",
+		"attack": "numStatusTokens",
+		"life": 4,
+		"recover": 1,
+		"abilities": []
+	},
+	"Jessa Na Ni": {
+		"type": "pheonixborn",
+		"life": 18,
+		"battlefield": 5,
+		"spellboard": 4,
+		"abilities": []
+	},
+	"Blood Transfer": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"cost": ["main"],
+		"abilities": []
+	},
+	"Cut the Strings": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"cost": ["main"],
+		"abilities": []
+	},
+	"Summon Blood Puppet": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"cost": ["main"],
+		"abilities": [],
+		"conjurations": {
+			"Blood Puppet": 5
+		}
+	},
+	"Fear": {
+		"type": "actionSpell",
+		"location": "discard",
+		"exclusive": "Jessa Na Ni",
+		"cost": ["main"],
+		"abilities": []
+	},
+	"Final Cry": {
+		"type": "reactionSpell",
+		"location": "discard",
+		"cost": ["cer-power"],
+		"abilities": []
+	},
+	"Redirect": {
+		"type": "reactionSpell",
+		"location": "discard",
+		"cost": ["cha-class"],
+		"abilities": []
+	},
+	"Undying Heart": {
+		"type": "alterationSpell",
+		"location": "unit",
+		"cost": ["main","cha-class","basic"],
+		"abilities": []
+	},
+	"Leech Warrior": {
+		"type": "ally",
+		"location": "battlefield",
+		"cost": ["main","cer-class","cer-class","basic"],
+		"attack": 2,
+		"life": 3,
+		"recover": 3,
+		"abilities": []
+	},
+	"Living Doll": {
+		"type": "ally",
+		"location": "battlefield",
+		"cost": ["main","cer-class","cha-class","basic"],
+		"attack": 0,
+		"life": 3,
+		"recover": 1,
+		"abilities": []
+	},
+	"Blood Archer": {
+		"type": "ally",
+		"location": "battlefield",
+		"cost": ["main","cer-class","cha-class","basic","basic"],
+		"attack": 3,
+		"life": 3,
+		"recover": 2,
+		"abilities": []
+	},
+	"Blood Puppet": {
+		"type": "conjuration",
+		"location": "battlefield",
+		"attack": 0,
+		"life": 2,
+		"recover": 0,
+		"abilities": []
+	},
+	"Coal Roarkwin": {
+		"type": "pheonixborn",
+		"life": 15,
+		"battlefield": 6,
+		"spellboard": 5,
+		"abilities": [
+			{
+				"name": "Slash",
+				"cost": ["side","discard"]
+			}
+		]
+	},
+	"Summon Iron Rhino": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"cost": ["main","nat-class"],
+		"abilities": [],
+		"conjurations": {
+			"Iron Rhino": 5
+		}
+	},
+	"Expand Energy": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"cost": ["main","cer-power"],
+		"abilities": []
+	},
+	"Strengthen": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"cost": ["main","nat-class","cer-class"],
+		"abilities": []
+	},
+	"Protect": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"cost": ["main","nat-class","cer-class"],
+		"abilities": []
+	},
+	"Chant of Revenge": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"cost": ["cer-class"],
+		"abilities": []
+	},
+	"Spiked Armor": {
+		"type": "alterationSpell",
+		"location": "unit",
+		"cost": ["main","nat-class","basic"],
+		"abilities": []
+	},
+	"One Hundred Blades": {
+		"type": "actionSpell",
+		"location": "discard",
+		"exclusive": "Coal Roarkwin",
+		"cost": ["main","basic","basic"],
+		"abilities": []
+	},
+	"Hammer Knight": {
+		"type": "ally",
+		"location": "battlefield",
+		"cost": ["main","cer-power","nat-class","basic"],
+		"attack": 4,
+		"life": 3,
+		"recover": 1,
+		"abilities": []
+	},
+	"Iron Worker": {
+		"type": "ally",
+		"location": "battlefield",
+		"cost": ["main","basic","basic"],
+		"attack": 2,
+		"life": 2,
+		"recover": 1,
+		"abilities": []
+	},
+	"Anchornaut": {
+		"type": "ally",
+		"location": "battlefield",
+		"cost": ["main","basic"],
+		"attack": 0,
+		"life": 1,
+		"recover": 1,
+		"abilities": []
+	},
+	"Iron Rhino": {
+		"type": "conjuration",
+		"location": "battlefield",
+		"attack": 5,
+		"life": 4,
+		"recover": 0,
+		"abilities": []
+	},
+	"Brennen Blackcloud": {
+		"type": "pheonixborn",
+		"life": 20,
+		"battlefield": 5,
+		"spellboard": 3,
+		"abilities": [
+			{
+				"name": "Spirit Burn",
+				"cost": ["side","exhaust","basic"]
+			}
+		]
+	},
+	"Chant of the Dead": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"cost": ["main","cer-class"],
+		"abilities": []
+	},
+	"Summon Dread Wraith": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"cost": ["main"],
+		"abilities": [],
+		"conjurations": {
+			"Dread Wraith": 2
+		}
+	},
+	"Chant of Protection": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"cost": ["main","basic","discard"],
+		"abilities": []
+	},
+	"Poison": {
+		"type": "alterationSpell",
+		"location": "unit",
+		"cost": ["main","cer-class"],
+		"abilities": []
+	},
+	"Regress": {
+		"type": "alterationSpell",
+		"location": "unit",
+		"cost": ["main","cer-class","basic"],
+		"abilities": []
+	},
+	"Blood Chains": {
+		"type": "actionSpell",
+		"location": "discard",
+		"cost": ["main","cer-class"],
+		"abilities": []
+	},
+	"Choke": {
+		"type": "reactionSpell",
+		"location": "discard",
+		"cost": ["cer-class"],
+		"abilities": []
+	},
+	"Blackcloud Ninja": {
+		"type": "ally",
+		"location": "battlefield",
+		"exclusive": "Brennen Blackcloud",
+		"cost": ["main","cer-class","basic","basic"],
+		"attack": 3,
+		"life": 2,
+		"recover": 2,
+		"abilities": []
+	},
+	"Crimson Bomber": {
+		"type": "ally",
+		"location": "battlefield",
+		"cost": ["main","cer-class","cer-class"],
+		"attack": 3,
+		"life": 2,
+		"recover": 0,
+		"abilities": []
+	},
+	"Fire Archer": {
+		"type": "ally",
+		"location": "battlefield",
+		"cost": ["main","cer-class"],
+		"attack": 1,
+		"life": 1,
+		"recover": 0,
+		"abilities": []
+	},
+	"Dread Wraith": {
+		"type": "conjuration",
+		"location": "battlefield",
+		"attack": 1,
+		"life": 6,
+		"recover": 0,
+		"abilities": []
+	},
+	"Rin Northfell": {
+		"type": "pheonixborn",
+		"life": 17,
+		"battlefield": 6,
+		"spellboard": 4,
+		"conjurations": {
+			"Ice Buff": 5
+		},
+		"abilities": [
+			{
+				"name": "Ice Buff",
+				"cost": ["side","exhaust"]
+			}
+		]
+	},
+	"Summon Ice Golem": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"cost": ["main"],
+		"abilities": [],
+		"conjurations": {
+			"Ice Golem": 4
+		}
+	},
+	"Summon Frostback Bear": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"cost": ["main","nat-power"],
+		"abilities": [],
+		"conjurations": {
+			"Frostback Bear": 3
+		}
+	},
+	"Frost Bite": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"cost": ["main"],
+		"abilities": []
+	},
+	"Rin's Fury": {
+		"type": "actionSpell",
+		"location": "discard",
+		"exclusive": "Rin Northfell",
+		"cost": ["main","basic","basic","basic"],
+		"abilities": []
+	},
+	"Crystal Shield": {
+		"type": "alterationSpell",
+		"location": "unit",
+		"cost": ["main","nat-class","basic"],
+		"abilities": []
+	},
+	"Frozen Crown": {
+		"type": "alterationSpell",
+		"location": "unit",
+		"cost": ["main","nat-class","basic","basic"],
+		"abilities": []
+	},
+	"Deep Freeze": {
+		"type": "alterationSpell",
+		"location": "unit",
+		"cost": ["main","nat-class"],
+		"abilities": []
+	},
+	"Ice Trap": {
+		"type": "reactionSpell",
+		"location": "discard",
+		"cost": ["nat-class"],
+		"abilities": []
+	},
+	"Freezing Blast": {
+		"type": "actionSpell",
+		"location": "discard",
+		"cost": ["main","nat-class","nat-class"],
+		"abilities": []
+	},
+	"Frost Fang": {
+		"type": "ally",
+		"location": "battlefield",
+		"cost": ["main","nat-power"],
+		"attack": 1,
+		"life": 1,
+		"recover": 1,
+		"abilities": []
+	},
+	"Ice Golem": {
+		"type": "conjuration",
+		"location": "battlefield",
+		"attack": 3,
+		"life": 2,
+		"recover": 0,
+		"abilities": []
+	},
+	"Frostback Bear": {
+		"type": "conjuration",
+		"location": "battlefield",
+		"attack": 2,
+		"life": 3,
+		"recover": 0,
+		"abilities": []
+	},
+	"Ice Buff": {
+		"type": "conjuration",
+		"location": "unit",
+		"abilities": []
+	},
+	"Lulu Firststone": {
+		"type": "pheonixborn",
+		"life": 21,
+		"battlefield": 4,
+		"spellboard": 4,
+		"abilities": [
+			{
+				"name": "Bolster",
+				"cost": ["side","exhaust","basic"]
+			}
+		]
+	},
+	"Phoenix Barrage": {
+		"type": "actionSpell",
+		"location": "discard",
+		"exclusive": "Lulu Firststone",
+		"cost": ["main","basic","basic","basic"],
+		"abilities": []
+	},
+	"Dimona Odinstar": {
+		"type": "pheonixborn",
+		"life": 17,
+		"battlefield": 5,
+		"spellboard": 5,
+		"abilities": [
+			{
+				"name": "Order",
+				"cost": ["side","exhaust","basic","basic"]
+			}
+		]
+	},
+	"Rayward Knight": {
+		"type": "ally",
+		"location": "battlefield",
+		"exclusive": "Dimona Odinstar",
+		"cost": ["main","basic","basic","basic"],
+		"attack": 3,
+		"life": 3,
+		"recover": 3,
+		"abilities": []
 	}
 }
+

@@ -100,7 +100,6 @@ export default {
 			this.$refs.context.openMenu(contextActions, event);
 		},
 		openBrowser: function(cards) {
-			console.log('board: ' + cards);
 			this.$refs.browser.openBrowser(cards);
 		}
 	},
@@ -109,7 +108,7 @@ export default {
 			return store.state.gameRound;
 		},
 		player: function() {
-			return store.state.players[store.socketId];
+			return store.state.players[this.playerId];
 		}
 	}
 }

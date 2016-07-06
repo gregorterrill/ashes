@@ -72,7 +72,6 @@ export default {
 		},
 
 		peekAtCards: function() {
-			console.log('stack:' + this.cards);
 			this.$dispatch('openBrowser', this.cards);
 		}
 	}

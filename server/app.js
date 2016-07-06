@@ -134,9 +134,9 @@ function validateDecklist(decklist, roomId, playerSocketId) {
 			}
 
 			//check if the card has any character restriction
-			if (cardBeingChecked.characterBound && cardBeingChecked.characterBound !== decklist.pheonixborn) {
+			if (cardBeingChecked.exclusive && cardBeingChecked.exclusive !== decklist.pheonixborn) {
 				validationResults.valid = false;
-				validationResults.error = 'Deck has a card that is unique to another Pheonixborn: \'' + cardName + '\'.';
+				validationResults.error = 'Deck has a card that is exclusive to another Pheonixborn: \'' + cardName + '\'.';
 				return validationResults;
 			}
 
