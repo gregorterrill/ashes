@@ -47,34 +47,27 @@ export default {
 			this.$dispatch('openContext', this.contextActions, e );
 		},
 		
-		// randomizes the deck using the Fisher-Yates Shuffle (http://bost.ocks.org/mike/shuffle/)
 		shuffle: function() {
 
 			this.$dispatch('playSound', 'shuffle');
-	
-			var unshuffledCards = this.cards.length,
-					lastUnshuffledCard,
-					randomPick;
 
-			while (unshuffledCards) {
-				//choose a random card from the unshuffled part of the deck which, when removed, will decrease number of unshuffled cards by one
-				randomPick = Math.floor(Math.random() * unshuffledCards--);
-				//set aside the last unshuffled card
-				lastUnshuffledCard = this.cards[unshuffledCards];
-				//put the random card at the end of the unshuffled cards (from the next iteration on, this card will never be shuffled again)
-				//NORMAL JS VERSION: this.cards[unshuffledCards] = this.cards[randomPick];
-				this.cards.$set(unshuffledCards, this.cards[randomPick]); //TO TRIGGER VUE UPDATE
-
-				//put the set aside card where the random card was (a future iteration will eventually shuffle this card again)
-				//NORMAL JS VERSION: this.cards[randomPick] = lastUnshuffledCard;
-				this.cards.$set(randomPick, lastUnshuffledCard); //TO TRIGGER VUE UPDATE
-			}
-
-			store.socket.emit('userAction', store.state.gameId, store.socketId, 'shuffled', this.type, this.$parent.playerId);
+			store.socket.emit('userAction', store.state.gameId, {
+				playerSocketId: store.socketId,
+				actionVerb: 'shuffle',
+				target: this.type,
+				targetOwnerSocketId: this.$parent.playerId
+			});
 		},
 
 		peekAtCards: function() {
 			this.$dispatch('openBrowser', this.cards);
+
+			store.socket.emit('userAction', store.state.gameId, {
+				playerSocketId: store.socketId,
+				actionVerb: 'peek',
+				target: this.type,
+				targetOwnerSocketId: this.$parent.playerId
+			});
 		}
 	}
 }

@@ -51,7 +51,7 @@
 			</div>
 			<div class="board__row">						
 				<div class="dice-pool">
-					<die v-for="die in player.dice" :type="die.type" :face="die.face" :exhausted="die.exhausted"></die>
+					<die v-for="(index, die) in player.dice" :index="index" :type="die.type" :face="die.face" :exhausted="die.exhausted"></die>
 				</div>
 			</div>
 		</div>

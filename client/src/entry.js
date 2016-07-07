@@ -34,6 +34,7 @@ store.socket.on('chat', function(sender, msg, className){
 
 // recieve game state (this is only sent to the specific game)
 store.socket.on('gameStateUpdated', function(gameState) {
+	console.log('recieved a state update');
 	store.state = gameState;
 });
 
@@ -50,4 +51,10 @@ store.socket.on('prebuiltDecklists', function(lists){
 // get validations results
 store.socket.on('decklistValidated', function(playerSocketId, decklist, valid, validationError) {
 	vm.$broadcast('decklistValidated', playerSocketId, decklist, valid, validationError);
+});
+
+// trigger animation
+store.socket.on('dieRoll', function(targetPlayer, dieIndex){
+	console.log('got a die roll of index ' + dieIndex);
+	vm.$broadcast('dieRoll', targetPlayer, dieIndex);
 });

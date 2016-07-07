@@ -273,6 +273,33 @@ function buildDeck(decklist, gameId, playerSocketId) {
 	activeGames[gameId].players[playerSocketId].discard = [];
 }
 
+// -----------------------------------------------------------[ SHUFFLE ANY STACK OF CARDS ]
+// randomizes the deck using the Fisher-Yates Shuffle (http://bost.ocks.org/mike/shuffle/)
+function shuffleStack(stack) {
+	var unshuffledCards = stack.length,
+		lastUnshuffledCard,
+		randomPick;
+
+	while (unshuffledCards) {
+		//choose a random card from the unshuffled part of the deck which, when removed, will decrease number of unshuffled cards by one
+		randomPick = Math.floor(Math.random() * unshuffledCards--);
+		//set aside the last unshuffled card
+		lastUnshuffledCard = stack[unshuffledCards];
+		//put the random card at the end of the unshuffled cards (from the next iteration on, this card will never be shuffled again)
+		stack[unshuffledCards] = stack[randomPick];
+		//put the set aside card where the random card was (a future iteration will eventually shuffle this card again)
+		stack[randomPick] = lastUnshuffledCard;
+	}
+
+	return stack;
+}
+
+// -----------------------------------------------------------[ ROLL A DIE ]
+function getDieRoll() {
+	var faces = ['basic','basic','class','class','class','power'];
+	return faces[Math.floor(Math.random() * faces.length)];
+}
+
 // -----------------------------------------------------------[ CHECK GAME STATUS ]
 // Compare number of players to max players to see if waiting
 // If the status is changing, update the game round
@@ -429,10 +456,16 @@ server.on('connection', function(socket){
 	});
 
 	// -----------------------------------------------------------[ CLIENT TAKES AN ACTION WE NEED TO PROPOGATE ]
-	socket.on('userAction', function(gameId, playerSocketId, actionVerb, actionTarget, targetOwnerSocketId) {
+	socket.on('userAction', function(gameId, action) {
 
-		var playerUsername = getPlayerUsername(gameId, playerSocketId);
-		var targetOwnerUsername = getPlayerUsername(gameId, targetOwnerSocketId);
+// 	playerSocketId: store.socketId,
+// 	actionVerb: 'shuffle',
+// 	target: this.type,
+// 	targetOwnerSocketId: this.$parent.playerId
+
+		var playerUsername = getPlayerUsername(gameId, action.playerSocketId);
+		var targetOwnerUsername = getPlayerUsername(gameId, action.targetOwnerSocketId);
+		var actionDescription = '';
 
 		if (playerUsername === targetOwnerUsername) {
 			targetOwnerUsername = 'their own ';
@@ -440,12 +473,36 @@ server.on('connection', function(socket){
 			targetOwnerUsername += '\'s ';
 		}
 
-		//TODO: the thing hasn't actually happened on the server yet
+		//actually do the thing, if we need to
+		switch (action.actionVerb) {
+
+			case 'shuffle': 
+				var stack = activeGames[gameId].players[action.targetOwnerSocketId][action.target];
+				activeGames[gameId].players[action.targetOwnerSocketId][action.target] = shuffleStack(stack);
+				actionDescription = playerUsername + ' shuffled ' + targetOwnerUsername + action.target + '.';
+				break;
+
+			case 'roll':
+				activeGames[gameId].players[action.targetOwnerSocketId].dice[action.target].face = getDieRoll();
+				actionDescription = playerUsername + ' rolled one of ' + targetOwnerUsername + ' dice.';
+				break;
+
+			case 'peek':
+				actionDescription = playerUsername + ' peeked at ' + targetOwnerUsername + action.target + '.';
+				break;
+		}
 
 		//tell everyone what happened
-		chatToGame(gameId, 'server', playerUsername + ' ' + actionVerb + ' ' + targetOwnerUsername + actionTarget + '.');
+		chatToGame(gameId, 'server', actionDescription);
 		//send the updated gamestate
 		server.to(gameId).emit('gameStateUpdated', getGameState(gameId));
+
+		//if it was a roll, we have to send this after the game state update, so the animation won't
+		//be ended instantly
+		if (action.actionVerb === 'roll') {
+			server.to(gameId).emit('dieRoll', action.targetOwnerSocketId, action.target);
+		}
+
 	});
 
 });

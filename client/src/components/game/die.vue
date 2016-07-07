@@ -48,12 +48,12 @@
 </template>
 
 <script>
+import store from '../../store.js';
 
 export default {
-	props: ['type','face','exhausted'],
+	props: ['type','face','exhausted','index'],
 	data: function() {
 		return {
-			faces: ['basic','basic','class','class','class','power'],
 			rolling: false,
 			contextActions: [ {
 				text: "Roll",
@@ -72,13 +72,12 @@ export default {
 			this.rolling = true;
 			this.$dispatch('playSound', 'dice');
 
-			setTimeout(function() {
-				this.face = this.faces[Math.floor(Math.random() * this.faces.length)];
-				//TODO: send the roll to the server (or maybe do it there?)
-				//store.socket.emit('userAction', store.state.gameId, store.socketId, 'rolled', this.type, this.$parent.playerId);
-				this.rolling = false;
-			}.bind(this), 250);
-			
+			store.socket.emit('userAction', store.state.gameId, {
+				playerSocketId: store.socketId,
+				actionVerb: 'roll',
+				target: this.index,
+				targetOwnerSocketId: this.$parent.playerId
+			});
 		},
 		refresh: function() {
 			this.exhausted = false;
@@ -88,6 +87,16 @@ export default {
 		},
 		openContext: function(e) {
 			this.$dispatch('openContext', this.contextActions, e );
+		}
+	},
+	events: {
+		dieRoll: function(targetPlayer, dieIndex) {
+			if (targetPlayer === this.$parent.playerId && this.index === dieIndex) {
+				this.rolling = true;
+				setTimeout(function() {
+					this.rolling = false;
+				}.bind(this), 250);
+			}
 		}
 	}
 }
