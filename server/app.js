@@ -4,13 +4,20 @@ var http = require('http').Server(app);
 var server = require('socket.io')(http);
 var _ = require('underscore');
 
+var path = require('path');
+var publicDir = path.join(__dirname, '../client/public');
+
 var lists = require('./data/decks.json');
 var cards = require('./data/cards.json');
 
 app.use(express.static('../client/public'));
 
 app.get('/', function(req, res){
-	res.sendFile('../client/public/index.html');
+	res.sendFile(path.join(publicDir, 'index.html'));
+});
+
+app.get('/about', function (req, res) {
+  res.sendFile(path.join(publicDir, 'about.html'));
 });
 
 http.listen(3000, function(){
@@ -19,14 +26,15 @@ http.listen(3000, function(){
 
 // -----------------------------------------------------------[ GAME OBJECT ]
 function Game() {
-	this.roomName = 'Empty Room';
-	this.roomId = '';
+	this.gameName = 'Empty Game';
+	this.gameId = '';
   this.status = 'waiting';
   this.gameRound = -1;
   this.isPrivate = false;
 	this.allowSpectators = true;
   this.maxPlayers = 2;
-  this.players = {}
+  this.players = {},
+  this.chatLog = []
 }
 
 // this will hold ALL basic info and states for ALL games currently active
@@ -46,26 +54,26 @@ var activeGames = {};
 function getGameList() {
 	var gameList = {};
 
-	_.each(activeGames, function(game, roomId) {
-		gameList[roomId] = _.pick(game, ['roomName', 'roomId', 'status', 'isPrivate', 'allowSpectators', 'maxPlayers']);
+	_.each(activeGames, function(game, gameId) {
+		gameList[gameId] = _.pick(game, ['gameName', 'gameId', 'status', 'isPrivate', 'allowSpectators', 'maxPlayers']);
 	});
 	return gameList;
 }
 
 // -----------------------------------------------------------[ GET GAME NAME ]
-function getGameName(roomId) {
-	var players = _.pluck(activeGames[roomId].players, 'username');
+function getGameName(gameId) {
+	var players = _.pluck(activeGames[gameId].players, 'username');
 	return players.join(' vs. ');
 }
 
 // -----------------------------------------------------------[ GET GAME STATE ]
-function getGameState(roomId) {
-	return activeGames[roomId];
+function getGameState(gameId) {
+	return activeGames[gameId];
 }
 
 // -----------------------------------------------------------[ GET A PLAYER'S USERNAME ]
-function getPlayerUsername(roomId, playerSocketId) {
-	return activeGames[roomId].players[playerSocketId].username;
+function getPlayerUsername(gameId, playerSocketId) {
+	return activeGames[gameId].players[playerSocketId].username;
 }
 
 // -----------------------------------------------------------[ REMOVE PLAYER FROM GAMES ]
@@ -74,19 +82,32 @@ function getPlayerUsername(roomId, playerSocketId) {
 function removePlayerFromGames(playerSocketId) {
 
 	//look through each game
-	_.each(activeGames, function(game, roomId) {
+	_.each(activeGames, function(game, gameId) {
 		//if they were in this game
 		if (game.players[playerSocketId]) {
 			//tell everyone they left :(
-			server.to(roomId).emit('chat', 'SERVER', game.players[playerSocketId].username + ' disconnected.', 'server-msg');
+			chatToGame(gameId, 'server', game.players[playerSocketId].username + ' disconnected.');
 			//remove them
-			delete(activeGames[roomId].players[playerSocketId]);
+			delete(activeGames[gameId].players[playerSocketId]);
 			//if the game is now empty, delete it
-			if (_.keys(activeGames[roomId].players).length === 0) {
-				delete(activeGames[roomId]);
+			if (_.keys(activeGames[gameId].players).length === 0) {
+				delete(activeGames[gameId]);
+			} else {
+				//otherwise send game state
+				server.to(gameId).emit('gameStateUpdated', getGameState(gameId));
 			}
 		}
 	});
+}
+
+// -----------------------------------------------------------[ ADD CHAT TO GAME ]
+function chatToGame(gameId, sender, msg) {
+	activeGames[gameId].chatLog.push({
+		sender: sender,
+		message: msg
+	});
+	//emit an event that alerts the sidebar to scroll to the bottom
+	server.to(gameId).emit('chat');
 }
 
 // -----------------------------------------------------------[ VALIDATE DECKLIST ]
@@ -94,7 +115,7 @@ function removePlayerFromGames(playerSocketId) {
 // If the deck is invalid, send an error
 // If the deck is valid, build the deck and trigger moving
 // the game state forward
-function validateDecklist(decklist, roomId, playerSocketId) {
+function validateDecklist(decklist, gameId, playerSocketId) {
 
 	var totalCards = 0;
 	var validationResults = {
@@ -201,10 +222,10 @@ function validateDecklist(decklist, roomId, playerSocketId) {
 	//HOORAY WE'RE VALID
 
 	//build the decks and send them to activeGames
-	buildDeck(decklist, roomId, playerSocketId);
+	buildDeck(decklist, gameId, playerSocketId);
 
 	//if this was the last decklist to be validated, we should start the game!
-	checkGameStatus(roomId);
+	checkGameStatus(gameId);
 
 	//add the modified decklist (w/conjurations added)
 	validationResults.decklist = JSON.stringify(decklist);
@@ -214,7 +235,7 @@ function validateDecklist(decklist, roomId, playerSocketId) {
 // -----------------------------------------------------------[ BUILD DECK ]
 // Build decklists in shuffleable arrays and set up dice array 
 // Push the decks to activeGames
-function buildDeck(decklist, roomId, playerSocketId) {
+function buildDeck(decklist, gameId, playerSocketId) {
 
 	var deck = [];
 	var conjurations = [];
@@ -245,55 +266,55 @@ function buildDeck(decklist, roomId, playerSocketId) {
 	});
 
 	//send this player's decklist to activeGames
-	activeGames[roomId].players[playerSocketId].pheonixborn = decklist.pheonixborn;
-	activeGames[roomId].players[playerSocketId].deck = deck;
-	activeGames[roomId].players[playerSocketId].dice = dice;
-	activeGames[roomId].players[playerSocketId].conjurations = conjurations;
-	activeGames[roomId].players[playerSocketId].discard = [];
+	activeGames[gameId].players[playerSocketId].pheonixborn = decklist.pheonixborn;
+	activeGames[gameId].players[playerSocketId].deck = deck;
+	activeGames[gameId].players[playerSocketId].dice = dice;
+	activeGames[gameId].players[playerSocketId].conjurations = conjurations;
+	activeGames[gameId].players[playerSocketId].discard = [];
 }
 
 // -----------------------------------------------------------[ CHECK GAME STATUS ]
 // Compare number of players to max players to see if waiting
 // If the status is changing, update the game round
-function checkGameStatus(roomId) {
+function checkGameStatus(gameId) {
 
 	//don't keep running this check if the game is already in play
-	if (activeGames[roomId].status === 'inPlay') {
+	if (activeGames[gameId].status === 'inPlay') {
 		return false;
 	}
 
-	var numPlayers = _.keys(activeGames[roomId].players).length;
+	var numPlayers = _.keys(activeGames[gameId].players).length;
 	var numReadyPlayers = 0;
 
 	//if we have fewer than the player cap, we're waiting
-	if (activeGames[roomId].maxPlayers > numPlayers) {
-		activeGames[roomId].status = 'waiting';
+	if (activeGames[gameId].maxPlayers > numPlayers) {
+		activeGames[gameId].status = 'waiting';
 	} else {
 		//if we have the player cap, and everyone's validated their decklists, we're ready
-		_.each(activeGames[roomId].players, function(player, playerSocketId) {
+		_.each(activeGames[gameId].players, function(player, playerSocketId) {
 			if (player.deck && player.deck.length === 30) {
 				numReadyPlayers++;
 			}
 		});
 
-		//console.log('there are ' + numPlayers + ' out of ' + activeGames[roomId].maxPlayers + '. ' + numReadyPlayers + ' of them have valid lists.');
+		//console.log('there are ' + numPlayers + ' out of ' + activeGames[gameId].maxPlayers + '. ' + numReadyPlayers + ' of them have valid lists.');
 
 		if (numReadyPlayers === numPlayers) {
 			//console.log('all players are ready');
 			
 			//initialize first five phase
-			if (activeGames[roomId].gameRound === -1) {
-				activeGames[roomId].gameRound = 0;
-				activeGames[roomId].status = 'firstFive';
+			if (activeGames[gameId].gameRound === -1) {
+				activeGames[gameId].gameRound = 0;
+				activeGames[gameId].status = 'firstFive';
 			} else {
 				//start the regular rounds
-				activeGames[roomId].gameRound = 1;
-				activeGames[roomId].status = 'inPlay';
+				activeGames[gameId].gameRound = 1;
+				activeGames[gameId].status = 'inPlay';
 			}
 
 		} else {
 			//players are choosing their decks
-			activeGames[roomId].status = 'setup';
+			activeGames[gameId].status = 'setup';
 		}
 	}
 }
@@ -319,8 +340,11 @@ server.on('connection', function(socket){
   });
 
   // -----------------------------------------------------------[ CLIENT SENDS CHAT ]
-	socket.on('chat', function(sender, msg){
-		server.emit('chat', sender, msg);
+	socket.on('chat', function(gameId, sender, msg){
+		//add chat to game
+		chatToGame(gameId, sender, msg);
+		//emit update
+		server.to(gameId).emit('gameStateUpdated', getGameState(gameId));
 	});
 
 	// -----------------------------------------------------------[ CLIENT REQUESTS GAME LIST ]
@@ -332,95 +356,96 @@ server.on('connection', function(socket){
 	socket.on('createGame', function(username){
 
 		var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-		var roomId = '';
+		var gameId = '';
 
-		//generate a roomId, don't allow duplicates
+		//generate a gameId, don't allow duplicates
 		do {
-			roomId = _.sample(possible, 12).join('');
-		} while (activeGames[roomId]);
+			gameId = _.sample(possible, 12).join('');
+		} while (activeGames[gameId]);
 
-		//add the user to the room
-		socket.join(roomId);
+		//add the user to the game
+		socket.join(gameId);
 
 		//create a new game and configure it
 		var newGame = new Game();
-		newGame.roomId = roomId;
-		newGame.roomName = username;
+		newGame.gameId = gameId;
+		newGame.gameName = username;
 		newGame.players[socket.id] = {
 			username: username,
 			position: 1
 		};
-		activeGames[roomId] = newGame;
+		activeGames[gameId] = newGame;
 
 		//send the updated game list to everyone
 		server.emit('gameList', getGameList() );
 
 		//send the game state to this game
-		server.to(roomId).emit('gameStateUpdated', roomId, getGameState(roomId));
+		server.to(gameId).emit('gameStateUpdated', getGameState(gameId));
 	});
 
 	// -----------------------------------------------------------[ CLIENT JOINS GAME ]
-	socket.on('joinGame', function(roomId, username){
+	socket.on('joinGame', function(gameId, username){
 
-		//add the user to the room
-		socket.join(roomId);
+		//add the user to the game
+		socket.join(gameId);
 
 		//add the player to the game
-		activeGames[roomId].players[socket.id] = {
+		activeGames[gameId].players[socket.id] = {
 			username: username,
-			position: _.keys(activeGames[roomId].players).length + 1
+			position: _.keys(activeGames[gameId].players).length + 1
 		};
 
 		//update the name of the game
-		activeGames[roomId].roomName = getGameName(roomId);
+		activeGames[gameId].gameName = getGameName(gameId);
 
 		//if we have enough players to begin it's go time
-		checkGameStatus(roomId);
+		checkGameStatus(gameId);
 
 		//send the updated game list to everyone
 		server.emit('gameList', getGameList() );
 
+		//tell the game that someone has joined
+		chatToGame(gameId, 'server',  username + ' connected.');
+
 		//send the game state to this game
-		server.to(roomId).emit('gameStateUpdated', roomId, getGameState(roomId));
-
-		//tell the room that someone has joined
-		server.to(roomId).emit('chat', 'SERVER', username + ' connected.', 'server-msg');
-
+		server.to(gameId).emit('gameStateUpdated', getGameState(gameId));
 	});
 
 	// -----------------------------------------------------------[ CLIENT REQUESTS PREBUILT DECKLISTS ]
-	socket.on('requestPrebuiltLists', function(roomId){
-		server.to(roomId).emit('prebuiltDecklists', lists);
+	socket.on('requestPrebuiltLists', function(gameId){
+		server.to(gameId).emit('prebuiltDecklists', lists);
 	});
 
 	// -----------------------------------------------------------[ CLIENT SUBMITS DECKLIST ]
-	socket.on('submitDecklistForValidation', function(roomId, decklist){
-		var validationResults = validateDecklist(decklist, roomId, socket.id);
-		server.to(roomId).emit('decklistValidated', socket.id, validationResults.decklist, validationResults.valid, validationResults.error);
-		server.to(roomId).emit('gameStateUpdated', roomId, getGameState(roomId));
+	socket.on('submitDecklistForValidation', function(gameId, decklist){
+		var validationResults = validateDecklist(decklist, gameId, socket.id);
+		server.to(gameId).emit('decklistValidated', socket.id, validationResults.decklist, validationResults.valid, validationResults.error);
+		server.to(gameId).emit('gameStateUpdated', getGameState(gameId));
 	});
 
 	// -----------------------------------------------------------[ CLIENT REQUESTS GAME STATE ]
-	socket.on('requestGameState', function(roomId) {
-		server.to(roomId).emit('gameStateUpdated', roomId, getGameState(roomId));
+	socket.on('requestGameState', function(gameId) {
+		server.to(gameId).emit('gameStateUpdated', getGameState(gameId));
 	});
 
 	// -----------------------------------------------------------[ CLIENT TAKES AN ACTION WE NEED TO PROPOGATE ]
-	socket.on('userAction', function(roomId, playerSocketId, actionVerb, actionTarget, targetOwnerSocketId) {
+	socket.on('userAction', function(gameId, playerSocketId, actionVerb, actionTarget, targetOwnerSocketId) {
 
-		var playerUsername = getPlayerUsername(roomId, playerSocketId);
-		var targetOwnerUsername = getPlayerUsername(roomId, targetOwnerSocketId);
+		var playerUsername = getPlayerUsername(gameId, playerSocketId);
+		var targetOwnerUsername = getPlayerUsername(gameId, targetOwnerSocketId);
 
 		if (playerUsername === targetOwnerUsername) {
-			targetOwnerUsername = 'their';
+			targetOwnerUsername = 'their own ';
+		} else {
+			targetOwnerUsername += '\'s ';
 		}
 
 		//TODO: the thing hasn't actually happened on the server yet
 
 		//tell everyone what happened
-		server.to(roomId).emit('chat', 'SERVER', playerUsername + ' ' + actionVerb + ' ' + targetOwnerUsername + '\'s ' + actionTarget + '.');
+		chatToGame(gameId, 'server', playerUsername + ' ' + actionVerb + ' ' + targetOwnerUsername + actionTarget + '.');
 		//send the updated gamestate
-		server.to(roomId).emit('gameStateUpdated', roomId, getGameState(roomId));
+		server.to(gameId).emit('gameStateUpdated', getGameState(gameId));
 	});
 
 });

@@ -74,6 +74,8 @@ export default {
 
 			setTimeout(function() {
 				this.face = this.faces[Math.floor(Math.random() * this.faces.length)];
+				//TODO: send the roll to the server (or maybe do it there?)
+				//store.socket.emit('userAction', store.state.gameId, store.socketId, 'rolled', this.type, this.$parent.playerId);
 				this.rolling = false;
 			}.bind(this), 250);
 			

@@ -52,7 +52,7 @@ export default {
 		},
 
 		openContext: function(e) {
-			
+
 			this.$dispatch('openContext', this.contextActions, e );
 		},
 

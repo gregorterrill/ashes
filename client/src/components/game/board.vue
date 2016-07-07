@@ -1,9 +1,11 @@
 <style lang="sass">
 .board {
+	position:relative;
 	width:100%;
 	height:calc(50vh - 1rem);
 	padding:1rem;
 	display:flex;
+	overflow:scroll;
 }
 
 .board * {
@@ -33,6 +35,8 @@
 
 <template>
 	<div class="board board--{{ playerType }}" id="board-{{ playerId }}">
+
+		<span class="board__title">{{ player.username }} ({{ playerType | capitalize}})</span>
 		
 		<deck-loader v-if="(gameRound < 0)" :player-type="playerType" :player-id="playerId"></deck-loader>
 		

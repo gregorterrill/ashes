@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+	<head>
+		<title>ASHES Online</title>
+		<script type="text/javascript">
+	  WebFontConfig = {
+	    google: { families: [ 'Marcellus::latin' ] }
+	  };
+	  (function() {
+	    var wf = document.createElement('script');
+	    wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+	    wf.type = 'text/javascript';
+	    wf.async = 'true';
+	    var s = document.getElementsByTagName('script')[0];
+	    s.parentNode.insertBefore(wf, s);
+	  })(); </script>
+		<link rel="stylesheet" href="../build.css" type="text/css" media="all">
+
+	</head>
+	<body>
+		<div class="static-page">
+			<div class="container">
+				<h1>About Ashes Online</h1>
+				<p>Ashes Online is a fan project by <a href="https://twitter.com/GregorTerrill">@GregorTerrill</a>. I am a web developer and board/card game geek from Ottawa, Canada.</p>
+
+				<p>Ashes: Rise of the Pheonixborn is a card game by <a href="http://www.plaidhatgames.com">Plaid Hat Games</a>. I am not associated with them in any way. If you like Ashes, please show them your support by <a href="http://www.plaidhatgames.com/store">purchasing their products</a> and spreading the word about their game in your local and online communities.</p>
+
+				<p>This project was inspired by <a href="http://jinteki.net">Jinteki.net</a>, a fan-made online version of Android: Netrunner, which is another card game I've been playing for several years. That platform (and the OCTGN module by db0 that came before it) has been invaluable to the Android: Netrunner community, and allows players to squeeze in practice games when in-person games are too time-consuming, or opponents are difficult to find/organize. Without it, I don't think the competitive Netrunner scene would be what it is today.</p>
+
+				<p>I decided to build Ashes Online just after I started playing Ashes, and was looking for a way to get more practice in. I was also looking for a web app project to build to learn Vue, which I was starting to use at my day job.</p>
+
+				<section id="technical">
+					<h2>Technical Details</h2>
+					<p>Ashes Online is built entirely in JavaScript, using the following technologies/frameworks:</p>
+					<h3>Server-Side</h3>
+					<ul>
+						<li><a href="https://nodejs.org">node.js</a></li>
+						<li><a href="http://expressjs.com/">Express</a></li>
+						<li><a href="http://socket.io/">socket.io</a></li>
+						<li><a href="http://underscorejs.org/">Underscore</a></li>
+					</ul>
+					<h3>Client-Side</h3>
+					<ul>
+						<li><a href="https://vuejs.org/">Vue.js</a></li>
+					</ul>
+					<p>All of the source code is available on the <a href="https://github.com/gregorterrill/ashes">GitHub repo</a>.</p>
+				</section>
+
+				<section id="bugs">
+					<h2>Bug Reporting</h2>
+					<p>Find a bug? You can open an issue on the <a href="https://github.com/gregorterrill/ashes/issues">GitHub repo</a>, but please do a search first to avoid duplicate reports.</p>
+				</section>
+
+				<section id="formatting">
+					<h2>Decklist Formatting</h2>
+
+					<p>Until a proper deckbuilder is added, decklists need to be formatted in a specific JSON structure. This is how Aradel's deck from the core set looks:</p>
+
+					<pre style="tab-size: 2rem;">
+{
+	"name": "The Mist Guardian",
+	"pheonixborn": "Aradel Summergaard",
+	"deck": {
+		"Shifting Mist": 3,
+		"Summon Mist Spirit": 3,
+		"Summon Blue Jaguar": 3,
+		"Reflections in the Water": 3,
+		"Mist Typhoon": 3,
+		"Out of the Mist": 3,
+		"Root Armor": 3,
+		"Steady Gaze": 3,
+		"Massive Growth": 3,
+		"Summon Butterfly Monk": 3
+	},
+	"dice": {
+		"nat": 5,
+		"ill": 5,
+		"cer": 0,
+		"cha": 0
+	}
+}</pre>
+
+					<p>Each decklist should contain a name, pheonixborn, deck (containing card names with values totalling 30), and dice (leave the three-letter keys as is, values must total 10). Careful with your spelling - cards are looked up based on title, so typos will cause errors.</p>
+					<p>Your JSON must be valid to work - watch for trailing commas on the last item between each curly brace. You can also paste your list into <a href="http://jsonlint.com/">JSONLint</a> which will point out where any errors are occuring.</p>
+					<p>Hopefully a deck builder will be added in the not-so-distant future to take care of this formatting for you!</p>
+				</section>
+
+				<a class="btn" href="/">Back to Lobby</a>
+
+			</div>
+		</div>
+
+	</body>
+</html>

@@ -1,6 +1,6 @@
 <style lang="sass">
 .card-browser {
-	position:absolute;
+	position:fixed;
 	width: 100vw;
 	top:50%;
 	margin-top:-226px;
@@ -11,17 +11,16 @@
 
 .card-browser__list {
 	margin:0;
-	padding:0.5rem;
+	padding:0;
 	list-style-type:none;
 	width:9960px; //332*30
   display: block;
-  height: 476px; //452 + 1.5rem
+  height: 452px;
   background-color:white;
 }
 
 .card-browser__item {
 	display:inline-block;
-	margin-right:0.25rem;
 }
 
 .card-browser__overlay {

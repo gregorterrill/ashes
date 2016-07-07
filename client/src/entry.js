@@ -27,25 +27,14 @@ store.socket.on('socketId', function(socketId) {
 	store.socketId = socketId;
 });
 
-// when a message is recieved, display it
+// when a message is recieved, keep scrolled to bottom
 store.socket.on('chat', function(sender, msg, className){
-
-	vm.$broadcast('chatRecieved', {
-		sender: sender,
-		message: msg,
-		className: className
-	});
-
-	//keep scrolled to bottom
-	var chatWindow = document.getElementsByClassName('chat__messages')[0];
-	if (chatWindow) chatWindow.scrollTop = chatWindow.scrollHeight;
+	vm.$broadcast('chatRecieved');
 });
 
-// recieve game ID (this is only sent to the specific room)
-store.socket.on('gameStateUpdated', function(gameId, gameState) {
-	store.state.gameId = gameId;
-	store.state.players = gameState.players;
-	store.state.gameRound = gameState.gameRound;
+// recieve game state (this is only sent to the specific game)
+store.socket.on('gameStateUpdated', function(gameState) {
+	store.state = gameState;
 });
 
 // recieve game list

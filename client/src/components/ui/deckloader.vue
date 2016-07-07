@@ -1,10 +1,14 @@
 <style lang="sass">
 .deck-loader {
 	flex-grow:1;
+
+	.select-container, .decklist-container {
+		margin-bottom:1rem;
+	}
 }
 
-label {
-	display:block;
+.decklist-container label {
+	display:inline;
 }
 
 #decklist, #prebuilt {
@@ -18,13 +22,19 @@ label {
 
 		<div v-if="!decklistValid">
 			<label for="prebuilt-{{ playerId }}">Choose a prebuilt deck</label>
-			<select id="prebuilt-{{ playerId }}" name="prebuilt" v-model="prebuiltSelection" @change="populateDecklist">
-				<option value="">Choose...</option>
-				<option v-for="(key, list) in prebuiltLists" value="{{ key }}">{{ list.pheonixborn }} - {{ list.name }}</option>
-			</select>
+
+			<div class="select-container">
+				<select id="prebuilt-{{ playerId }}" name="prebuilt" v-model="prebuiltSelection" @change="populateDecklist">
+					<option value="">Choose...</option>
+					<option v-for="(key, list) in prebuiltLists" value="{{ key }}">{{ list.pheonixborn }} - {{ list.name }}</option>
+				</select>
+				<span class="icon">&blacktriangledown;</span>
+			</div>
 			
-			<label for="decklist-{{ playerId }}">Or paste your list here</label>
-			<textarea rows="5" name="decklist" id="decklist-{{ playerId }}" v-model="decklist"></textarea>
+			<div class="decklist-container">
+				<label for="decklist-{{ playerId }}">Or paste your decklist here</label> <a href="/about/#formatting" target="_blank">(formatting help)</a>
+				<textarea rows="5" name="decklist" id="decklist-{{ playerId }}" v-model="decklist"></textarea>
+			</div>
 
 			<button class="btn btn--block" @click="submitDecklistForValidation">Submit</button>
 

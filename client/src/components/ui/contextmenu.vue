@@ -67,11 +67,19 @@ export default {
 	methods: {
 
 		positionMenu: function(x,y) {
+
 			largestHeight = window.innerHeight - this.$els.menu.offsetHeight;
 			largestWidth = window.innerWidth - this.$els.menu.offsetWidth;
 
-			if (y > largestHeight) y = largestHeight;
-			if (x > largestWidth) x = largestWidth;
+			//modify the y coordinate, because the parent board is positioned relative
+			y = y - this.$parent.$el.getBoundingClientRect().top;
+
+			if (y > largestHeight) {
+				y = largestHeight;
+			}
+			if (x > largestWidth) {
+				x = largestWidth;
+			}
 
 			this.top = y + 'px';
 			this.left = x + 'px';
