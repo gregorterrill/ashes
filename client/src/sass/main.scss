@@ -13,6 +13,10 @@ html, body {
 
 $red: #963535;
 
+.targeted {
+	outline:2px solid $red;
+}
+
 // -----------------------------------------------------------[ LINKS / BUTTONS ]
 
 a {

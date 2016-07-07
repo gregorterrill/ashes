@@ -63,6 +63,11 @@ function getGameState(roomId) {
 	return activeGames[roomId];
 }
 
+// -----------------------------------------------------------[ GET A PLAYER'S USERNAME ]
+function getPlayerUsername(roomId, playerSocketId) {
+	return activeGames[roomId].players[playerSocketId].username;
+}
+
 // -----------------------------------------------------------[ REMOVE PLAYER FROM GAMES ]
 // Removes a player from any games they are in
 // Deletes the game if their departure makes it empty
@@ -397,6 +402,24 @@ server.on('connection', function(socket){
 
 	// -----------------------------------------------------------[ CLIENT REQUESTS GAME STATE ]
 	socket.on('requestGameState', function(roomId) {
+		server.to(roomId).emit('gameStateUpdated', roomId, getGameState(roomId));
+	});
+
+	// -----------------------------------------------------------[ CLIENT TAKES AN ACTION WE NEED TO PROPOGATE ]
+	socket.on('userAction', function(roomId, playerSocketId, actionVerb, actionTarget, targetOwnerSocketId) {
+
+		var playerUsername = getPlayerUsername(roomId, playerSocketId);
+		var targetOwnerUsername = getPlayerUsername(roomId, targetOwnerSocketId);
+
+		if (playerUsername === targetOwnerUsername) {
+			targetOwnerUsername = 'their';
+		}
+
+		//TODO: the thing hasn't actually happened on the server yet
+
+		//tell everyone what happened
+		server.to(roomId).emit('chat', 'SERVER', playerUsername + ' ' + actionVerb + ' ' + targetOwnerUsername + '\'s ' + actionTarget + '.');
+		//send the updated gamestate
 		server.to(roomId).emit('gameStateUpdated', roomId, getGameState(roomId));
 	});
 

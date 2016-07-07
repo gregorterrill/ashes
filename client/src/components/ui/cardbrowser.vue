@@ -6,20 +6,22 @@
 	margin-top:-226px;
   left: 0;
   overflow-x: scroll;
-  z-index: 99;
+  z-index: 98;
 }
 
 .card-browser__list {
 	margin:0;
-	padding:0;
+	padding:0.5rem;
 	list-style-type:none;
 	width:9960px; //332*30
   display: block;
-  height: 452px;
+  height: 476px; //452 + 1.5rem
+  background-color:white;
 }
 
 .card-browser__item {
 	display:inline-block;
+	margin-right:0.25rem;
 }
 
 .card-browser__overlay {
@@ -30,7 +32,7 @@
 	bottom:0;
 	left:0;
 	background-color:transparentize(black,0.2);
-	z-index:98;
+	z-index:97;
 }
 
 .card-browser .card {
@@ -44,7 +46,7 @@
 <template>
 	<div class="card-browser__overlay" v-show="viewBrowser" @click="closeBrowser"></div>
 	<div class="card-browser" v-show="viewBrowser">
-		<ul class="card-browser__list" :style="{ width: listWidth + 'px' }">
+		<ul class="card-browser__list" v-bind:style="{ width: listWidth + 'px' }">
 			<li v-for="cardName in cards" track-by="$index" class="card-browser__item">
 				<card :card-name="cardName"></card>
 			</li>

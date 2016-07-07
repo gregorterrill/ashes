@@ -80,7 +80,7 @@ export default {
 		openMenu: function(contextActions, e) {
 			this.viewMenu = true;
 			this.contextActions = contextActions;
-			this.positionMenu(e.x, e.y);
+			this.positionMenu(e.clientX, e.clientY);
 		},
 
 		closeMenu: function() {

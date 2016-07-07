@@ -69,6 +69,8 @@ export default {
 				//NORMAL JS VERSION: this.cards[randomPick] = lastUnshuffledCard;
 				this.cards.$set(randomPick, lastUnshuffledCard); //TO TRIGGER VUE UPDATE
 			}
+
+			store.socket.emit('userAction', store.state.gameId, store.socketId, 'shuffled', this.type, this.$parent.playerId);
 		},
 
 		peekAtCards: function() {
