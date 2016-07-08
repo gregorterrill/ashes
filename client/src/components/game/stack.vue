@@ -38,21 +38,36 @@ import store from '../../store.js';
 
 export default {
 	props: ['type', 'cards'],
-	data: function() {
-		return {
-			contextActions: [ {
-				text: "Shuffle",
-				action: this.shuffle
-			}, {
-				text: "Peek",
-				action: this.peekAtCards
-			} ]
+	
+	computed: {
+		contextActions: function() {
+
+			actions = [];
+
+			if (this.cards.length > 1) {
+				actions.push({
+					text: "Shuffle",
+					action: this.shuffle
+				});
+			}
+
+			if (this.cards.length > 0) {
+				actions.push({
+					text: "Peek",
+					action: this.peekAtCards
+				});
+			}
+
+			return actions;
 		}
 	},
+
 	methods: {
 
 		openContext: function(e) {
-			this.$dispatch('openContext', this.contextActions, e );
+			if (this.contextActions.length) {
+				this.$dispatch('openContext', this.contextActions, e );
+			}
 		},
 		
 		shuffle: function() {

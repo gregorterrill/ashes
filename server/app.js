@@ -445,7 +445,8 @@ server.on('connection', function(socket){
 		socket.join(gameId);
 
 		//add the player to the game
-		activeGames[gameId].players[socket.id] = new Player(username, _.keys(activeGames[gameId].players).length + 1);
+		var playerPosition = _.keys(activeGames[gameId].players).length + 1;
+		activeGames[gameId].players[socket.id] = new Player(username, playerPosition);
 
 		//update the name of the game
 		activeGames[gameId].gameName = getGameName(gameId);
