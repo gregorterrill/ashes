@@ -57,6 +57,10 @@ var Player = function(username, position) {
 	this.position = position;
 	this.isFirstPlayer = false;
 	this.justPassed = false;
+	this.actions = {
+		message: 'Waiting for players to finalize decklists.',
+		buttons: []
+	};
 	this.pheonixborn = {};
 	this.dice = [];
 	this.hand = [];
@@ -132,6 +136,52 @@ function getGameState(gameId) {
 function sendGameState(gameId) {
 	console.log('Game ' + gameId + ' state updated.');
 	server.to(gameId).emit('gameStateUpdated', getGameState(gameId));
+}
+
+// -----------------------------------------------------------[ SEND ACTIONS ]
+// playerSocketId is optional, if not sent it will go to all players in the game
+function sendActions(gameId, action, playerSocketId) {
+
+	switch (action) {
+
+		case 'requestFirstFive':
+			_.each(activeGames[gameId].players, function(playerData, playerSocketId) {
+				activeGames[gameId].players[playerSocketId].actions = {
+					message: 'Choose your First Five by moving 5 cards from your deck into your hand.',
+					buttons: [{
+						text: 'Submit First Five',
+						action: 'submitFirstFive'
+					}]
+				};
+			});
+			break;
+
+		case 'firstFiveInvalid':
+			activeGames[gameId].players[playerSocketId].actions = {
+				message: 'Your First Five were invalid. Please re-submit.',
+				buttons: [{
+					text: 'Submit First Five',
+					action: 'submitFirstFive'
+				}]
+			};
+			break;
+
+		case 'firstFiveValid':
+			activeGames[gameId].players[playerSocketId].actions = {
+				message: 'Your First Five were submitted. Waiting for your opponent(s).',
+				buttons: []
+			};
+			break;
+
+		default:
+			activeGames[gameId].players[playerSocketId].actions = {
+				message: 'An error has occured.',
+				buttons: []
+			};
+
+	}
+
+	sendGameState(gameId);
 }
 
 // -----------------------------------------------------------[ GET A PLAYER'S USERNAME ]
@@ -367,6 +417,34 @@ function buildDeck(decklist, gameId, playerSocketId) {
 	}	
 }
 
+// -----------------------------------------------------------[ VALIDATE A PLAYER'S FIRST FIVE ]
+function validateFirstFive(gameId, playerSocketId) {
+
+	var hand = activeGames[gameId].players[playerSocketId].hand;
+	var valid = true;
+
+	//if we don't have five cards, bail
+	if (hand.length !== 5) {
+		valid = false;
+	}
+
+	if (valid) {
+		//make sure all of the five cards have unique names
+		var cardNames = _.pluck(hand, 'name');
+		if (_.uniq(cardNames).length !== 5) {
+			valid = false;
+		}
+	}
+
+	if (valid) {
+		sendActions(gameId, 'firstFiveValid', playerSocketId);
+	} else {
+		sendActions(gameId, 'firstFiveInvalid', playerSocketId);
+	}
+
+	return valid;
+}
+
 // -----------------------------------------------------------[ SHUFFLE ANY STACK OF CARDS ]
 // randomizes the deck using the Fisher-Yates Shuffle (http://bost.ocks.org/mike/shuffle/)
 function shuffleStack(stack) {
@@ -493,14 +571,10 @@ function checkGameStatus(gameId) {
 			if (activeGames[gameId].gameRound === -1) {
 				activeGames[gameId].gameRound = 0;
 				activeGames[gameId].status = 'firstFive';
-				chatToGame(gameId, 'server', 'Select your First Five.');
-
-				server.to(gameId).emit('requirePlayerInput', {
-					targetType: 'card',
-					owner: 'self',
-					quantity: 5,
-					targets: []
-				});
+				
+				//tell the players we need some action
+				sendActions(gameId, 'requestFirstFive');
+				
 			} else {
 				//start the regular rounds
 				activeGames[gameId].gameRound = 1;
@@ -635,14 +709,16 @@ server.on('connection', function(socket){
 // 	targetOwnerSocketId: this.$parent.playerId
 
 		var playerUsername = getPlayerUsername(gameId, action.playerSocketId);
-		var targetOwnerUsername = getPlayerUsername(gameId, action.targetOwnerSocketId);
 		var actionDescription = 'did something.';
 
-		//change the wording based on the target
-		if (action.playerSocketId === action.targetOwnerSocketId) {
-			targetOwnerUsername = 'their ';
-		} else {
-			targetOwnerUsername += '\'s ';
+		//if there's a target owner, change the wording based on the relationship between acting player and target owner
+		if (action.targetOwnerSocketId) {
+			var targetOwnerUsername = getPlayerUsername(gameId, action.targetOwnerSocketId)
+			if (action.playerSocketId === action.targetOwnerSocketId) {
+				targetOwnerUsername = 'their ';
+			} else {
+				targetOwnerUsername += '\'s ';
+			}
 		}
 
 		//actually do the thing, if we need to
@@ -685,6 +761,20 @@ server.on('connection', function(socket){
 				activeGames[gameId].players[action.targetOwnerSocketId].dice[action.target].exhausted = true;
 				actionDescription = playerUsername + ' exhausted one of ' + targetOwnerUsername + ' dice.';
 				break;
+
+			//there is no target
+			case 'submitFirstFive':
+				var valid = validateFirstFive(gameId, action.playerSocketId);
+				if (valid) {
+					actionDescription = playerUsername + ' successfully submitted their First Five.';
+				} else {
+					actionDescription = playerUsername + ' submitted their First Five but it was invalid.';
+				}
+				break;
+
+			default:
+				actionDescription = playerUsername + ' tried to perform an unhandled action: ' + action.actionVerb + '.';
+
 		}
 
 		//tell everyone what happened

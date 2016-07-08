@@ -71,15 +71,8 @@
 <template>
 	<div class="sidebar">
 		<div class="actions">
-			<h2>Main Actions</h2>
-			<button class="btn">Attack Pheonixborn</button>
-			<button class="btn">Attack Unit</button>
-			<button class="btn">Pass</button>
-			<h2>Side Actions</h2>
-			<button class="btn">Meditate</button>
-			<button class="btn">Dice Power</button>
-			<hr/>
-			<button class="btn">End Turn</button>
+			<p v-if="actions.message">{{ actions.message }}</p>
+			<button class="btn" v-for="action in actions.buttons" @click="submitAction(action.action)">{{ action.text }}</button>
 		</div>
 		<div id="chat" class="chat">
 			<ul class="chat__messages" v-el:chat>
@@ -106,6 +99,9 @@ export default {
 	computed: {
 		chatLog: function() {
 			return store.state.chatLog
+		},
+		actions: function() {
+			return store.state.players[store.socketId].actions;
 		}
 	},
 
@@ -115,6 +111,13 @@ export default {
 				store.socket.emit('chat', store.state.gameId, store.username, this.message);
 				this.message = '';
 			}
+		},
+		submitAction: function(actionVerb) {
+			//deal with this on the server
+			store.socket.emit('userAction', store.state.gameId, {
+				playerSocketId: store.socketId,
+				actionVerb: actionVerb
+			});
 		}
 	},
 
