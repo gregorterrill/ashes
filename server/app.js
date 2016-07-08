@@ -127,7 +127,7 @@ function getGameName(gameId) {
 	return players.join(' vs. ');
 }
 
-// -----------------------------------------------------------[ GET GAME STATE ]
+// -----------------------------------------------------------[ GET FULL GAME STATE ]
 function getGameState(gameId) {
 	return activeGames[gameId];
 }
@@ -139,6 +139,7 @@ function sendGameState(gameId) {
 }
 
 // -----------------------------------------------------------[ SEND ACTIONS ]
+// update the actions menu for a player (or all players)
 // playerSocketId is optional, if not sent it will go to all players in the game
 function sendActions(gameId, action, playerSocketId) {
 
@@ -147,6 +148,7 @@ function sendActions(gameId, action, playerSocketId) {
 		case 'requestFirstFive':
 			_.each(activeGames[gameId].players, function(playerData, playerSocketId) {
 				activeGames[gameId].players[playerSocketId].actions = {
+					status: 'chooseFirstFive',
 					message: 'Choose your First Five by moving 5 cards from your deck into your hand.',
 					buttons: [{
 						text: 'Submit First Five',
@@ -158,6 +160,7 @@ function sendActions(gameId, action, playerSocketId) {
 
 		case 'firstFiveInvalid':
 			activeGames[gameId].players[playerSocketId].actions = {
+				status: 'chooseFirstFive',
 				message: 'Your First Five were invalid. Please re-submit.',
 				buttons: [{
 					text: 'Submit First Five',
@@ -167,10 +170,30 @@ function sendActions(gameId, action, playerSocketId) {
 			break;
 
 		case 'firstFiveValid':
+
 			activeGames[gameId].players[playerSocketId].actions = {
+				status: 'waitingFirstFive',
 				message: 'Your First Five were submitted. Waiting for your opponent(s).',
 				buttons: []
 			};
+			//check if we need to start play
+			advanceGameStatusWhenReady(gameId);		
+			break;
+
+		case 'preparePhase':
+			_.each(activeGames[gameId].players, function(playerData, playerSocketId) {
+				activeGames[gameId].players[playerSocketId].actions = {
+					status: 'preparePhase',
+					message: 'PREPARE PHASE: Roll dice, discard cards, draw up to five.',
+					buttons: [{
+						text: 'Roll all dice',
+						action: 'rollAllDice'
+					}, {
+						text: 'Draw up to five',
+						action: 'drawToFive'
+					}]
+				};
+			});
 			break;
 
 		default:
@@ -178,7 +201,6 @@ function sendActions(gameId, action, playerSocketId) {
 				message: 'An error has occured.',
 				buttons: []
 			};
-
 	}
 
 	sendGameState(gameId);
@@ -223,6 +245,14 @@ function chatToGame(gameId, sender, msg) {
 	//emit an event that alerts the sidebar to scroll to the bottom
 	server.to(gameId).emit('chat');
 }
+
+
+//   _____          __  __ ______    _____ ______ _______ _    _ _____
+//  / ____|   /\   |  \/  |  ____|  / ____|  ____|__   __| |  | |  __ \
+// | |  __   /  \  | \  / | |__    | (___ | |__     | |  | |  | | |__) |
+// | | |_ | / /\ \ | |\/| |  __|    \___ \|  __|    | |  | |  | |  ___/
+// | |__| |/ ____ \| |  | | |____   ____) | |____   | |  | |__| | |
+//  \_____/_/    \_\_|  |_|______| |_____/|______|  |_|   \____/|_|
 
 // -----------------------------------------------------------[ VALIDATE DECKLIST ]
 // Check the decklist, adding conjurations if needed
@@ -339,7 +369,7 @@ function validateDecklist(decklist, gameId, playerSocketId) {
 	buildDeck(decklist, gameId, playerSocketId);
 
 	//if this was the last decklist to be validated, we should start the game!
-	checkGameStatus(gameId);
+	advanceGameStatusWhenReady(gameId);
 
 	//add the modified decklist (w/conjurations added)
 	validationResults.decklist = JSON.stringify(decklist);
@@ -391,7 +421,7 @@ function buildDeck(decklist, gameId, playerSocketId) {
 			dice.push({
 				type: type,
 				face: 'basic',
-				exhausted: false
+				exhausted: true
 			});
 		}
 	});
@@ -444,6 +474,13 @@ function validateFirstFive(gameId, playerSocketId) {
 
 	return valid;
 }
+
+//   _____          __  __ ______            _____ _______ _____ ____  _   _  _____
+//  / ____|   /\   |  \/  |  ____|     /\   / ____|__   __|_   _/ __ \| \ | |/ ____|
+// | |  __   /  \  | \  / | |__       /  \ | |       | |    | || |  | |  \| | (___
+// | | |_ | / /\ \ | |\/| |  __|     / /\ \| |       | |    | || |  | | . ` |\___ \
+// | |__| |/ ____ \| |  | | |____   / ____ \ |____   | |   _| || |__| | |\  |____) |
+//  \_____/_/    \_\_|  |_|______| /_/    \_\_____|  |_|  |_____\____/|_| \_|_____/
 
 // -----------------------------------------------------------[ SHUFFLE ANY STACK OF CARDS ]
 // randomizes the deck using the Fisher-Yates Shuffle (http://bost.ocks.org/mike/shuffle/)
@@ -541,51 +578,72 @@ function moveCardTo(gameId, card, destinationType, destination, destinationOwner
 
 }
 
-// -----------------------------------------------------------[ CHECK GAME STATUS ]
+// -----------------------------------------------------------[ ADVANCE GAME STATUS ]
 // Compare number of players to max players to see if waiting
 // If the status is changing, update the game round
-function checkGameStatus(gameId) {
+function advanceGameStatusWhenReady(gameId) {
 
-	//don't keep running this check if the game is already in play
-	if (activeGames[gameId].status === 'inPlay') {
-		return false;
-	}
+	//determine what to check based on current game status
+	switch (activeGames[gameId].status) {
 
-	var numPlayers = _.keys(activeGames[gameId].players).length;
-	var numReadyPlayers = 0;
+		case 'inPlay':
+			//if it's in play already, why are we even here?
+			return false;
+			break;
 
-	//if we have fewer than the player cap, we're waiting
-	if (activeGames[gameId].maxPlayers > numPlayers) {
-		activeGames[gameId].status = 'waiting';
-	} else {
-		//if we have the player cap, and everyone's validated their decklists, we're ready
-		_.each(activeGames[gameId].players, function(player, playerSocketId) {
-			if (player.deck && player.deck.length === 30) {
-				numReadyPlayers++;
-			}
-		});
+		case 'waiting':
+			//if we have fewer than the player cap, we're still waiting
+			var numPlayers = _.keys(activeGames[gameId].players).length;
+			if (activeGames[gameId].maxPlayers > numPlayers) {
+				//still waiting
+				return false;
 
-		if (numReadyPlayers === numPlayers) {
-			
-			//initialize first five phase
-			if (activeGames[gameId].gameRound === -1) {
-				activeGames[gameId].gameRound = 0;
-				activeGames[gameId].status = 'firstFive';
-				
-				//tell the players we need some action
-				sendActions(gameId, 'requestFirstFive');
-				
 			} else {
-				//start the regular rounds
+				//if we have the player cap, check if everyone's validated their decklists
+				var numReadyPlayers = 0;
+				_.each(activeGames[gameId].players, function(player, playerSocketId) {
+					if (player.deck && player.deck.length === 30) {
+						numReadyPlayers++;
+					}
+				});
+
+				//all players are ready
+				if (numReadyPlayers === numPlayers) {
+					//initialize first five phase
+					if (activeGames[gameId].gameRound === -1) {
+						activeGames[gameId].gameRound = 0;
+						activeGames[gameId].status = 'firstFive';
+						
+						//tell the players we need some action
+						sendActions(gameId, 'requestFirstFive');
+					}
+				}
+			}
+			break;
+
+		case 'firstFive':
+			//check if everyone's submitted their first five
+			var allFirstFivesValidated = true;
+			_.each(activeGames[gameId].players, function(playerData, playerSocketId) {
+				if (activeGames[gameId].players[playerSocketId].actions.status !== 'waitingFirstFive') {
+					allFirstFivesValidated = false;
+				}
+			});
+
+			if (allFirstFivesValidated) {
+				//move on to first round
 				activeGames[gameId].gameRound = 1;
 				activeGames[gameId].status = 'inPlay';
-			}
 
-		} else {
-			//players are choosing their decks
-			activeGames[gameId].status = 'setup';
-		}
+				//tell the players we need some action
+				sendActions(gameId, 'preparePhase');
+			}
+			break;
+
+		default:
+			break;
 	}
+
 }
 
 
@@ -664,7 +722,7 @@ server.on('connection', function(socket){
 		activeGames[gameId].gameName = getGameName(gameId);
 
 		//if we have enough players to begin it's go time
-		checkGameStatus(gameId);
+		advanceGameStatusWhenReady(gameId);
 
 		//send the updated game list to everyone
 		server.emit('gameList', getGameList());

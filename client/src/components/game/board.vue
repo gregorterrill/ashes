@@ -28,6 +28,18 @@
   justify-content:space-around;
 }
 
+.board__first {
+	display:inline-block;
+	vertical-align:top;
+	width: 100px;
+	height:140px;
+
+	img {
+		max-width:100%;
+		margin-top: 25px;
+	}
+}
+
 .board--opponent {
 	border-bottom:1px dashed #CCC;
 }
@@ -50,6 +62,9 @@
 			<div class="board__row">
 				<stack type="discard" face="up" :cards="player.discard"></stack>
 				<stack type="deck" face="down" :cards="player.deck"></stack>
+				<div class="board__first" v-if="player.isFirstPlayer">
+					<img src="/img/token-first.png" title="First Player" />
+				</div>
 			</div>
 			<div class="board__row">
 				<stack type="conjurations" face="down" :cards="player.conjurations"></stack>
