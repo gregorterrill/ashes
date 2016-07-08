@@ -22,32 +22,49 @@ export default {
 	props: ['card-data'],
 	data: function() {
 		return {
-			contextActions: [ {
-					text: "Activate",
-					action: this.activateCard
-				}, {
-				text: "Move to...",
-				action: this.doSubAction,
-				subActions: [ {
-					text: "Hand",
-					action: this.moveToHand
-				}, {
-					text: "Deck",
-					action: this.moveToDeck
-				}, {
-					text: "Discard",
-					action: this.moveToDiscard
-				}, {
-					text: "Spellboard",
-					action: this.moveToSpellboard
-				}, {
-					text: "Battlefield",
-					action: this.moveToBattlefield
-				} ]
-			} ]
+
 		}
 	},
 	computed: {
+
+		contextActions: function() {
+
+			actions = [];
+
+			var isController = (store.socketId === this.cardData.controller);
+
+			//if i control this card, i can do what i want with it
+			if (isController) {
+				actions.push({
+					text: "Activate",
+					action: this.activateCard
+				});
+
+				actions.push({
+					text: "Move to...",
+					action: this.doSubAction,
+					subActions: [ {
+						text: "Hand",
+						action: this.moveToHand
+					}, {
+						text: "Deck",
+						action: this.moveToDeck
+					}, {
+						text: "Discard",
+						action: this.moveToDiscard
+					}, {
+						text: "Spellboard",
+						action: this.moveToSpellboard
+					}, {
+						text: "Battlefield",
+						action: this.moveToBattlefield
+					} ]
+				});
+			}
+
+			return actions;
+		},
+
 		imageUri : function() {
 			return 'img/cards/' + encodeURIComponent(this.cardData.name) + '.jpg';
 		}
@@ -59,7 +76,9 @@ export default {
 		},
 
 		openContext: function(e) {
-			this.$dispatch('openContext', this.contextActions, e );
+			if (this.contextActions.length) {
+				this.$dispatch('openContext', this.contextActions, e );
+			}
 		},
 
 		doSubAction: function() {

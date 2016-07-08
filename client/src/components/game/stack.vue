@@ -17,7 +17,7 @@
 .stack__hand {
 	width: 50px;
   position: relative;
-  top: 40px;
+  top: 48px;
   left: 26px;
   opacity:0.85;
 }
@@ -63,14 +63,18 @@ export default {
 
 			actions = [];
 
-			if (this.cards.length > 1) {
+			var isOwner = (store.socketId === this.$parent.playerId);
+
+			//if i own this deck and there are multiple cards in it, i can shuffle it
+			if (isOwner && this.cards.length > 1) {
 				actions.push({
 					text: "Shuffle",
 					action: this.shuffle
 				});
 			}
 
-			if (this.cards.length > 0) {
+			//if this deck is face up or i own it, and there are cards in it, i can look at it
+			if ((this.face === 'up' || isOwner) && this.cards.length > 0) {
 				actions.push({
 					text: "Peek",
 					action: this.peekAtCards

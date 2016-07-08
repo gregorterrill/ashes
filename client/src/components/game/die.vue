@@ -64,20 +64,25 @@ export default {
 
 			actions = [];
 
-			if (this.exhausted) {
-				actions.push({
-					text: "Refresh",
-					action: this.refresh
-				});
-			} else {
-				actions.push({
-					text: "Roll",
-					action: this.roll
-				});
-				actions.push({
-					text: "Exhaust",
-					action: this.exhaust
-				});
+			var isOwner = (store.socketId === this.$parent.playerId);
+
+			//if this is one of my dice, i can do what i want with it
+			if (isOwner) {
+				if (this.exhausted) {
+					actions.push({
+						text: "Refresh",
+						action: this.refresh
+					});
+				} else {
+					actions.push({
+						text: "Roll",
+						action: this.roll
+					});
+					actions.push({
+						text: "Exhaust",
+						action: this.exhaust
+					});
+				}
 			}
 
 			return actions;
@@ -115,7 +120,9 @@ export default {
 			});
 		},
 		openContext: function(e) {
-			this.$dispatch('openContext', this.contextActions, e );
+			if (this.contextActions.length) {
+				this.$dispatch('openContext', this.contextActions, e );
+			}
 		}
 	},
 	events: {
