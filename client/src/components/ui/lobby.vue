@@ -45,7 +45,7 @@
 		<label for="username">Enter your name</label>
 		<input type="text" id="username" name="username" v-model="username" autocomplete="off" />
 
-		<h3>Available Games</h3>
+		<h3>Available Games ({{ totalGames }})</h3>
 
 		<div class="lobby__games">
 

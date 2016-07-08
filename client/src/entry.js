@@ -53,8 +53,7 @@ store.socket.on('decklistValidated', function(playerSocketId, decklist, valid, v
 	vm.$broadcast('decklistValidated', playerSocketId, decklist, valid, validationError);
 });
 
-// trigger animation
+// trigger die roll animation
 store.socket.on('dieRoll', function(targetPlayer, dieIndex){
-	console.log('got a die roll of index ' + dieIndex);
 	vm.$broadcast('dieRoll', targetPlayer, dieIndex);
 });

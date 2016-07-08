@@ -24,8 +24,8 @@ http.listen(3000, function(){
 	console.log('listening on *:3000');
 });
 
-// -----------------------------------------------------------[ GAME OBJECT ]
-function Game() {
+// -----------------------------------------------------------[ GAME OBJECTS ]
+var Game = function() {
 	this.gameName = 'Empty Game';
 	this.gameId = '';
   this.status = 'waiting';
@@ -33,9 +33,30 @@ function Game() {
   this.isPrivate = false;
 	this.allowSpectators = true;
   this.maxPlayers = 2;
-  this.players = {},
-  this.chatLog = []
-}
+  this.players = {};
+  this.chatLog = [];
+};
+
+var Player = function(username, position) {
+	this.username = username;
+	this.position = position;
+	this.isFirstPlayer = false;
+	this.justPassed = false;
+	this.pheonixborn = {};
+	this.dice = [];
+	this.hand = [];
+	this.deck = [];
+	this.discard = [];
+	this.conjurations = [];
+	this.battlefield = { 
+		limit: 5,
+		slots: []
+	};
+	this.spellboard = {
+		limit: 5,
+		slots: []
+	};
+};
 
 // this will hold ALL basic info and states for ALL games currently active
 var activeGames = {};
@@ -71,6 +92,12 @@ function getGameState(gameId) {
 	return activeGames[gameId];
 }
 
+// -----------------------------------------------------------[ SEND GAME STATE TO CLIENTS ]
+function sendGameState(gameId) {
+	console.log('sending a game state for game ' + gameId);
+	server.to(gameId).emit('gameStateUpdated', getGameState(gameId));
+}
+
 // -----------------------------------------------------------[ GET A PLAYER'S USERNAME ]
 function getPlayerUsername(gameId, playerSocketId) {
 	return activeGames[gameId].players[playerSocketId].username;
@@ -94,7 +121,7 @@ function removePlayerFromGames(playerSocketId) {
 				delete(activeGames[gameId]);
 			} else {
 				//otherwise send game state
-				server.to(gameId).emit('gameStateUpdated', getGameState(gameId));
+				sendGameState(gameId);
 			}
 		}
 	});
@@ -270,7 +297,6 @@ function buildDeck(decklist, gameId, playerSocketId) {
 	activeGames[gameId].players[playerSocketId].deck = deck;
 	activeGames[gameId].players[playerSocketId].dice = dice;
 	activeGames[gameId].players[playerSocketId].conjurations = conjurations;
-	activeGames[gameId].players[playerSocketId].discard = [];
 }
 
 // -----------------------------------------------------------[ SHUFFLE ANY STACK OF CARDS ]
@@ -300,6 +326,12 @@ function getDieRoll() {
 	return faces[Math.floor(Math.random() * faces.length)];
 }
 
+// -----------------------------------------------------------[ GET CARD ]
+// Return an object with all of a card's details based on name
+function getCard(cardName) {
+	return cards[cardName];
+}
+
 // -----------------------------------------------------------[ CHECK GAME STATUS ]
 // Compare number of players to max players to see if waiting
 // If the status is changing, update the game round
@@ -324,10 +356,7 @@ function checkGameStatus(gameId) {
 			}
 		});
 
-		//console.log('there are ' + numPlayers + ' out of ' + activeGames[gameId].maxPlayers + '. ' + numReadyPlayers + ' of them have valid lists.');
-
 		if (numReadyPlayers === numPlayers) {
-			//console.log('all players are ready');
 			
 			//initialize first five phase
 			if (activeGames[gameId].gameRound === -1) {
@@ -344,6 +373,8 @@ function checkGameStatus(gameId) {
 			activeGames[gameId].status = 'setup';
 		}
 	}
+
+	console.log('check game status is ending with a status of: ' + activeGames[gameId].status);
 }
 
 
@@ -371,7 +402,7 @@ server.on('connection', function(socket){
 		//add chat to game
 		chatToGame(gameId, sender, msg);
 		//emit update
-		server.to(gameId).emit('gameStateUpdated', getGameState(gameId));
+		sendGameState(gameId);
 	});
 
 	// -----------------------------------------------------------[ CLIENT REQUESTS GAME LIST ]
@@ -397,17 +428,14 @@ server.on('connection', function(socket){
 		var newGame = new Game();
 		newGame.gameId = gameId;
 		newGame.gameName = username;
-		newGame.players[socket.id] = {
-			username: username,
-			position: 1
-		};
+		newGame.players[socket.id] = new Player(username, 1);
 		activeGames[gameId] = newGame;
 
 		//send the updated game list to everyone
-		server.emit('gameList', getGameList() );
+		server.emit('gameList', getGameList());
 
 		//send the game state to this game
-		server.to(gameId).emit('gameStateUpdated', getGameState(gameId));
+		sendGameState(gameId);
 	});
 
 	// -----------------------------------------------------------[ CLIENT JOINS GAME ]
@@ -417,10 +445,7 @@ server.on('connection', function(socket){
 		socket.join(gameId);
 
 		//add the player to the game
-		activeGames[gameId].players[socket.id] = {
-			username: username,
-			position: _.keys(activeGames[gameId].players).length + 1
-		};
+		activeGames[gameId].players[socket.id] = new Player(username, _.keys(activeGames[gameId].players).length + 1);
 
 		//update the name of the game
 		activeGames[gameId].gameName = getGameName(gameId);
@@ -429,13 +454,13 @@ server.on('connection', function(socket){
 		checkGameStatus(gameId);
 
 		//send the updated game list to everyone
-		server.emit('gameList', getGameList() );
+		server.emit('gameList', getGameList());
 
 		//tell the game that someone has joined
 		chatToGame(gameId, 'server',  username + ' connected.');
 
 		//send the game state to this game
-		server.to(gameId).emit('gameStateUpdated', getGameState(gameId));
+		sendGameState(gameId);
 	});
 
 	// -----------------------------------------------------------[ CLIENT REQUESTS PREBUILT DECKLISTS ]
@@ -447,17 +472,18 @@ server.on('connection', function(socket){
 	socket.on('submitDecklistForValidation', function(gameId, decklist){
 		var validationResults = validateDecklist(decklist, gameId, socket.id);
 		server.to(gameId).emit('decklistValidated', socket.id, validationResults.decklist, validationResults.valid, validationResults.error);
-		server.to(gameId).emit('gameStateUpdated', getGameState(gameId));
+		sendGameState(gameId);
 	});
 
 	// -----------------------------------------------------------[ CLIENT REQUESTS GAME STATE ]
 	socket.on('requestGameState', function(gameId) {
-		server.to(gameId).emit('gameStateUpdated', getGameState(gameId));
+		sendGameState(gameId);
 	});
 
 	// -----------------------------------------------------------[ CLIENT TAKES AN ACTION WE NEED TO PROPOGATE ]
 	socket.on('userAction', function(gameId, action) {
 
+//action:
 // 	playerSocketId: store.socketId,
 // 	actionVerb: 'shuffle',
 // 	target: this.type,
@@ -465,10 +491,11 @@ server.on('connection', function(socket){
 
 		var playerUsername = getPlayerUsername(gameId, action.playerSocketId);
 		var targetOwnerUsername = getPlayerUsername(gameId, action.targetOwnerSocketId);
-		var actionDescription = '';
+		var actionDescription = 'did something.';
 
-		if (playerUsername === targetOwnerUsername) {
-			targetOwnerUsername = 'their own ';
+		//change the wording based on the target
+		if (action.playerSocketId === action.targetOwnerSocketId) {
+			targetOwnerUsername = 'their ';
 		} else {
 			targetOwnerUsername += '\'s ';
 		}
@@ -476,29 +503,39 @@ server.on('connection', function(socket){
 		//actually do the thing, if we need to
 		switch (action.actionVerb) {
 
+			//target should be a stack name (e.g. "deck")
 			case 'shuffle': 
 				var stack = activeGames[gameId].players[action.targetOwnerSocketId][action.target];
 				activeGames[gameId].players[action.targetOwnerSocketId][action.target] = shuffleStack(stack);
 				actionDescription = playerUsername + ' shuffled ' + targetOwnerUsername + action.target + '.';
 				break;
 
+			//target should be a stack name (e.g. "deck")
+			case 'peek':
+				actionDescription = playerUsername + ' peeked at ' + targetOwnerUsername + action.target + '.';
+				break;
+
+			//target should be a card (WHICH IS WHAT?)
+			case 'move': 
+				//TODO
+				actionDescription = playerUsername + ' moved CARDNAME from OWNERS LOCATION to OWNERS LOCATION';
+				break;
+
+			//target should be a die index (0-9)
 			case 'roll':
 				activeGames[gameId].players[action.targetOwnerSocketId].dice[action.target].face = getDieRoll();
 				actionDescription = playerUsername + ' rolled one of ' + targetOwnerUsername + ' dice.';
-				break;
-
-			case 'peek':
-				actionDescription = playerUsername + ' peeked at ' + targetOwnerUsername + action.target + '.';
 				break;
 		}
 
 		//tell everyone what happened
 		chatToGame(gameId, 'server', actionDescription);
-		//send the updated gamestate
-		server.to(gameId).emit('gameStateUpdated', getGameState(gameId));
 
-		//if it was a roll, we have to send this after the game state update, so the animation won't
-		//be ended instantly
+		//send the updated gamestate
+		sendGameState(gameId);
+
+		//if it was a roll, we have to send this after the game state update, 
+		//so the animation won't be ended instantly for everyone
 		if (action.actionVerb === 'roll') {
 			server.to(gameId).emit('dieRoll', action.targetOwnerSocketId, action.target);
 		}

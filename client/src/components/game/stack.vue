@@ -17,11 +17,19 @@
 	background-image:none;
 }
 
+.stack__hand {
+	width: 50px;
+  position: relative;
+  top: 40px;
+  left: 26px;
+}
+
 </style>
 
 <template>
 	<div @click.stop="openContext" class="stack stack--{{ this.type }}{{ !this.cards.length ? ' stack--empty' : ''}}">
 		<div class="stack__counter">{{ this.cards.length ? this.cards.length : '0' }}</div>
+		<img class="stack__hand" v-if="(this.type === 'hand')" src="img/icon-hand.png" />
 	</div>
 </template>
 

@@ -15,7 +15,8 @@
 	overflow-y:scroll;
 
 	li { 
-		font-size:0.9375rem;
+		font-size:0.825rem;
+		line-height:1.2;
 		color: white;
 		padding: 0.125rem 0; 
 

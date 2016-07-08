@@ -15,6 +15,8 @@
 </template>
 
 <script>
+import store from '../../store.js';
+
 export default {
 	props: ['card-name', 'card-type'],
 	data: function() {
@@ -25,6 +27,9 @@ export default {
 				}, {
 				text: "Move to...",
 				subActions: [ {
+					text: "Hand",
+					actions: this.moveToStack('hand')
+				}, {
 					text: "Deck",
 					actions: this.moveToStack('deck')
 				}, {
@@ -58,6 +63,16 @@ export default {
 
 		moveToStack: function(stack) {
 			
+			/* TODO
+			store.socket.emit('userAction', store.state.gameId, {
+				playerSocketId: store.socketId,
+				actionVerb: 'move',
+				object: this,
+				objectOwnerSocketId: this.$parent.playerId,
+				target: stack,
+				targetOwnerSocketId: this.$parent.playerId
+			});*/
+
 		},
 
 		moveToSpellboard: function() {

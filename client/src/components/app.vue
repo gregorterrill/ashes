@@ -43,9 +43,6 @@ import sidebar from './ui/sidebar.vue';
 import infobar from './ui/infobar.vue';
 import store from '../store.js';
 
-//helpers
-import { testFunction } from '../helpers/game.js';
-
 export default {
 	components: {
 		lobby,

@@ -5,7 +5,6 @@
 	height:calc(50vh - 1rem);
 	padding:1rem;
 	display:flex;
-	overflow:scroll;
 }
 
 .board * {
@@ -48,6 +47,7 @@
 			<div class="board__row">
 				<stack type="conjurations" :cards="player.conjurations"></stack>
 				<card :card-name="player.pheonixborn" card-type="pheonixborn"></card>
+				<stack type="hand" :cards="player.hand"></stack>
 			</div>
 			<div class="board__row">						
 				<div class="dice-pool">
