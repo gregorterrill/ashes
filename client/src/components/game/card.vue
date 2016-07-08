@@ -3,22 +3,23 @@
 	display:inline-block;
 	vertical-align:top;
 	width:100px;
-	height:136px;
+	height:140px;
 	position:relative;
 	background-image:url('../img/back-standard.jpg');
-	background-size:100px 136px;
+	background-size:100px 140px;
+	border-radius:6px;
 }
 </style>
 
 <template>
-	<div @click.stop="openContext" class="card" :style="{ backgroundImage: 'url(' + imageUri + ')' }" @mouseover="previewCard" ></div>
+	<div @click.stop="clickCard" class="card" :style="{ backgroundImage: 'url(' + imageUri + ')' }" @mouseover="previewCard" ></div>
 </template>
 
 <script>
 import store from '../../store.js';
 
 export default {
-	props: ['card-name', 'card-type'],
+	props: ['card-data'],
 	data: function() {
 		return {
 			contextActions: [ {
@@ -47,13 +48,31 @@ export default {
 	},
 	computed: {
 		imageUri : function() {
-			return 'img/cards/' + encodeURIComponent(this.cardName) + '.jpg';
+			return 'img/cards/' + encodeURIComponent(this.cardData.name) + '.jpg';
 		}
 	},
 	methods: {
 		previewCard: function(e) {
 			this.$dispatch('previewCard', this.imageUri, e );
 			// TODO: nothing is catching this yet
+		},
+
+		clickCard: function(e) {
+
+			//if we're asking for targets, toggle the targetting of this card
+			if (store.currentInput.targetType === 'card' && store.currentInput.targets.length < store.currentInput.quantity) {
+
+				store.currentInput.targets.push(this);
+
+				//if this is the last one
+				if (store.currentInput.targets.length === store.currentInput.quantity) {
+					store.socket.emit('playerInput', store.currentInput.targets );
+				}
+
+			} else {
+				this.openContext(e);
+			}
+
 		},
 
 		openContext: function(e) {

@@ -3,5 +3,6 @@ export default {
 	socketId: '',
 	username: 'Anonymous',
 	gameList: [],
-  state: {}
+  state: {},
+  currentInput: {}
 }

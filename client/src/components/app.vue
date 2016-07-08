@@ -6,6 +6,9 @@
   flex-direction: column;
   justify-content: flex-end;
 }
+.boards--targetting {
+	cursor: crosshair;
+}
 </style>
 
 <template>
@@ -18,7 +21,7 @@
 
 		<div class="container">
 
-			<div class="boards">
+			<div class="boards{{ store.currentInput.target ? ' boards--targetting' : '' }}">
 				<board v-for="playerId in otherPlayerIds" :player-id="playerId" player-type="opponent"></board>
 				<board :player-id="store.socketId" player-type="you"></board>
 			</div>

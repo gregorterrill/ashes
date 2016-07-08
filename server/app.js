@@ -1,3 +1,11 @@
+//   _____ ____  _   _ ______ _____ _____
+//  / ____/ __ \| \ | |  ____|_   _/ ____|
+// | |   | |  | |  \| | |__    | || |  __
+// | |   | |  | | . ` |  __|   | || | |_ |
+// | |___| |__| | |\  | |     _| || |__| |
+//  \_____\____/|_| \_|_|    |_____\_____|
+
+// -----------------------------------------------------------[ ]
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
@@ -24,7 +32,14 @@ http.listen(3000, function(){
 	console.log('listening on *:3000');
 });
 
-// -----------------------------------------------------------[ GAME OBJECTS ]
+//   _____          __  __ ______    ____  ____       _ ______ _____ _______ _____
+//  / ____|   /\   |  \/  |  ____|  / __ \|  _ \     | |  ____/ ____|__   __/ ____|
+// | |  __   /  \  | \  / | |__    | |  | | |_) |    | | |__ | |       | | | (___
+// | | |_ | / /\ \ | |\/| |  __|   | |  | |  _ < _   | |  __|| |       | |  \___ \
+// | |__| |/ ____ \| |  | | |____  | |__| | |_) | |__| | |___| |____   | |  ____) |
+//  \_____/_/    \_\_|  |_|______|  \____/|____/ \____/|______\_____|  |_| |_____/
+
+// -----------------------------------------------------------[ ]
 var Game = function() {
 	this.gameName = 'Empty Game';
 	this.gameId = '';
@@ -55,6 +70,26 @@ var Player = function(username, position) {
 	this.spellboard = {
 		limit: 5,
 		slots: []
+	};
+};
+
+var Card = function(cardData) {
+	this.name = cardData.name;
+	this.type = cardData.type;
+	this.location = cardData.location;
+	this.cost = cardData.cost;
+	this.attack = cardData.attack;
+	this.life = cardData.life;
+	this.recover = cardData.recover;
+	this.restrictions = cardData.restrictions;
+	this.abilities = cardData.abilities;
+	this.controller = '';
+	this.owner = '';
+	this.tokens = {
+		wound: 0,
+		status: 0,
+		exhaustion: 0,
+		charm: 0
 	};
 };
 
@@ -94,7 +129,7 @@ function getGameState(gameId) {
 
 // -----------------------------------------------------------[ SEND GAME STATE TO CLIENTS ]
 function sendGameState(gameId) {
-	console.log('sending a game state for game ' + gameId);
+	console.log('Game ' + gameId + ' state updated.');
 	server.to(gameId).emit('gameStateUpdated', getGameState(gameId));
 }
 
@@ -119,6 +154,7 @@ function removePlayerFromGames(playerSocketId) {
 			//if the game is now empty, delete it
 			if (_.keys(activeGames[gameId].players).length === 0) {
 				delete(activeGames[gameId]);
+				console.log('Game ' + gameId + ' ended.');
 			} else {
 				//otherwise send game state
 				sendGameState(gameId);
@@ -268,16 +304,19 @@ function buildDeck(decklist, gameId, playerSocketId) {
 	var conjurations = [];
 	var dice = [];
 
-	//rebuild the decks as arrays so we can shuffle them
+	//we're just getting the data instead of making the card so we can use the spellboard/battlefield values soon
+	var pheonixbornData = getCardData(decklist.pheonixborn);
+
+	//rebuild the decks as arrays so we can shuffle them and we have card objects instead of strings
 	_.each(decklist.deck, function(quantity, cardName) {
 		for (var i = quantity - 1; i >= 0; i--) {
-			deck.push(cardName);
+			deck.push(new Card(getCardData(cardName)));
 		}
 	});
 
 	_.each(decklist.conjurations, function(quantity, cardName) {
 		for (var i = quantity - 1; i >= 0; i--) {
-			conjurations.push(cardName);
+			conjurations.push(new Card(getCardData(cardName)));
 		}
 	});
 
@@ -293,10 +332,24 @@ function buildDeck(decklist, gameId, playerSocketId) {
 	});
 
 	//send this player's decklist to activeGames
-	activeGames[gameId].players[playerSocketId].pheonixborn = decklist.pheonixborn;
+	activeGames[gameId].players[playerSocketId].pheonixborn = new Card(pheonixbornData);
 	activeGames[gameId].players[playerSocketId].deck = deck;
 	activeGames[gameId].players[playerSocketId].dice = dice;
 	activeGames[gameId].players[playerSocketId].conjurations = conjurations;
+
+	//set up this players board zones
+	var battlefieldLimit = pheonixbornData.battlefield;
+	var spellboardLimit = pheonixbornData.spellboard;
+
+	//push empty objects to each slot they have available
+	activeGames[gameId].players[playerSocketId].battlefield.limit = battlefieldLimit;
+	for (var i = battlefieldLimit - 1; i >= 0; i--) {
+		activeGames[gameId].players[playerSocketId].battlefield.slots.push({});
+	}
+	activeGames[gameId].players[playerSocketId].spellboard.limit = spellboardLimit;
+	for (var i = spellboardLimit - 1; i >= 0; i--) {
+		activeGames[gameId].players[playerSocketId].spellboard.slots.push({});
+	}	
 }
 
 // -----------------------------------------------------------[ SHUFFLE ANY STACK OF CARDS ]
@@ -326,10 +379,12 @@ function getDieRoll() {
 	return faces[Math.floor(Math.random() * faces.length)];
 }
 
-// -----------------------------------------------------------[ GET CARD ]
+// -----------------------------------------------------------[ GET CARD DATA ]
 // Return an object with all of a card's details based on name
-function getCard(cardName) {
-	return cards[cardName];
+function getCardData(cardName) {
+	var cardObject = cards[cardName];
+	cardObject.name = cardName;
+	return cardObject;
 }
 
 // -----------------------------------------------------------[ CHECK GAME STATUS ]
@@ -362,6 +417,14 @@ function checkGameStatus(gameId) {
 			if (activeGames[gameId].gameRound === -1) {
 				activeGames[gameId].gameRound = 0;
 				activeGames[gameId].status = 'firstFive';
+				chatToGame(gameId, 'server', 'Select your First Five.');
+
+				server.to(gameId).emit('requirePlayerInput', {
+					targetType: 'card',
+					owner: 'self',
+					quantity: 5,
+					targets: []
+				});
 			} else {
 				//start the regular rounds
 				activeGames[gameId].gameRound = 1;
@@ -373,8 +436,6 @@ function checkGameStatus(gameId) {
 			activeGames[gameId].status = 'setup';
 		}
 	}
-
-	console.log('check game status is ending with a status of: ' + activeGames[gameId].status);
 }
 
 
@@ -433,6 +494,7 @@ server.on('connection', function(socket){
 
 		//send the updated game list to everyone
 		server.emit('gameList', getGameList());
+		console.log('Game ' + gameId + ' created.');
 
 		//send the game state to this game
 		sendGameState(gameId);
@@ -481,7 +543,13 @@ server.on('connection', function(socket){
 		sendGameState(gameId);
 	});
 
-	// -----------------------------------------------------------[ CLIENT TAKES AN ACTION WE NEED TO PROPOGATE ]
+	// -----------------------------------------------------------[ CLIENT RESPONDS TO AN INPUT REQUEST ]
+	socket.on('userInput', function(gameId, input) {
+		//TODO
+		console.log(input);
+	});
+
+	// -----------------------------------------------------------[ CLIENT TAKES A PROACTIVE ACTION WE NEED TO PROPOGATE ]
 	socket.on('userAction', function(gameId, action) {
 
 //action:
@@ -526,6 +594,18 @@ server.on('connection', function(socket){
 			case 'roll':
 				activeGames[gameId].players[action.targetOwnerSocketId].dice[action.target].face = getDieRoll();
 				actionDescription = playerUsername + ' rolled one of ' + targetOwnerUsername + ' dice.';
+				break;
+
+			//target should be a die index (0-9)
+			case 'refresh':
+				activeGames[gameId].players[action.targetOwnerSocketId].dice[action.target].exhausted = false;
+				actionDescription = playerUsername + ' refreshed one of ' + targetOwnerUsername + ' dice.';
+				break;
+
+			//target should be a die index (0-9)
+			case 'exhaust':
+				activeGames[gameId].players[action.targetOwnerSocketId].dice[action.target].exhausted = true;
+				actionDescription = playerUsername + ' exhausted one of ' + targetOwnerUsername + ' dice.';
 				break;
 		}
 

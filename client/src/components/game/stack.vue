@@ -3,10 +3,11 @@
 	display:inline-block;
 	vertical-align:top;
 	width:100px;
-	height:136px;
+	height:140px;
 	position:relative;
 	background-image:url('../img/back-standard.jpg');
-	background-size:100px 136px;
+	background-size:100px 140px;
+	border-radius:6px;
 }
 
 .stack--conjurations {
@@ -14,6 +15,7 @@
 }
 
 .stack--empty {
+	background-color:transparentize(black,0.9);
 	background-image:none;
 }
 
@@ -22,6 +24,7 @@
   position: relative;
   top: 40px;
   left: 26px;
+  opacity:0.85;
 }
 
 </style>

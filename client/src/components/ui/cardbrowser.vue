@@ -3,7 +3,7 @@
 	position:fixed;
 	width: 100vw;
 	top:50%;
-	margin-top:-226px;
+	margin-top:-209px; //418/2
   left: 0;
   overflow-x: scroll;
   z-index: 98;
@@ -13,9 +13,9 @@
 	margin:0;
 	padding:0;
 	list-style-type:none;
-	width:9960px; //332*30
+	width:8970px; //299*30
   display: block;
-  height: 452px;
+  height: 418px;
   background-color:white;
 }
 
@@ -35,9 +35,10 @@
 }
 
 .card-browser .card {
-	width:332px;
-	height:452px;
-	background-size:332px 452px;
+	width:299px;
+	height:418px;
+	background-size:299px 418px;
+	border-radius:6px;
 }
 
 </style>
@@ -46,8 +47,8 @@
 	<div class="card-browser__overlay" v-show="viewBrowser" @click="closeBrowser"></div>
 	<div class="card-browser" v-show="viewBrowser">
 		<ul class="card-browser__list" v-bind:style="{ width: listWidth + 'px' }">
-			<li v-for="cardName in cards" track-by="$index" class="card-browser__item">
-				<card :card-name="cardName"></card>
+			<li v-for="card in cards" track-by="$index" class="card-browser__item">
+				<card :card-data="card"></card>
 			</li>
 		</ul>
 	</div>
@@ -68,7 +69,7 @@ export default {
 	},
 	computed: {
 		listWidth: function() {
-			return this.cards.length * 332;
+			return this.cards.length * 299;
 		}
 	},
 	methods: {

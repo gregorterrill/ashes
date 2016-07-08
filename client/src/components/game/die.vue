@@ -54,19 +54,35 @@ export default {
 	props: ['type','face','exhausted','index'],
 	data: function() {
 		return {
-			rolling: false,
-			contextActions: [ {
-				text: "Roll",
-				action: this.roll
-			}, {
-				text: "Refresh",
-				action: this.refresh
-			}, {
-				text: "Exhaust",
-				action: this.exhaust
-			} ]
+			rolling: false
 		}
 	},
+
+	computed: {
+		contextActions: function() {
+
+			actions = [];
+
+			if (this.exhausted) {
+				actions.push({
+					text: "Refresh",
+					action: this.refresh
+				});
+			} else {
+				actions.push({
+					text: "Roll",
+					action: this.roll
+				});
+				actions.push({
+					text: "Exhaust",
+					action: this.exhaust
+				});
+			}
+
+			return actions;
+		}
+	},
+
 	methods: {
 		roll: function() {
 			this.rolling = true;
@@ -80,10 +96,22 @@ export default {
 			});
 		},
 		refresh: function() {
-			this.exhausted = false;
+			
+			store.socket.emit('userAction', store.state.gameId, {
+				playerSocketId: store.socketId,
+				actionVerb: 'refresh',
+				target: this.index,
+				targetOwnerSocketId: this.$parent.playerId
+			});
 		},
 		exhaust: function() {
-			this.exhausted = true;
+			
+			store.socket.emit('userAction', store.state.gameId, {
+				playerSocketId: store.socketId,
+				actionVerb: 'exhaust',
+				target: this.index,
+				targetOwnerSocketId: this.$parent.playerId
+			});
 		},
 		openContext: function(e) {
 			this.$dispatch('openContext', this.contextActions, e );

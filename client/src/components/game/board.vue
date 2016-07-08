@@ -13,9 +13,15 @@
 
 .board__player {
 	margin:auto;
+	flex:1;
+}
+
+.board__row {
+	margin-bottom:0.25rem;
 }
 
 .board__areas {
+	flex:1;
 	display: flex;
   flex-direction: column;
   justify-content:space-around;
@@ -46,7 +52,7 @@
 			</div>
 			<div class="board__row">
 				<stack type="conjurations" :cards="player.conjurations"></stack>
-				<card :card-name="player.pheonixborn" card-type="pheonixborn"></card>
+				<card :card-data="player.pheonixborn"></card>
 				<stack type="hand" :cards="player.hand"></stack>
 			</div>
 			<div class="board__row">						
@@ -57,22 +63,12 @@
 		</div>
 		<div v-if="(gameRound >= 0)" class="board__areas">
 			<div class="area area--spellboard">
-				<span class="area__title">Spellboard (0/4)</span>
-				<div class="area__slot"></div>
-				<div class="area__slot"></div>
-				<div class="area__slot"></div>
-				<div class="area__slot"></div>
+				<span class="area__title">Spellboard (0/{{ player.spellboard.limit }})</span>
+				<div v-for="slot in player.spellboard.slots" class="area__slot"></div>
 			</div>
 			<div class="area area--battlefield">
-				<span class="area__title">Battlefield (0/8)</span>
-				<div class="area__slot"></div>
-				<div class="area__slot"></div>
-				<div class="area__slot"></div>
-				<div class="area__slot"></div>
-				<div class="area__slot"></div>
-				<div class="area__slot"></div>
-				<div class="area__slot"></div>
-				<div class="area__slot"></div>
+				<span class="area__title">Battlefield (0/{{ player.battlefield.limit }})</span>
+				<div v-for="slot in player.battlefield.slots" class="area__slot"></div>
 			</div>
 		</div>
 		<context-menu v-ref:context></context-menu>
