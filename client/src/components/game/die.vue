@@ -5,6 +5,7 @@
 	height:29px;
 	display:inline-block;
 	margin-right: 2px;
+	border-radius:4px;
 
 	&.die--exhausted::after {
 		content: "";

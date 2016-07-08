@@ -7,6 +7,7 @@
   left: 0;
   overflow-x: scroll;
   z-index: 98;
+  background-color:white;
 }
 
 .card-browser__list {
@@ -47,7 +48,7 @@
 	<div class="card-browser__overlay" v-show="viewBrowser" @click="closeBrowser"></div>
 	<div class="card-browser" v-show="viewBrowser">
 		<ul class="card-browser__list" v-bind:style="{ width: listWidth + 'px' }">
-			<li v-for="card in cards" track-by="$index" class="card-browser__item">
+			<li v-for="card in cards" class="card-browser__item">
 				<card :card-data="card"></card>
 			</li>
 		</ul>
@@ -55,6 +56,7 @@
 </template>
 
 <script>
+import store from '../../store.js';
 import card from '../game/card.vue';
 
 export default {
@@ -64,17 +66,27 @@ export default {
 	data: function() {
 		return {
 			viewBrowser: false,
-			cards: []
+			playerSocketId: '',
+			stackName: ''
 		}
 	},
 	computed: {
 		listWidth: function() {
 			return this.cards.length * 299;
+		},
+		cards: function() {
+			//if we've got stack info, use cards from the stack, otherwise we're empty
+			if (this.playerSocketId && this.stackName) {
+				return store.state.players[this.playerSocketId][this.stackName];
+			} else {
+				return [];
+			}	
 		}
 	},
 	methods: {
-		openBrowser: function(cards) {
-			this.cards = cards;
+		openBrowser: function(playerSocketId, stackName) {
+			this.playerSocketId = playerSocketId;
+			this.stackName = stackName;
 			this.viewBrowser = true;
 		},
 		closeBrowser: function() {

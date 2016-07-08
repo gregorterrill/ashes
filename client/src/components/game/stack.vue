@@ -5,13 +5,8 @@
 	width:100px;
 	height:140px;
 	position:relative;
-	background-image:url('../img/back-standard.jpg');
 	background-size:100px 140px;
 	border-radius:6px;
-}
-
-.stack--conjurations {
-	background-image:url('../img/back-conjuration.jpg');
 }
 
 .stack--empty {
@@ -30,7 +25,7 @@
 </style>
 
 <template>
-	<div @click.stop="openContext" class="stack stack--{{ this.type }}{{ !this.cards.length ? ' stack--empty' : ''}}">
+	<div @click.stop="openContext" v-bind:style="{ backgroundImage: 'url(' + this.stackImageUri + ')' }" class="stack stack--face-{{ this.face }} stack--{{ this.type }}{{ !this.cards.length ? ' stack--empty' : ''}}">
 		<div class="stack__counter">{{ this.cards.length ? this.cards.length : '0' }}</div>
 		<img class="stack__hand" v-if="(this.type === 'hand')" src="img/icon-hand.png" />
 	</div>
@@ -40,9 +35,30 @@
 import store from '../../store.js';
 
 export default {
-	props: ['type', 'cards'],
+	props: ['type', 'cards', 'face'],
 	
 	computed: {
+
+		stackImageUri: function() {
+
+			// if the stack is empty, show nothing
+			if (this.cards.length === 0) {
+				return '';
+			}
+
+			//if the stack is face up, show the top card
+			if (this.face === 'up') {
+				return 'img/cards/' + encodeURIComponent(this.cards[0].name) + '.jpg';
+			}
+
+			if (this.type === 'conjurations') {
+				return 'img/back-conjuration.jpg';
+			}
+
+			return 'img/back-standard.jpg';
+
+		},
+
 		contextActions: function() {
 
 			actions = [];
@@ -86,7 +102,7 @@ export default {
 		},
 
 		peekAtCards: function() {
-			this.$dispatch('openBrowser', this.cards);
+			this.$dispatch('openBrowser', this.$parent.playerId, this.type );
 
 			store.socket.emit('userAction', store.state.gameId, {
 				playerSocketId: store.socketId,

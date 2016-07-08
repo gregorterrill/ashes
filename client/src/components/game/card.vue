@@ -12,7 +12,7 @@
 </style>
 
 <template>
-	<div @click.stop="clickCard" class="card" :style="{ backgroundImage: 'url(' + imageUri + ')' }" @mouseover="previewCard" ></div>
+	<div @click.stop="openContext" class="card" :style="{ backgroundImage: 'url(' + imageUri + ')' }" @mouseover="previewCard" ></div>
 </template>
 
 <script>
@@ -24,24 +24,25 @@ export default {
 		return {
 			contextActions: [ {
 					text: "Activate",
-					actions: this.activateCard
+					action: this.activateCard
 				}, {
 				text: "Move to...",
+				action: this.doSubAction,
 				subActions: [ {
 					text: "Hand",
-					actions: this.moveToStack('hand')
+					action: this.moveToHand
 				}, {
 					text: "Deck",
-					actions: this.moveToStack('deck')
+					action: this.moveToDeck
 				}, {
 					text: "Discard",
-					actions: this.moveToStack('discard')
+					action: this.moveToDiscard
 				}, {
 					text: "Spellboard",
-					actions: this.moveToSpellboard
+					action: this.moveToSpellboard
 				}, {
 					text: "Battlefield",
-					actions: this.moveToBattlefield
+					action: this.moveToBattlefield
 				} ]
 			} ]
 		}
@@ -57,53 +58,56 @@ export default {
 			// TODO: nothing is catching this yet
 		},
 
-		clickCard: function(e) {
-
-			//if we're asking for targets, toggle the targetting of this card
-			if (store.currentInput.targetType === 'card' && store.currentInput.targets.length < store.currentInput.quantity) {
-
-				store.currentInput.targets.push(this);
-
-				//if this is the last one
-				if (store.currentInput.targets.length === store.currentInput.quantity) {
-					store.socket.emit('playerInput', store.currentInput.targets );
-				}
-
-			} else {
-				this.openContext(e);
-			}
-
-		},
-
 		openContext: function(e) {
-
 			this.$dispatch('openContext', this.contextActions, e );
 		},
 
-		moveToStack: function(stack) {
-			
-			/* TODO
+		doSubAction: function() {
+			console.log('should be doing a sub action instead');
+		},
+
+		moveToHand: function() {
+
 			store.socket.emit('userAction', store.state.gameId, {
 				playerSocketId: store.socketId,
 				actionVerb: 'move',
-				object: this,
-				objectOwnerSocketId: this.$parent.playerId,
-				target: stack,
-				targetOwnerSocketId: this.$parent.playerId
-			});*/
+				object: this.cardData,
+				target: 'hand',
+				targetOwnerSocketId: store.socketId
+			});
 
+		},
+
+		moveToDeck: function() {
+			store.socket.emit('userAction', store.state.gameId, {
+				playerSocketId: store.socketId,
+				actionVerb: 'move',
+				object: this.cardData,
+				target: 'deck',
+				targetOwnerSocketId: store.socketId
+			});
+		},
+
+		moveToDiscard: function() {
+			store.socket.emit('userAction', store.state.gameId, {
+				playerSocketId: store.socketId,
+				actionVerb: 'move',
+				object: this.cardData,
+				target: 'discard',
+				targetOwnerSocketId: store.socketId
+			});
 		},
 
 		moveToSpellboard: function() {
-
+			console.log('tried to move to spellboard but failed');
 		},
 
 		moveToBattlefield: function() {
-
+			console.log('tried to move to battlefield but failed');
 		},
 
 		activateCard: function() {
-			
+			console.log('tried to activate a card but failed');
 		}
 	}
 }

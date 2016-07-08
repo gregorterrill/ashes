@@ -73,7 +73,7 @@ var Player = function(username, position) {
 	};
 };
 
-var Card = function(cardData) {
+var Card = function(cardData, owner, startingLocation) {
 	this.name = cardData.name;
 	this.type = cardData.type;
 	this.location = cardData.location;
@@ -83,8 +83,9 @@ var Card = function(cardData) {
 	this.recover = cardData.recover;
 	this.restrictions = cardData.restrictions;
 	this.abilities = cardData.abilities;
-	this.controller = '';
-	this.owner = '';
+	this.controller = owner;
+	this.owner = owner;
+	this.currentLocation = startingLocation;
 	this.tokens = {
 		wound: 0,
 		status: 0,
@@ -310,13 +311,27 @@ function buildDeck(decklist, gameId, playerSocketId) {
 	//rebuild the decks as arrays so we can shuffle them and we have card objects instead of strings
 	_.each(decklist.deck, function(quantity, cardName) {
 		for (var i = quantity - 1; i >= 0; i--) {
-			deck.push(new Card(getCardData(cardName)));
+
+			var startingLocation = {
+				type: 'stack',
+				name: 'deck',
+				position: deck.length
+			};
+
+			deck.push(new Card(getCardData(cardName), playerSocketId, startingLocation));
 		}
 	});
 
 	_.each(decklist.conjurations, function(quantity, cardName) {
 		for (var i = quantity - 1; i >= 0; i--) {
-			conjurations.push(new Card(getCardData(cardName)));
+
+			var startingLocation = {
+				type: 'stack',
+				name: 'conjurations',
+				position: conjurations.length
+			};
+
+			conjurations.push(new Card(getCardData(cardName), playerSocketId, startingLocation));
 		}
 	});
 
@@ -332,7 +347,7 @@ function buildDeck(decklist, gameId, playerSocketId) {
 	});
 
 	//send this player's decklist to activeGames
-	activeGames[gameId].players[playerSocketId].pheonixborn = new Card(pheonixbornData);
+	activeGames[gameId].players[playerSocketId].pheonixborn = new Card(pheonixbornData, playerSocketId, 'pheonixborn');
 	activeGames[gameId].players[playerSocketId].deck = deck;
 	activeGames[gameId].players[playerSocketId].dice = dice;
 	activeGames[gameId].players[playerSocketId].conjurations = conjurations;
@@ -370,6 +385,20 @@ function shuffleStack(stack) {
 		stack[randomPick] = lastUnshuffledCard;
 	}
 
+	stack = updateCardPositions(stack);
+
+	return stack;
+}
+
+
+// -----------------------------------------------------------[ UPDATE CARD POSITIONS ]
+// when we shuffle a stack or move cards between stacks, each card's position property
+// becomes incorrect, so we need to recalculate them based on their new positions
+function updateCardPositions(stack) {
+
+	_.each(stack, function(card, index) {
+		card.currentLocation.position = index;
+	});
 	return stack;
 }
 
@@ -385,6 +414,53 @@ function getCardData(cardName) {
 	var cardObject = cards[cardName];
 	cardObject.name = cardName;
 	return cardObject;
+}
+
+// -----------------------------------------------------------[ MOVE A CARD TO A STACK OR ZONE ]
+function moveCardTo(gameId, card, destinationType, destination, destinationOwner) {
+
+	var origin = {
+		location: card.currentLocation,
+		controller: card.controller
+	};
+
+	//TODO: if the origin is a stack, we need to remove this card from that stack by its index
+	if (origin.location.type === 'stack') {
+		activeGames[gameId].players[origin.controller][origin.location.name].splice(origin.location.position, 1);
+	}
+	
+	//TODO: if the origin is a zone, we need to remove this card and any attachments from that zone slot
+	
+	//TODO: if the destination is a stack, we need to add this card to the top of that stack
+	
+	//TODO: if the destination is a zone, we need to add this card to the next available zone slot, unless the zone is full
+
+	//TODO: if the destination is a stack or zone controlled by a different player than the origin, 
+	// we need to update the controller of the card
+
+
+	if (destinationType === 'stack') {
+
+		activeGames[gameId].players[origin.controller][origin.location];
+
+		card.currentLocation = {
+			type: 'stack',
+			name: destination,
+			position: activeGames[gameId].players[destinationOwner][destination].length
+		};
+
+		activeGames[gameId].players[destinationOwner][destination].unshift(card);
+
+	} else {
+
+
+
+	}
+
+	//after moving cards, we need to update the positions of their origin and destination stacks
+	activeGames[gameId].players[origin.controller][origin.location.name] = updateCardPositions(activeGames[gameId].players[origin.controller][origin.location.name]);
+	activeGames[gameId].players[destinationOwner][destination] = updateCardPositions(activeGames[gameId].players[destinationOwner][destination]);
+
 }
 
 // -----------------------------------------------------------[ CHECK GAME STATUS ]
@@ -584,10 +660,12 @@ server.on('connection', function(socket){
 				actionDescription = playerUsername + ' peeked at ' + targetOwnerUsername + action.target + '.';
 				break;
 
-			//target should be a card (WHICH IS WHAT?)
+			//target should be a card object
 			case 'move': 
+				var origin = action.object.currentLocation.name;
 				//TODO
-				actionDescription = playerUsername + ' moved CARDNAME from OWNERS LOCATION to OWNERS LOCATION';
+				moveCardTo(gameId, action.object, 'stack', action.target, action.targetOwnerSocketId);
+				actionDescription = playerUsername + ' moved ' + action.object.name + ' from ' + origin + ' to ' + action.target + '.';
 				break;
 
 			//target should be a die index (0-9)

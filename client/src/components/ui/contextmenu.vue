@@ -42,7 +42,7 @@
 <template>
 	<div class="context-menu" v-el:menu v-show="viewMenu" v-bind:style="{ top: top, left: left }" v-on-clickaway="closeMenu">
 		<ul class="context-menu__list">
-			<li v-for="item in contextActions" class="context-menu__item" @click="triggerAndClose(item.action)">{{ item.text }}
+			<li v-for="item in contextActions" class="context-menu__item" @click.self="triggerAndClose(item.action)">{{ item.text }}
 				<ul v-if="item.subActions" class="context-menu__sublist">
 					<li v-for="subItem in item.subActions" class="context-menu__item" @click="triggerAndClose(subItem.action)">{{ subItem.text }}
 				</ul>
@@ -96,7 +96,14 @@ export default {
 		},
 
 		triggerAndClose: function(action) {
-			action();
+
+			console.log(action);
+
+			if (typeof action === 'function') {
+				action();
+			} else {
+				console.log('tried to trigger an action but it wasnt a function');
+			}
 			this.closeMenu();
 		}
 	}

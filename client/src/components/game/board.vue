@@ -1,5 +1,6 @@
 <style lang="sass">
 .board {
+	background:url(img/bg-pattern.png);
 	position:relative;
 	width:100%;
 	height:calc(50vh - 1rem);
@@ -47,13 +48,13 @@
 		
 		<div v-if="(gameRound >= 0)" class="board__player">
 			<div class="board__row">
-				<stack type="discard" :cards="player.discard"></stack>
-				<stack type="deck" :cards="player.deck"></stack>
+				<stack type="discard" face="up" :cards="player.discard"></stack>
+				<stack type="deck" face="down" :cards="player.deck"></stack>
 			</div>
 			<div class="board__row">
-				<stack type="conjurations" :cards="player.conjurations"></stack>
+				<stack type="conjurations" face="down" :cards="player.conjurations"></stack>
 				<card :card-data="player.pheonixborn"></card>
-				<stack type="hand" :cards="player.hand"></stack>
+				<stack type="hand" face="down" :cards="player.hand"></stack>
 			</div>
 			<div class="board__row">						
 				<div class="dice-pool">
@@ -99,8 +100,8 @@ export default {
 		openContext: function(contextActions, event) {
 			this.$refs.context.openMenu(contextActions, event);
 		},
-		openBrowser: function(cards) {
-			this.$refs.browser.openBrowser(cards);
+		openBrowser: function(playerSocketId, stackName) {
+			this.$refs.browser.openBrowser(playerSocketId, stackName);
 		}
 	},
 	computed: {
