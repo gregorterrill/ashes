@@ -81,6 +81,24 @@ export default {
 				});
 			}
 
+			//TODO : For debug only FIRST FIVE draw helper
+			if (isOwner && this.type === 'deck' && store.state.status == 'firstFive') {
+				actions.push({
+					text: "DEBUG: Get five",
+					action: function() {
+						for (var i = 4; i >= 0; i--) {
+							store.socket.emit('userAction', store.state.gameId, {
+								playerSocketId: store.socketId,
+								actionVerb: 'move',
+								object: store.state.players[store.socketId].deck[Math.floor(Math.random() * store.state.players[store.socketId].deck.length)],
+								target: 'hand',
+								targetOwnerSocketId: store.socketId
+							});
+						}
+					}
+				});
+			}
+
 			return actions;
 		}
 	},

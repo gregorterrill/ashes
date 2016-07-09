@@ -181,16 +181,19 @@ function sendActions(gameId, action, playerSocketId) {
 			break;
 
 		case 'preparePhase':
+
+			preparePhaseRollDice(gameId);
+
 			_.each(activeGames[gameId].players, function(playerData, playerSocketId) {
 				activeGames[gameId].players[playerSocketId].actions = {
 					status: 'preparePhase',
-					message: 'PREPARE PHASE: Roll dice, discard cards, draw up to five.',
+					message: 'PREPARE PHASE: Discard any cards you wish from your hand and then draw back to five.',
 					buttons: [{
-						text: 'Roll all dice',
-						action: 'rollAllDice'
-					}, {
 						text: 'Draw up to five',
 						action: 'drawToFive'
+					}, {
+						text: 'End prepare phase',
+						action: 'endPrepare'
 					}]
 				};
 			});
@@ -531,6 +534,83 @@ function getCardData(cardName) {
 	return cardObject;
 }
 
+// -----------------------------------------------------------[ PREPARE PHASE: ROLL ALL DICE ]
+// roll all dice and determine start player
+function preparePhaseRollDice(gameId) {
+
+	var lastPlayersBasics = false;
+
+	_.each(activeGames[gameId].players, function(playerData, playerSocketId) {
+
+		var numBasics = 0;
+
+		_.each(activeGames[gameId].players[playerSocketId].dice, function(dieData, index) {
+
+			var newFace = getDieRoll();
+			activeGames[gameId].players[playerSocketId].dice[index].face = newFace;
+			activeGames[gameId].players[playerSocketId].dice[index].exhausted = false;
+
+			if (newFace === 'basic') {
+				numBasics++;
+			}
+
+		});
+
+		//if this is the first round, we need to determine first player based on number of rolled basics
+		if (activeGames[gameId].gameRound === 1) {
+
+			//if there is a tie, both players need to re-roll
+			if (numBasics === lastPlayersBasics) {
+				//TODO: re-roll without being recursive, probably need to break first player determination into own function
+			}
+
+			//if this is the first player we've looked at, or they have more basics than the previous, they're the new start player
+			if (!lastPlayersBasics || numBasics > lastPlayersBasics) {
+				setFirstPlayer(gameId, playerSocketId);
+			}
+			lastPlayersBasics = numBasics;
+		}
+
+	});
+
+	//if this is not the first round, pass the first player to next in position
+	if (activeGames[gameId].gameRound > 1) {
+
+		//get the current first player's position
+		var firstPlayerPosition = activeGames[gameId].players[getFirstPlayer(gameId)].position;
+
+		//try to get the next position's socketId
+		var newFirstPlayerSocketId = _.findKey(activeGames[gameId].players, { 'position': (firstPlayerPosition + 1) });
+
+		//if there wasn't one, that player was the last, so cycle back to the first position
+		if (!newFirstPlayerSocketId) {
+			newFirstPlayerSocketId = _.findKey(activeGames[gameId].players, { 'position': 1 });
+		}
+
+		//set our new first player
+		setFirstPlayer(gameId, newFirstPlayerSocketId);
+	}
+}
+
+// -----------------------------------------------------------[ SET FIRST PLAYER ]
+function setFirstPlayer(gameId, newFirstPlayerSocketId) {
+
+	//unset the previous first player if there is one (there won't be at the start of the game)
+	firstPlayerSocketId = getFirstPlayer(gameId);
+	if (firstPlayerSocketId) {
+		activeGames[gameId].players[firstPlayerSocketId].isFirstPlayer = false;
+	}
+
+	// set the new first player
+	activeGames[gameId].players[newFirstPlayerSocketId].isFirstPlayer = true;
+}
+
+// -----------------------------------------------------------[ GET FIRST PLAYER ]
+function getFirstPlayer(gameId) {
+	var firstPlayerSocketId = _.findKey(activeGames[gameId].players, { 'isFirstPlayer': true });
+	return firstPlayerSocketId;
+}
+
 // -----------------------------------------------------------[ MOVE A CARD TO A STACK OR ZONE ]
 function moveCardTo(gameId, card, destinationType, destination, destinationOwner) {
 
@@ -751,12 +831,6 @@ server.on('connection', function(socket){
 		sendGameState(gameId);
 	});
 
-	// -----------------------------------------------------------[ CLIENT RESPONDS TO AN INPUT REQUEST ]
-	socket.on('userInput', function(gameId, input) {
-		//TODO
-		console.log(input);
-	});
-
 	// -----------------------------------------------------------[ CLIENT TAKES A PROACTIVE ACTION WE NEED TO PROPOGATE ]
 	socket.on('userAction', function(gameId, action) {
 
@@ -799,7 +873,7 @@ server.on('connection', function(socket){
 				var origin = action.object.currentLocation.name;
 				//TODO
 				moveCardTo(gameId, action.object, 'stack', action.target, action.targetOwnerSocketId);
-				actionDescription = playerUsername + ' moved ' + action.object.name + ' from ' + origin + ' to ' + action.target + '.';
+				actionDescription = playerUsername + ' moved a card from ' + origin + ' to ' + action.target + '.';
 				break;
 
 			//target should be a die index (0-9)

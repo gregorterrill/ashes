@@ -27,17 +27,6 @@ store.socket.on('socketId', function(socketId) {
 	store.socketId = socketId;
 });
 
-// when a message is recieved, keep scrolled to bottom
-store.socket.on('chat', function(sender, msg, className){
-	vm.$broadcast('chatRecieved');
-});
-
-// recieve game state (this is only sent to the specific game)
-store.socket.on('gameStateUpdated', function(gameState) {
-	console.log('recieved a state update');
-	store.state = gameState;
-});
-
 // recieve game list
 store.socket.on('gameList', function(gameList){
 	store.gameList = gameList;
@@ -48,9 +37,20 @@ store.socket.on('prebuiltDecklists', function(lists){
 	vm.$broadcast('prebuiltDecklists', lists); //the deckloader uses this
 });
 
-// get validations results
+// get deck validation results
 store.socket.on('decklistValidated', function(playerSocketId, decklist, valid, validationError) {
 	vm.$broadcast('decklistValidated', playerSocketId, decklist, valid, validationError);
+});
+
+// recieve game state (this is only sent to the specific game)
+store.socket.on('gameStateUpdated', function(gameState) {
+	console.log('recieved a state update');
+	store.state = gameState;
+});
+
+// when a message is recieved, keep scrolled to bottom
+store.socket.on('chat', function(sender, msg, className){
+	vm.$broadcast('chatRecieved');
 });
 
 // trigger die roll animation

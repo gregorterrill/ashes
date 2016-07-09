@@ -4,6 +4,62 @@
 		"selected_items":
 		[
 			[
+				"firstPL",
+				"firstPlayerSocketId"
+			],
+			[
+				"new",
+				"newFirstPlayerSocketId"
+			],
+			[
+				"active",
+				"activeGames"
+			],
+			[
+				"last",
+				"lastPlayersBasics"
+			],
+			[
+				"all",
+				"allowSpectators"
+			],
+			[
+				"tar",
+				"targetOwnerSocketId"
+			],
+			[
+				"pla",
+				"playerSocketId"
+			],
+			[
+				"start",
+				"startingLocation"
+			],
+			[
+				"phe",
+				"pheonixbornData"
+			],
+			[
+				"spe",
+				"spellboardLimit"
+			],
+			[
+				"battle",
+				"battlefieldLimit"
+			],
+			[
+				"res",
+				"restrictions"
+			],
+			[
+				"targ",
+				"targetOwnerUsername"
+			],
+			[
+				"targetOwne",
+				"targetOwnerSocketId"
+			],
+			[
 				"deck",
 				"decklist-container"
 			],
@@ -22,10 +78,6 @@
 			[
 				"nat",
 				"nat-class"
-			],
-			[
-				"last",
-				"lastUnshuffledCard"
 			],
 			[
 				"card-b",
@@ -50,10 +102,6 @@
 			[
 				"check",
 				"checkGameStatus"
-			],
-			[
-				"pla",
-				"playerId"
 			],
 			[
 				"activ",
@@ -356,10 +404,10 @@
 	"buffers":
 	[
 		{
-			"file": "client/public/about.html",
+			"file": "server/app.js",
 			"settings":
 			{
-				"buffer_size": 1937,
+				"buffer_size": 30515,
 				"line_ending": "Unix"
 			}
 		}
@@ -371,10 +419,14 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 375.0,
-		"last_filter": "f",
+		"height": 307.0,
+		"last_filter": "fig",
 		"selected_items":
 		[
+			[
+				"fig",
+				"Figlet: Add Text"
+			],
 			[
 				"f",
 				"Figlet: Add Text"
@@ -382,10 +434,6 @@
 			[
 				"pack",
 				"Package Control: Install Package"
-			],
-			[
-				"fig",
-				"Figlet: Add Text"
 			],
 			[
 				"conver",
@@ -589,43 +637,44 @@
 	[
 		"/Users/gregorterrill/Documents/projects/ashes",
 		"/Users/gregorterrill/Documents/projects/ashes/client",
-		"/Users/gregorterrill/Documents/projects/ashes/client/public",
 		"/Users/gregorterrill/Documents/projects/ashes/client/src",
 		"/Users/gregorterrill/Documents/projects/ashes/client/src/components",
 		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/game",
 		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/ui",
-		"/Users/gregorterrill/Documents/projects/ashes/client/src/helpers",
+		"/Users/gregorterrill/Documents/projects/ashes/client/src/sass",
 		"/Users/gregorterrill/Documents/projects/ashes/server",
 		"/Users/gregorterrill/Documents/projects/ashes/server/data"
 	],
 	"file_history":
 	[
-		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/ui/contextmenu.vue",
+		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/ui/sidebar.vue",
+		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/game/die.vue",
+		"/Users/gregorterrill/Documents/projects/ashes/client/src/store.js",
+		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/game/stack.vue",
+		"/Users/gregorterrill/Documents/projects/ashes/client/src/entry.js",
+		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/game/board.vue",
+		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/game/card.vue",
 		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/ui/cardbrowser.vue",
 		"/Users/gregorterrill/Documents/projects/ashes/server/app.js",
+		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/app.vue",
+		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/ui/contextmenu.vue",
+		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/ui/deckloader.vue",
+		"/Users/gregorterrill/Documents/projects/ashes/client/src/sass/main.scss",
+		"/Users/gregorterrill/Documents/projects/ashes/server/data/cards.json",
+		"/Users/gregorterrill/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/Users/gregorterrill/Documents/projects/ashes/server/effects.js",
+		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/ui/lobby.vue",
+		"/Users/gregorterrill/Documents/projects/ashes/client/src/helpers/game.js",
+		"/Users/gregorterrill/Documents/projects/ashes/client/src/sampleGameState.json",
+		"/Users/gregorterrill/Documents/projects/ashes/server/data/decks.json",
+		"/Users/gregorterrill/Documents/projects/ashes/client/public/about.html",
 		"/Users/gregorterrill/Documents/projects/ashes/client/public/index.html",
 		"/Users/gregorterrill/Documents/projects/ashes/client/public/testpage.html",
-		"/Users/gregorterrill/Documents/projects/ashes/client/src/store.js",
-		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/ui/lobby.vue",
-		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/ui/sidebar.vue",
-		"/Users/gregorterrill/Documents/projects/ashes/client/src/entry.js",
-		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/game/die.vue",
-		"/Users/gregorterrill/Documents/projects/ashes/server/data/decks.json",
-		"/Users/gregorterrill/Documents/projects/ashes/client/src/sass/main.scss",
-		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/app.vue",
-		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/game/board.vue",
-		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/ui/deckloader.vue",
-		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/game/stack.vue",
-		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/game/card.vue",
 		"/Users/gregorterrill/Documents/projects/ashes/client/src/components/ui/infobar.vue",
-		"/Users/gregorterrill/Documents/projects/ashes/server/data/cards.json",
-		"/Users/gregorterrill/Documents/projects/ashes/server/effects.js",
-		"/Users/gregorterrill/Documents/projects/ashes/client/src/sampleGameState.json",
 		"/Users/gregorterrill/Documents/projects/ashes/.gitignore",
 		"/Users/gregorterrill/Documents/projects/ashes/server/.gitignore",
 		"/Users/gregorterrill/Documents/projects/ashes/server/data/conjurations.json",
 		"/Users/gregorterrill/Documents/projects/ashes/server/data/pheonixborn.json",
-		"/Users/gregorterrill/Documents/projects/ashes/client/src/helpers/game.js",
 		"/Users/gregorterrill/Downloads/gabriel-vue-develop-4222d0eca728937cf51c397b7ec5260f1e97ae8d/src/main.js",
 		"/Users/gregorterrill/Downloads/gabriel-vue-develop-4222d0eca728937cf51c397b7ec5260f1e97ae8d/src/App.vue",
 		"/Users/gregorterrill/Documents/projects/ashes/client/src/state.js",
@@ -725,9 +774,7 @@
 		"/Users/gregorterrill/Documents/projects/mihr-site/craft/templates/pages/_entry.twig",
 		"/Users/gregorterrill/Documents/projects/mihr-site/public/sass/base/_document.scss",
 		"/Users/gregorterrill/Documents/projects/mihr-site/craft/templates/careers/index.twig",
-		"/Users/gregorterrill/Documents/projects/mihr-site/craft/templates/news/_entry.twig",
-		"/Users/gregorterrill/Documents/projects/mihr-site/public/sass/partials/_fx.scss",
-		"/Users/gregorterrill/Documents/projects/schulich-site/wp-content/themes/schulich/js/scripts.js"
+		"/Users/gregorterrill/Documents/projects/mihr-site/craft/templates/news/_entry.twig"
 	],
 	"find":
 	{
@@ -738,6 +785,13 @@
 		"height": 93.0,
 		"where_history":
 		[
+			"/Users/gregorterrill/Documents/projects/ashes/client/src",
+			"/Users/gregorterrill/Documents/projects/ashes/client",
+			"/Users/gregorterrill/Documents/projects/ashes/client/src",
+			"/Users/gregorterrill/Documents/projects/ashes/server",
+			"/Users/gregorterrill/Documents/projects/ashes/client",
+			"/Users/gregorterrill/Documents/projects/ashes",
+			"/Users/gregorterrill/Documents/projects/ashes/client/src",
 			"/Users/gregorterrill/Documents/projects/ashes/client/src/components",
 			"/Users/gregorterrill/Documents/projects/ashes/client/src",
 			"/Users/gregorterrill/Documents/projects/ashes",
@@ -858,10 +912,6 @@
 			"/Users/jai/Workspace/talentpad_1",
 			"",
 			"*.html",
-			"",
-			"/Users/jai/Workspace/talentpad/public",
-			"",
-			"/Users/jai/Workspace/talentpad/client",
 			""
 		]
 	},
@@ -870,6 +920,56 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"rand",
+			"sendGameState",
+			"prepare",
+			"dice",
+			"sendActions",
+			"advanceGameStatusWhenReady",
+			"requestFirstFive",
+			"setup",
+			"advanceGameStatusWhenReady",
+			"checkGameStatus",
+			"action",
+			"sendActions",
+			"buttons",
+			"splice",
+			"moveCardTo",
+			"move",
+			"moveTo",
+			"deck.length",
+			"Pheonix",
+			"console.log",
+			"move",
+			"new Card",
+			"card",
+			"type",
+			".name",
+			"getCardData",
+			"new Card",
+			"create",
+			"console.lo",
+			"discard",
+			"emit('gameStat",
+			"checkGameStatus",
+			"firstFive",
+			"helpers",
+			"state.gameId",
+			".gameId",
+			"create",
+			"playerSocketId",
+			"TODO",
+			"[discard",
+			"[deck",
+			"deck",
+			"remove",
+			"chat",
+			"room",
+			"roomId",
+			"gameId",
+			"chatLog",
+			"gameStateUpdated",
+			"store.state",
 			".emit('chat'",
 			"store.socket.emit('chat'",
 			"cap",
@@ -947,57 +1047,7 @@
 			"media",
 			"sideButton",
 			"jumpLinks",
-			"page-content",
-			"page-summary",
-			"page-cont",
-			"clearfix",
-			"jumpLinks",
-			"main",
-			"page-contentmain",
-			"page-content",
-			".inside",
-			".inner",
-			"inner",
-			"#inner",
-			"search",
-			"#primary",
-			"#primary ul",
-			"#primary",
-			"main",
-			"search",
-			"site-header__search-back",
-			"site-header__toggle",
-			"site-header__main-nav-item",
-			"sideBar",
-			"side-bar",
-			"dirs",
-			"path",
-			"fs",
-			"public",
-			"sa-logo",
-			"window.location",
-			"?>>",
-			"slid",
-			".container",
-			"section-title",
-			"section-nav",
-			"section-title",
-			"related",
-			"section-nav--masthead",
-			"section-nav",
-			".section-nav",
-			".section-title",
-			"module",
-			"org",
-			"pageBg",
-			".html",
-			"phab",
-			"%}\n",
-			"back",
-			"lang",
-			"share",
-			"5rem",
-			"lang"
+			"page-content"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1005,6 +1055,9 @@
 		"regex": false,
 		"replace_history":
 		[
+			"advanceGameStatusWhenReady",
+			"game",
+			"gameId",
 			"",
 			"\"logo-blue\"",
 			"\"logo-yellow\"",
@@ -1055,19 +1108,19 @@
 			[
 				{
 					"buffer": 0,
-					"file": "client/public/about.html",
+					"file": "server/app.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1937,
+						"buffer_size": 30515,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								978,
-								978
+								18082,
+								18082
 							]
 						],
 						"settings":
@@ -1077,9 +1130,19 @@
 							{
 								"close":
 								{
+									"1":
+									[
+										18081,
+										18082
+									]
 								},
 								"open":
 								{
+									"1":
+									[
+										17963,
+										17964
+									]
 								}
 							},
 							"bracket_highlighter.regions":
@@ -1140,11 +1203,12 @@
 								"bh_tag_close",
 								"bh_tag_content"
 							],
-							"syntax": "Packages/Craft-Twig/Syntaxes/Craft-Twig.tmLanguage",
+							"color_scheme": "Packages/User/Color Highlighter/themes/Aurora (SL).tmTheme",
+							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 296.0,
+						"translation.y": 14048.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -1196,7 +1260,7 @@
 	"project": "ashes.sublime-project",
 	"replace":
 	{
-		"height": 46.0
+		"height": 66.0
 	},
 	"save_all_on_build": true,
 	"select_file":
