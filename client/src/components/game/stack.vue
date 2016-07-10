@@ -91,6 +91,7 @@ export default {
 								playerSocketId: store.socketId,
 								actionVerb: 'move',
 								object: store.state.players[store.socketId].deck[Math.floor(Math.random() * store.state.players[store.socketId].deck.length)],
+								targetType: 'stack',
 								target: 'hand',
 								targetOwnerSocketId: store.socketId
 							});

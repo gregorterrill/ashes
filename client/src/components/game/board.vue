@@ -21,7 +21,7 @@
 	margin-bottom:0.25rem;
 }
 
-.board__areas {
+.board__zones {
 	flex:1;
 	display: flex;
   flex-direction: column;
@@ -45,9 +45,21 @@
 }
 
 .board--you {
-	.board__areas {
+	.board__zones {
 		flex-direction: column-reverse;
 	}
+}
+
+.card-preview {
+	position:fixed;
+	z-index:90;
+	top:4px;
+	right:0;
+	width:299px;
+	height:418px;
+	background-size:299px 418px;
+	border-radius:10px;
+	box-shadow: -2px 2px 6px black;
 }
 </style>
 
@@ -77,18 +89,27 @@
 				</div>
 			</div>
 		</div>
-		<div v-if="(gameRound >= 0)" class="board__areas">
-			<div class="area area--spellboard">
-				<span class="area__title">Spellboard (0/{{ player.spellboard.limit }})</span>
-				<div v-for="slot in player.spellboard.slots" class="area__slot"></div>
+		<div v-if="(gameRound >= 0)" class="board__zones">
+			<div class="zone zone--spellboard">
+				<span class="zone__title">Spellboard
+					<span class="zone__limit">({{ player.spellboard.slots.length }}/{{ player.spellboard.limit }})</span>
+				</span>
+				<div v-for="slot in player.spellboard.slots" class="zone__slot">
+					<card :card-data="slot"></card>
+				</div>
 			</div>
-			<div class="area area--battlefield">
-				<span class="area__title">Battlefield (0/{{ player.battlefield.limit }})</span>
-				<div v-for="slot in player.battlefield.slots" class="area__slot"></div>
+			<div class="zone zone--battlefield">
+				<span class="zone__title">Battlefield
+					<span class="zone__limit">({{ player.battlefield.slots.length }}/{{ player.battlefield.limit }})</span>
+				</span>
+				<div v-for="slot in player.battlefield.slots" class="zone__slot">
+					<card :card-data="slot"></card>
+				</div>
 			</div>
 		</div>
 		<context-menu v-ref:context></context-menu>
 		<card-browser v-ref:browser></card-browser>
+		<div v-show="cardPreviewActive" class="card-preview" v-bind:style="{ backgroundImage: 'url(' + cardPreviewUri + ')' }"></div>
 	</div>
 </template>
 
@@ -111,12 +132,30 @@ export default {
 		cardBrowser,
 		deckLoader
 	},
+	data: function() {
+		return {
+			cardBrowserActive: false,
+			cardPreviewActive: false,
+			cardPreviewUri: ''
+		}
+	},
 	events: {
 		openContext: function(contextActions, event) {
 			this.$refs.context.openMenu(contextActions, event);
 		},
 		openBrowser: function(playerSocketId, stackName) {
 			this.$refs.browser.openBrowser(playerSocketId, stackName);
+			this.cardBrowserActive = true;
+			this.cardPreviewActive = false;
+		},
+		turnPreviewOn: function(imageUri, event) {
+			if (!this.cardBrowserActive) {
+				this.cardPreviewActive = true;
+				this.cardPreviewUri = imageUri;
+			}
+		},
+		turnPreviewOff: function(event) {
+			this.cardPreviewActive = false;
 		}
 	},
 	computed: {
@@ -125,6 +164,9 @@ export default {
 		},
 		player: function() {
 			return store.state.players[this.playerId];
+		},
+		cardPreview: function() {
+
 		}
 	}
 }

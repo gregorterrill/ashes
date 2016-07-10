@@ -436,18 +436,18 @@ function buildDeck(decklist, gameId, playerSocketId) {
 	activeGames[gameId].players[playerSocketId].conjurations = conjurations;
 
 	//set up this players board zones
-	var battlefieldLimit = pheonixbornData.battlefield;
-	var spellboardLimit = pheonixbornData.spellboard;
+	activeGames[gameId].players[playerSocketId].battlefield.limit = pheonixbornData.battlefield;
+	activeGames[gameId].players[playerSocketId].spellboard.limit = pheonixbornData.spellboard;
 
 	//push empty objects to each slot they have available
-	activeGames[gameId].players[playerSocketId].battlefield.limit = battlefieldLimit;
-	for (var i = battlefieldLimit - 1; i >= 0; i--) {
+	//TODO: TEMPORARILY REMOVED, MAY NOT NEED TO DO THIS
+	/*for (var i = battlefieldLimit - 1; i >= 0; i--) {
 		activeGames[gameId].players[playerSocketId].battlefield.slots.push({});
 	}
-	activeGames[gameId].players[playerSocketId].spellboard.limit = spellboardLimit;
 	for (var i = spellboardLimit - 1; i >= 0; i--) {
 		activeGames[gameId].players[playerSocketId].spellboard.slots.push({});
 	}	
+	*/
 }
 
 // -----------------------------------------------------------[ VALIDATE A PLAYER'S FIRST FIVE ]
@@ -619,44 +619,119 @@ function moveCardTo(gameId, card, destinationType, destination, destinationOwner
 		controller: card.controller
 	};
 
-	//TODO: if the origin is a stack, we need to remove this card from that stack by its index
+	//if the origin is a stack, we need to remove this card from that stack by its index
 	if (origin.location.type === 'stack') {
 		activeGames[gameId].players[origin.controller][origin.location.name].splice(origin.location.position, 1);
 	}
 	
-	//TODO: if the origin is a zone, we need to remove this card and any attachments from that zone slot
-	
-	//TODO: if the destination is a stack, we need to add this card to the top of that stack
-	
-	//TODO: if the destination is a zone, we need to add this card to the next available zone slot, unless the zone is full
+	//if the origin is a zone, we need to remove this card and any attachments from that zone slot
+	if (origin.location.type === 'zone') {
+		activeGames[gameId].players[origin.controller][origin.location.name].splice(origin.location.position, 1);
+		//TODO: handle attachments, like alteration spells
+		
+	}
 
-	//TODO: if the destination is a stack or zone controlled by a different player than the origin, 
+	// if the destination is a stack or zone controlled by a different player than the origin, 
 	// we need to update the controller of the card
+	// TODO: this is untested, need to check if it actually works!
+	if (destinationOwner !== origin.controller) {
+		card.controller = destinationOwner;
+	}
 
-
+	//if the destination is a stack, we need to add this card to the top of that stack
 	if (destinationType === 'stack') {
 
-		activeGames[gameId].players[origin.controller][origin.location];
-
+		//update the current location
 		card.currentLocation = {
-			type: 'stack',
+			type: destinationType,
 			name: destination,
 			position: activeGames[gameId].players[destinationOwner][destination].length
 		};
 
+		//remove all of the card's tokens since it's being taken out of play
+		card.tokens = {
+			wound: 0,
+			status: 0,
+			exhaustion: 0,
+			charm: 0
+		};
+
+		//add to top of stack (beginning of array)
 		activeGames[gameId].players[destinationOwner][destination].unshift(card);
 
-	} else {
+	//if the destination is a zone, we need to add this card to the next available zone slot, unless the zone is full
+	} else if (destinationType === 'zone') {
 
+		//add to next available slot in zone
+		var limit = activeGames[gameId].players[destinationOwner][destination].limit;
+		var usedSlots = activeGames[gameId].players[destinationOwner][destination].slots.length;
 
+		//update the current location
+		card.currentLocation = {
+			type: destinationType,
+			name: destination,
+			position: usedSlots
+		};
 
+		//if there are free slots, put it there
+		if (usedSlots < limit) {
+			activeGames[gameId].players[destinationOwner][destination].slots.push(card);
+		} else {
+			//TODO: otherwise discard it (generally this should be disallowed before it happens)
+			activeGames[gameId].players[origin.controller].discard.unshift(card);
+		}
 	}
 
+	//TODO: we also need to do the below for ZONES
+
 	//after moving cards, we need to update the positions of their origin and destination stacks
-	activeGames[gameId].players[origin.controller][origin.location.name] = updateCardPositions(activeGames[gameId].players[origin.controller][origin.location.name]);
-	activeGames[gameId].players[destinationOwner][destination] = updateCardPositions(activeGames[gameId].players[destinationOwner][destination]);
+	if (origin.location.type === 'stack') {
+		activeGames[gameId].players[origin.controller][origin.location.name] = updateCardPositions(activeGames[gameId].players[origin.controller][origin.location.name]);
+	}
+
+	if (destinationType === 'stack') {
+		activeGames[gameId].players[destinationOwner][destination] = updateCardPositions(activeGames[gameId].players[destinationOwner][destination]);
+	}
+}
+
+// -----------------------------------------------------------[ ADD TOKENS TO CARD ]
+function addTokenToCard(gameId, tokenType, tokenQuantity, card, cardOwnerSocketId) {
+
+	//if we're looking at a card in zone, we need to go into slots
+	if (card.currentLocation.name === 'spellboard' || card.currentLocation.name === 'battlefield') {
+		activeGames[gameId].players[cardOwnerSocketId][card.currentLocation.name].slots[card.currentLocation.position].tokens[tokenType] += tokenQuantity;
+	} else if (card.currentLocation.name === 'unit') {
+		//TODO: how will these work?
+	} else {
+		//pheonixborn has no position (and currentLocation is just 'pheonixborn', there is no name property)
+		activeGames[gameId].players[cardOwnerSocketId][card.currentLocation].tokens[tokenType] += tokenQuantity;
+	}
 
 }
+
+// -----------------------------------------------------------[ REMOVE TOKENS FROM CARD ]
+function removeTokenFromCard(gameId, tokenType, tokenQuantity, card, cardOwnerSocketId) {
+
+	//if we're looking at a card in zone, we need to go into slots
+	if (card.currentLocation.name === 'spellboard' || card.currentLocation.name === 'battlefield') {
+		activeGames[gameId].players[cardOwnerSocketId][card.currentLocation.name].slots[card.currentLocation.position].tokens[tokenType] -= tokenQuantity;
+		//don't allow tokens to go negative
+		if (activeGames[gameId].players[cardOwnerSocketId][card.currentLocation.name].slots[card.currentLocation.position].tokens[tokenType] < 0) {
+			activeGames[gameId].players[cardOwnerSocketId][card.currentLocation.name].slots[card.currentLocation.position].tokens[tokenType] = 0;
+		}
+	} else if (card.currentLocation.name === 'unit') {
+		//TODO: how will these work?
+	} else {
+		//pheonixborn has no position (and currentLocation is just 'pheonixborn', there is no name property)
+		activeGames[gameId].players[cardOwnerSocketId][card.currentLocation].tokens[tokenType] -= tokenQuantity;
+		//don't allow tokens to go negative
+		if (activeGames[gameId].players[cardOwnerSocketId][card.currentLocation].tokens[tokenType] < 0) {
+			activeGames[gameId].players[cardOwnerSocketId][card.currentLocation].tokens[tokenType] = 0;
+		}
+	}
+}
+
+
 
 // -----------------------------------------------------------[ ADVANCE GAME STATUS ]
 // Compare number of players to max players to see if waiting
@@ -865,15 +940,33 @@ server.on('connection', function(socket){
 
 			//target should be a stack name (e.g. "deck")
 			case 'peek':
-				actionDescription = playerUsername + ' peeked at ' + targetOwnerUsername + action.target + '.';
+				//we don't need to tell other players when a player looks at their own hand
+				if (action.playerSocketId === action.targetOwnerSocketId && action.target === 'hand') {
+					actionDescription = null;
+				} else {
+					actionDescription = playerUsername + ' peeked at ' + targetOwnerUsername + action.target + '.';
+				}
 				break;
 
-			//target should be a card object
+			//object should be a card, target should be a stack or zone
 			case 'move': 
 				var origin = action.object.currentLocation.name;
-				//TODO
-				moveCardTo(gameId, action.object, 'stack', action.target, action.targetOwnerSocketId);
+				moveCardTo(gameId, action.object, action.targetType, action.target, action.targetOwnerSocketId);
 				actionDescription = playerUsername + ' moved a card from ' + origin + ' to ' + action.target + '.';
+				break;
+
+			//object should be a token type, target should be a card
+			case 'addToken': 
+				//TODO: replace the 1 with quantity from context menu
+				addTokenToCard(gameId, action.object, 1, action.target, action.targetOwnerSocketId);
+				actionDescription = playerUsername + ' added a ' + action.object + ' token to ' + action.target.name + '.';
+				break;
+
+			//object should be a token type, target should be a card
+			case 'removeToken': 
+				//TODO: replace the 1 with quantity from context menu
+				removeTokenFromCard(gameId, action.object, 1, action.target, action.targetOwnerSocketId);
+				actionDescription = playerUsername + ' removed a ' + action.object + ' token from ' + action.target.name + '.';
 				break;
 
 			//target should be a die index (0-9)
@@ -909,8 +1002,10 @@ server.on('connection', function(socket){
 
 		}
 
-		//tell everyone what happened
-		chatToGame(gameId, 'server', actionDescription);
+		//tell everyone what happened if we need to
+		if (actionDescription) {
+			chatToGame(gameId, 'server', actionDescription);
+		}
 
 		//send the updated gamestate
 		sendGameState(gameId);

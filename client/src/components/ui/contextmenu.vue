@@ -68,21 +68,23 @@ export default {
 
 		positionMenu: function(x,y) {
 
-			largestHeight = window.innerHeight - this.$els.menu.offsetHeight;
-			largestWidth = window.innerWidth - this.$els.menu.offsetWidth;
+			//first check if the click is in the bottom half of the screen {
+			var bottomHalf = (y > (window.innerHeight / 2));
 
 			//modify the y coordinate, because the parent board is positioned relative
 			y = y - this.$parent.$el.getBoundingClientRect().top;
 
-			if (y > largestHeight) {
-				y = largestHeight;
-			}
-			if (x > largestWidth) {
-				x = largestWidth;
-			}
-
+			//set the menu to be at the click
 			this.top = y + 'px';
 			this.left = x + 'px';
+
+			//if the click was on the bottom half of the screen...
+			if (bottomHalf) {
+				//after the dom updates (and we know the height of the menu), shift it up by its own height
+				this.$nextTick(function () {
+					this.top = (parseInt(this.top) - this.$els.menu.offsetHeight) + 'px';
+				});
+			}
 		},
 
 		openMenu: function(contextActions, e) {
@@ -96,9 +98,6 @@ export default {
 		},
 
 		triggerAndClose: function(action) {
-
-			console.log(action);
-
 			if (typeof action === 'function') {
 				action();
 			} else {

@@ -186,20 +186,22 @@ x:-o-prefocus, .select-container::after {
 	color:$green;
 }
 
-// -----------------------------------------------------------[ AREAS ]
-.area {
+// -----------------------------------------------------------[ ZONES ]
+.zone {
 	position:relative;
 	display: flex;
   justify-content: flex-start;
 	border-radius:6px;
 	background-color:transparentize($red,0.9);
+	height:140px;
+	min-width:100px;
 }
 
-.area--battlefield {
+.zone--battlefield {
 	background-color:transparentize($green,0.9);
 }
 
-.area__slot {
+.zone__slot {
 	margin-left:0.25rem;
 	&:first-of-type { margin-left:0; }
 	width:100px;
@@ -209,7 +211,7 @@ x:-o-prefocus, .select-container::after {
 }
 
 // -----------------------------------------------------------[ INFO OVERLAYS ]
-.stack__counter, .area__title, .board__title {
+.stack__counter, .zone__title, .board__title {
 	z-index:9;
 	position:absolute;
 	top:0;
@@ -224,6 +226,28 @@ x:-o-prefocus, .select-container::after {
 	left:auto;
 	right:0.5rem;
 	top:0.5rem;
+}
+
+.zone__title {
+	width: 140px;
+	height:50px;
+	line-height: 1;
+	padding:1rem;
+	transform: rotate(-90deg);
+	left: -100px;
+	text-align: left;
+	top: 45px;
+}
+
+.zone__limit {
+	transform:rotate(90deg);
+	display:block;
+	position:absolute;
+	width:50px;
+	text-align:center;
+	right:0;
+	top:18px;
+	font-size:0.825rem;
 }
 
 // -----------------------------------------------------------[ LAYOUT ]

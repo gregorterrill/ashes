@@ -39,7 +39,7 @@
 	width:299px;
 	height:418px;
 	background-size:299px 418px;
-	border-radius:6px;
+	border-radius:10px;
 }
 
 </style>
@@ -91,6 +91,7 @@ export default {
 		},
 		closeBrowser: function() {
 			this.viewBrowser = false;
+			this.$parent.cardBrowserActive = false;
 		}
 	}
 }
