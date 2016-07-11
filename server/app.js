@@ -11,10 +11,9 @@ var app = express();
 var http = require('http').Server(app);
 var server = require('socket.io')(http);
 var _ = require('underscore');
-
 var path = require('path');
-var publicDir = path.join(__dirname, '../client/public');
 
+var publicDir = path.join(__dirname, '../client/public');
 var lists = require('./data/decks.json');
 var cards = require('./data/cards.json');
 
@@ -29,7 +28,7 @@ app.get('/about', function (req, res) {
 });
 
 http.listen(3000, function(){
-	console.log('listening on *:3000');
+	console.log('Ashes Online is running on port 3000. Prepare for magical fun times!');
 });
 
 //   _____          __  __ ______    ____  ____       _ ______ _____ _______ _____
@@ -182,8 +181,10 @@ function sendActions(gameId, action, playerSocketId) {
 
 		case 'preparePhase':
 
-			preparePhaseRollDice(gameId);
+			//increase the round counter, re-roll and refresh all dice, determine first player if first round
+			preparePhaseAutoActions(gameId);
 
+			//send actions
 			_.each(activeGames[gameId].players, function(playerData, playerSocketId) {
 				activeGames[gameId].players[playerSocketId].actions = {
 					status: 'preparePhase',
@@ -194,6 +195,40 @@ function sendActions(gameId, action, playerSocketId) {
 					}, {
 						text: 'End prepare phase',
 						action: 'endPrepare'
+					}]
+				};
+			});
+			break;
+
+		//TODO
+		case 'playerTurnsPhase':
+			_.each(activeGames[gameId].players, function(playerData, playerSocketId) {
+				activeGames[gameId].players[playerSocketId].actions = {
+					status: 'playerTurnsPhase',
+					message: 'PLAYER TURNS PHASE: Take your actions. The round will end when both players pass in a row.',
+					buttons: [{
+						text: 'Use dice power',
+						action: 'dicePower'
+					}, {
+						text: 'Pass',
+						action: 'pass'
+					}]
+				};
+			});
+			break;
+
+		case 'recoveryPhase':
+
+			//recover all units with recovery values, remove one exhaustion token from each card, pass first player marker
+			recoveryPhaseAutoActions(gameId);
+
+			_.each(activeGames[gameId].players, function(playerData, playerSocketId) {
+				activeGames[gameId].players[playerSocketId].actions = {
+					status: 'recoveryPhase',
+					message: 'RECOVERY PHASE: Exhaust any dice you wish to re-roll next round.',
+					buttons: [{
+						text: 'End recovery phase',
+						action: 'endRecovery'
 					}]
 				};
 			});
@@ -438,16 +473,6 @@ function buildDeck(decklist, gameId, playerSocketId) {
 	//set up this players board zones
 	activeGames[gameId].players[playerSocketId].battlefield.limit = pheonixbornData.battlefield;
 	activeGames[gameId].players[playerSocketId].spellboard.limit = pheonixbornData.spellboard;
-
-	//push empty objects to each slot they have available
-	//TODO: TEMPORARILY REMOVED, MAY NOT NEED TO DO THIS
-	/*for (var i = battlefieldLimit - 1; i >= 0; i--) {
-		activeGames[gameId].players[playerSocketId].battlefield.slots.push({});
-	}
-	for (var i = spellboardLimit - 1; i >= 0; i--) {
-		activeGames[gameId].players[playerSocketId].spellboard.slots.push({});
-	}	
-	*/
 }
 
 // -----------------------------------------------------------[ VALIDATE A PLAYER'S FIRST FIVE ]
@@ -534,24 +559,32 @@ function getCardData(cardName) {
 	return cardObject;
 }
 
-// -----------------------------------------------------------[ PREPARE PHASE: ROLL ALL DICE ]
-// roll all dice and determine start player
-function preparePhaseRollDice(gameId) {
+// -----------------------------------------------------------[ PREPARE PHASE: AUTO ACTIONS ]
+// roll and refresh all dice and determine start player
+function preparePhaseAutoActions(gameId) {
+
+	//increase the round counter
+	activeGames[gameId].gameRound++;
 
 	var lastPlayersBasics = false;
 
+	//for each player...
 	_.each(activeGames[gameId].players, function(playerData, playerSocketId) {
 
 		var numBasics = 0;
 
+		//and each of their dice...
 		_.each(activeGames[gameId].players[playerSocketId].dice, function(dieData, index) {
 
-			var newFace = getDieRoll();
-			activeGames[gameId].players[playerSocketId].dice[index].face = newFace;
-			activeGames[gameId].players[playerSocketId].dice[index].exhausted = false;
+			//if it's exhausted, refresh it and re-roll it
+			if (dieData.exhausted) {
+				var newFace = getDieRoll();
+				activeGames[gameId].players[playerSocketId].dice[index].face = newFace;
+				activeGames[gameId].players[playerSocketId].dice[index].exhausted = false;
 
-			if (newFace === 'basic') {
-				numBasics++;
+				if (newFace === 'basic') {
+					numBasics++;
+				}
 			}
 
 		});
@@ -572,24 +605,29 @@ function preparePhaseRollDice(gameId) {
 		}
 
 	});
+}
 
-	//if this is not the first round, pass the first player to next in position
-	if (activeGames[gameId].gameRound > 1) {
+// -----------------------------------------------------------[ RECOVERY PHASE: AUTO ACTIONS ]
+// roll and refresh all dice and determine start player
+function recoveryPhaseAutoActions(gameId) {
+	//TODO: go through each unit and check for a recover value, if they have damage, remove that many tokens
+	//TODO: remove one exhaustion token from each card
+	
+	//STEP 4: pass the first player to next in position
+	//get the current first player's position
+	var firstPlayerPosition = activeGames[gameId].players[getFirstPlayer(gameId)].position;
 
-		//get the current first player's position
-		var firstPlayerPosition = activeGames[gameId].players[getFirstPlayer(gameId)].position;
+	//try to get the next position's socketId
+	var newFirstPlayerSocketId = _.findKey(activeGames[gameId].players, { 'position': (firstPlayerPosition + 1) });
 
-		//try to get the next position's socketId
-		var newFirstPlayerSocketId = _.findKey(activeGames[gameId].players, { 'position': (firstPlayerPosition + 1) });
-
-		//if there wasn't one, that player was the last, so cycle back to the first position
-		if (!newFirstPlayerSocketId) {
-			newFirstPlayerSocketId = _.findKey(activeGames[gameId].players, { 'position': 1 });
-		}
-
-		//set our new first player
-		setFirstPlayer(gameId, newFirstPlayerSocketId);
+	//if there wasn't one, that player was the last, so cycle back to the first position
+	if (!newFirstPlayerSocketId) {
+		newFirstPlayerSocketId = _.findKey(activeGames[gameId].players, { 'position': 1 });
 	}
+
+	//set our new first player
+	setFirstPlayer(gameId, newFirstPlayerSocketId);
+
 }
 
 // -----------------------------------------------------------[ SET FIRST PLAYER ]
@@ -626,7 +664,7 @@ function moveCardTo(gameId, card, destinationType, destination, destinationOwner
 	
 	//if the origin is a zone, we need to remove this card and any attachments from that zone slot
 	if (origin.location.type === 'zone') {
-		activeGames[gameId].players[origin.controller][origin.location.name].splice(origin.location.position, 1);
+		activeGames[gameId].players[origin.controller][origin.location.name].slots.splice(origin.location.position, 1);
 		//TODO: handle attachments, like alteration spells
 		
 	}
@@ -666,6 +704,11 @@ function moveCardTo(gameId, card, destinationType, destination, destinationOwner
 		var limit = activeGames[gameId].players[destinationOwner][destination].limit;
 		var usedSlots = activeGames[gameId].players[destinationOwner][destination].slots.length;
 
+		//if it's a ready spell, we need to check if another copy already exists, and if so, we stack onto it instead
+		if (card.type === 'readySpell') {
+			//TODO
+		}
+
 		//update the current location
 		card.currentLocation = {
 			type: destinationType,
@@ -682,13 +725,14 @@ function moveCardTo(gameId, card, destinationType, destination, destinationOwner
 		}
 	}
 
-	//TODO: we also need to do the below for ZONES
-
-	//after moving cards, we need to update the positions of their origin and destination stacks
+	//after moving cards, we need to update the positions of their origin stack/zone and destination stack
 	if (origin.location.type === 'stack') {
 		activeGames[gameId].players[origin.controller][origin.location.name] = updateCardPositions(activeGames[gameId].players[origin.controller][origin.location.name]);
+	} else {
+		activeGames[gameId].players[origin.controller][origin.location.name].slots = updateCardPositions(activeGames[gameId].players[origin.controller][origin.location.name].slots);
 	}
 
+	//we don't need to do this one for zones because we aren't prepending to the array
 	if (destinationType === 'stack') {
 		activeGames[gameId].players[destinationOwner][destination] = updateCardPositions(activeGames[gameId].players[destinationOwner][destination]);
 	}
@@ -787,7 +831,6 @@ function advanceGameStatusWhenReady(gameId) {
 
 			if (allFirstFivesValidated) {
 				//move on to first round
-				activeGames[gameId].gameRound = 1;
 				activeGames[gameId].status = 'inPlay';
 
 				//tell the players we need some action
@@ -995,6 +1038,31 @@ server.on('connection', function(socket){
 				} else {
 					actionDescription = playerUsername + ' submitted their First Five but it was invalid.';
 				}
+				break;
+
+			//TODO
+			case 'drawToFive':
+				actionDescription = playerUsername + ' tried to draw up to five.';
+				break;
+
+			//TODO
+			case 'endPrepare':
+				actionDescription = playerUsername + ' tried to end the prepare phase.';
+				break;
+
+			//TODO
+			case 'dicePower':
+				actionDescription = playerUsername + ' tried to use a dice power.';
+				break;
+
+			//TODO
+			case 'pass':
+				actionDescription = playerUsername + ' tried to pass.';
+				break;
+
+			//TODO
+			case 'endRecovery':
+				actionDescription = playerUsername + ' tried to end the recovery phase.';
 				break;
 
 			default:

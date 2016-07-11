@@ -14,7 +14,7 @@
 
 .board__player {
 	margin:auto;
-	flex:1;
+	width:23.5rem;
 }
 
 .board__row {
@@ -94,16 +94,16 @@
 				<span class="zone__title">Spellboard
 					<span class="zone__limit">({{ player.spellboard.slots.length }}/{{ player.spellboard.limit }})</span>
 				</span>
-				<div v-for="slot in player.spellboard.slots" class="zone__slot">
-					<card :card-data="slot"></card>
+				<div v-for="slot in player.spellboard.limit" class="zone__slot">
+					<card v-if="player.spellboard.slots[slot]" :card-data="player.spellboard.slots[slot]"></card>
 				</div>
 			</div>
 			<div class="zone zone--battlefield">
 				<span class="zone__title">Battlefield
 					<span class="zone__limit">({{ player.battlefield.slots.length }}/{{ player.battlefield.limit }})</span>
 				</span>
-				<div v-for="slot in player.battlefield.slots" class="zone__slot">
-					<card :card-data="slot"></card>
+				<div v-for="slot in player.battlefield.limit" class="zone__slot">
+					<card v-if="player.battlefield.slots[slot]" :card-data="player.battlefield.slots[slot]"></card>
 				</div>
 			</div>
 		</div>

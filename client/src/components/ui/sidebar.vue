@@ -10,7 +10,7 @@
 .chat__messages { 
 	list-style-type: none; 
 	margin: 0; 
-	padding: 0.5rem 0.5rem 2rem;
+	padding: 0.5rem 0 2rem;
 	height:calc(50vh - 1.5rem);
 	overflow-y:scroll;
 
@@ -18,7 +18,11 @@
 		font-size:0.825rem;
 		line-height:1.2;
 		color: white;
-		padding: 0.125rem 0; 
+		padding: 0.125rem 0.375rem; 
+
+		&:nth-of-type(odd) {
+			background-color: #1f1f1f;
+		}
 
 		&:last-of-type {
 			margin-bottom:1rem;
@@ -27,6 +31,7 @@
 		&.server-msg {
 			color:#CCC;
 			font-style:italic;
+			font-size:0.75rem;
 		}
 	}
 }
