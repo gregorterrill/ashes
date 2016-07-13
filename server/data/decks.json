@@ -174,5 +174,49 @@
 			"cer": 0,
 			"cha": 0
 		}
+	},
+	"leo": {
+		"name": "The Roaring Rose",
+		"pheonixborn": "Leo Sunshadow",
+		"deck": {
+			"Anguish": 3,
+			"Mind Probe": 3,
+			"Change Psyche": 3,
+			"Amplify": 3,
+			"Beast Tamer": 3,
+			"Memory Theft": 3,
+			"Dispel": 3,
+			"TBA": 3,
+			"TBA": 3,
+			"TBA": 3
+		},
+		"dice": {
+			"nat": 0,
+			"ill": 0,
+			"cer": 0,
+			"cha": 10
+		}
+	},
+	"victoria": {
+		"name": "The Duchess of Deception",
+		"pheonixborn": "Victoria Glassfire",
+		"deck": {
+			"Illusionary Cycle": 3,
+			"Secret Door": 3,
+			"Particle Shield": 3,
+			"Vanish": 3,
+			"Summon Shadow Spirit": 3,
+			"Summon Shadow Hound": 3,
+			"Body Inversion": 3,
+			"Flash Archer": 3,
+			"To Shadows": 3,
+			"Figures in the Fog": 3
+		},
+		"dice": {
+			"nat": 0,
+			"ill": 10,
+			"cer": 0,
+			"cha": 0
+		}
 	}
 }

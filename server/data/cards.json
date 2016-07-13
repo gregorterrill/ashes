@@ -959,6 +959,173 @@
 		"life": 3,
 		"recover": 3,
 		"abilities": []
+	},
+	"Leo Sunshadow": {
+		"type": "pheonixborn",
+		"life": 19,
+		"battlefield": 6,
+		"spellboard": 3,
+		"abilities": [
+			{
+				"name": "Summon Glow Finch",
+				"cost": ["side","exhaust","basic"]
+			}
+		],
+		"conjurations": {
+			"Glow Finch": 1
+		}
+	},
+	"Glow Finch": {
+		"type": "conjuration",
+		"location": "battlefield",
+		"attack": 0,
+		"life": 2,
+		"recover": 1,
+		"abilities": []
+	},
+	"Anguish": {
+		"type": "actionSpell",
+		"location": "discard",
+		"exclusive": "Leo Sunshadow",
+		"cost": ["basic","basic"],
+		"abilities": []
+	},
+	"Mind Probe": {
+		"type": "actionSpell",
+		"location": "discard",
+		"cost": ["main","cha-class"],
+		"abilities": []
+	},
+	"Change Psyche": {
+		"type": "actionSpell",
+		"location": "discard",
+		"cost": ["main","cha-class","basic"],
+		"abilities": []
+	},
+	"Amplify": {
+		"type": "alterationSpell",
+		"location": "unit",
+		"cost": ["main","cha-class"],
+		"abilities": []
+	},
+	"Memory Theft": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"cost": ["main"],
+		"abilities": []
+	},
+	"Dispel": {
+		"type": "actionSpell",
+		"location": "discard",
+		"cost": ["main","basic"],
+		"abilities": []
+	},
+	"Beast Tamer": {
+		"type": "ally",
+		"location": "battlefield",
+		"cost": ["main","cha-power","cha-class","basic"],
+		"attack": 3,
+		"life": 3,
+		"recover": 2,
+		"abilities": []
+	},
+	"Victoria Glassfire": {
+		"type": "pheonixborn",
+		"life": 18,
+		"battlefield": 5,
+		"spellboard": 4,
+		"abilities": [
+			{
+				"name": "Shadow Spring",
+				"cost": ["side","exhaust","ill-power"]
+			}
+		]
+	},
+	"Illusionary Cycle": {
+		"type": "actionSpell",
+		"location": "discard",
+		"exclusive": "Victoria Glassfire",
+		"cost": ["main"],
+		"abilities": []
+	},
+	"Secret Door": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"cost": ["main","ill-class","basic"],
+		"abilities": []
+	},
+	"Particle Shield": {
+		"type": "reactionSpell",
+		"location": "discard",
+		"cost": ["basic"],
+		"abilities": []
+	},
+	"Vanish": {
+		"type": "reactionSpell",
+		"location": "discard",
+		"cost": ["ill-class","ill-class"],
+		"abilities": []
+	},
+	"Body Inversion": {
+		"type": "alterationSpell",
+		"location": "unit",
+		"cost": ["main","ill-class","ill-class"],
+		"abilities": []
+	},
+	"Figures in the Fog": {
+		"type": "reactionSpell",
+		"location": "discard",
+		"cost": ["ill-class","ill-class","basic"],
+		"abilities": []
+	},
+	"To Shadows": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"cost": ["main"],
+		"abilities": []
+	},
+	"Flash Archer": {
+		"type": "ally",
+		"location": "battlefield",
+		"cost": ["main","ill-class","ill-class","basic","basic"],
+		"attack": 4,
+		"life": 2,
+		"recover": 2,
+		"abilities": []
+	},
+	"Summon Shadow Hound": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"cost": ["main"],
+		"abilities": [],
+		"conjurations": {
+			"Shadow Hound": 3
+		}
+	},
+	"Summon Shadow Spirit": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"cost": ["main"],
+		"abilities": [],
+		"conjurations": {
+			"Shadow Spirit": 4
+		}
+	},
+	"Shadow Hound": {
+		"type": "conjuration",
+		"location": "battlefield",
+		"attack": 3,
+		"life": 5,
+		"recover": 0,
+		"abilities": []
+	},
+	"Shadow Spirit": {
+		"type": "conjuration",
+		"location": "battlefield",
+		"attack": 2,
+		"life": "numberOfSummonSpells",
+		"recover": 0,
+		"abilities": []
 	}
 }
 
