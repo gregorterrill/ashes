@@ -6,6 +6,7 @@
 //  \_____\____/|_| \_|_|    |_____\_____|
 
 // -----------------------------------------------------------[ ]
+// dependencies
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
@@ -13,14 +14,15 @@ var server = require('socket.io')(http);
 var _ = require('underscore');
 var path = require('path');
 
+// make public dir available
 var publicDir = path.join(__dirname, '../client/public');
-var lists = require('./data/decks.json');
-
-var setup = require('./controllers/game-setup.js');
-var utils = require('./helpers/utils.js');
-
 app.use(express.static('../client/public'));
 
+// load list data and setup script
+var lists = require('./data/decks.json');
+var setup = require('./controllers/game-setup.js');
+
+// basic routing
 app.get('/', function(req, res){
 	res.sendFile(path.join(publicDir, 'index.html'));
 });
@@ -29,6 +31,7 @@ app.get('/about', function (req, res) {
   res.sendFile(path.join(publicDir, 'about.html'));
 });
 
+// start server
 http.listen(3000, function(){
 	console.log('Ashes Online is running on port 3000. Prepare for magical fun times!');
 });
@@ -224,132 +227,13 @@ server.on('connection', function(socket){
 		sendGameState(gameId);
 	});
 
-	// -----------------------------------------------------------[ CLIENT REQUESTS GAME STATE ]
-	socket.on('requestGameState', function(gameId) {
-		sendGameState(gameId);
-	});
-
-	// -----------------------------------------------------------[ CLIENT TAKES A PROACTIVE ACTION WE NEED TO PROPOGATE ]
+	// -----------------------------------------------------------[ CLIENT TAKES AN ACTION WE NEED TO HANDLE ]
 	socket.on('userAction', function(gameId, action) {
 
-//action:
-// 	playerSocketId: store.socketId,
-// 	actionVerb: 'shuffle',
-// 	target: this.type,
-// 	targetOwnerSocketId: this.$parent.playerId
-
-		var playerUsername = getPlayerUsername(gameId, action.playerSocketId);
-		var actionDescription = 'did something.';
-
-		//if there's a target owner, change the wording based on the relationship between acting player and target owner
-		if (action.targetOwnerSocketId) {
-			var targetOwnerUsername = getPlayerUsername(gameId, action.targetOwnerSocketId)
-			if (action.playerSocketId === action.targetOwnerSocketId) {
-				targetOwnerUsername = 'their ';
-			} else {
-				targetOwnerUsername += '\'s ';
-			}
-		}
-
-		//actually do the thing, if we need to
-		switch (action.actionVerb) {
-
-			//target should be a stack name (e.g. "deck")
-			case 'shuffle': 
-				var stack = activeGames[gameId].players[action.targetOwnerSocketId][action.target];
-				activeGames[gameId].players[action.targetOwnerSocketId][action.target] = utils.shuffle(stack);
-				actionDescription = playerUsername + ' shuffled ' + targetOwnerUsername + action.target + '.';
-				break;
-
-			//target should be a stack name (e.g. "deck")
-			case 'peek':
-				//we don't need to tell other players when a player looks at their own hand
-				if (action.playerSocketId === action.targetOwnerSocketId && action.target === 'hand') {
-					actionDescription = null;
-				} else {
-					actionDescription = playerUsername + ' peeked at ' + targetOwnerUsername + action.target + '.';
-				}
-				break;
-
-			//object should be a card, target should be a stack or zone
-			case 'move': 
-				var origin = action.object.currentLocation.name;
-				activeGames[gameId] = utils.moveCardTo(activeGames[gameId], action.object, action.targetType, action.target, action.targetOwnerSocketId);
-				actionDescription = playerUsername + ' moved a card from ' + origin + ' to ' + action.target + '.';
-				break;
-
-			//object should be a token type, target should be a card
-			case 'addToken': 
-				//TODO: replace the 1 with quantity from context menu
-				activeGames[gameId] = utils.addTokenToCard(activeGames[gameId], action.object, 1, action.target, action.targetOwnerSocketId);
-				actionDescription = playerUsername + ' added a ' + action.object + ' token to ' + action.target.name + '.';
-				break;
-
-			//object should be a token type, target should be a card
-			case 'removeToken': 
-				//TODO: replace the 1 with quantity from context menu
-				activeGames[gameId] = utils.removeTokenFromCard(activeGames[gameId], action.object, 1, action.target, action.targetOwnerSocketId);
-				actionDescription = playerUsername + ' removed a ' + action.object + ' token from ' + action.target.name + '.';
-				break;
-
-			//target should be a die index (0-9)
-			case 'roll':
-				activeGames[gameId].players[action.targetOwnerSocketId].dice[action.target].face = utils.getDieRoll();
-				actionDescription = playerUsername + ' rolled one of ' + targetOwnerUsername + ' dice.';
-				break;
-
-			//target should be a die index (0-9)
-			case 'refresh':
-				activeGames[gameId].players[action.targetOwnerSocketId].dice[action.target].exhausted = false;
-				actionDescription = playerUsername + ' refreshed one of ' + targetOwnerUsername + ' dice.';
-				break;
-
-			//target should be a die index (0-9)
-			case 'exhaust':
-				activeGames[gameId].players[action.targetOwnerSocketId].dice[action.target].exhausted = true;
-				actionDescription = playerUsername + ' exhausted one of ' + targetOwnerUsername + ' dice.';
-				break;
-
-			//there is no target
-			case 'submitFirstFive':
-				var validationResults = setup.validateFirstFive(activeGames[gameId], action.playerSocketId);
-				activeGames[gameId] = validationResults.game;
-				if (validationResults.valid) {
-					actionDescription = playerUsername + ' successfully submitted their First Five.';
-				} else {
-					actionDescription = playerUsername + ' submitted their First Five but it was invalid.';
-				}
-				break;
-
-			//TODO
-			case 'drawToFive':
-				actionDescription = playerUsername + ' tried to draw up to five.';
-				break;
-
-			//TODO
-			case 'endPrepare':
-				actionDescription = playerUsername + ' tried to end the prepare phase.';
-				break;
-
-			//TODO
-			case 'dicePower':
-				actionDescription = playerUsername + ' tried to use a dice power.';
-				break;
-
-			//TODO
-			case 'pass':
-				actionDescription = playerUsername + ' tried to pass.';
-				break;
-
-			//TODO
-			case 'endRecovery':
-				actionDescription = playerUsername + ' tried to end the recovery phase.';
-				break;
-
-			default:
-				actionDescription = playerUsername + ' tried to perform an unhandled action: ' + action.actionVerb + '.';
-
-		}
+		//handle the action 
+		var actionResults = gameFlow.handleUserAction(activeGames[gameId], action);
+		var actionDescription = actionResults.actionDescription;
+		activeGames[gameId] = actionResults.game;
 
 		//tell everyone what happened if we need to
 		if (actionDescription) {

@@ -2,8 +2,9 @@
  * GAME SETUP
  * Decklist validation
  * Deck building
- * First Five
- * Starting first round
+ * First Five validation
+ * Advance game status from lobby to first round
+ * After first round starts, passed off to Game Flow
  */
 
 var _ = require('underscore');
