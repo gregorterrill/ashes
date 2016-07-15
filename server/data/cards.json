@@ -428,7 +428,7 @@
 	"Enchanted Violinist": {
 		"type": "ally",
 		"location": "battlefield",
-		"cost": ["main"],
+		"cost": ["main","basic"],
 		"attack": 1,
 		"life": 2,
 		"recover": 0,
@@ -1027,6 +1027,46 @@
 		"attack": 3,
 		"life": 3,
 		"recover": 2,
+		"abilities": []
+	},
+	"Summon Orchid Dove": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"cost": ["main"],
+		"abilities": [],
+		"conjurations": {
+			"Orchid Dove": 5
+		}
+	},
+	"Orchid Dove": {
+		"type": "conjuration",
+		"location": "battlefield",
+		"attack": 1,
+		"life": 1,
+		"recover": 0,
+		"abilities": []
+	},
+	"Summon Nightshade Swallow": {
+		"type": "readySpell",
+		"location": "spellboard",
+		"cost": ["main"],
+		"abilities": [],
+		"conjurations": {
+			"Nightshade Swallow": 5
+		}
+	},
+	"Nightshade Swallow": {
+		"type": "conjuration",
+		"location": "battlefield",
+		"attack": 1,
+		"life": 2,
+		"recover": 1,
+		"abilities": []
+	},
+	"Remorse": {
+		"type": "reactionSpell",
+		"location": "discard",
+		"cost": ["cha-class","basic"],
 		"abilities": []
 	},
 	"Victoria Glassfire": {
