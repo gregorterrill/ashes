@@ -21,6 +21,7 @@ app.use(express.static('../client/public'));
 // load list data and setup script
 var lists = require('./data/decks.json');
 var setup = require('./controllers/game-setup.js');
+var userActions = require('./controllers/user-actions.js');
 
 // basic routing
 app.get('/', function(req, res){
@@ -97,6 +98,8 @@ function getPlayerUsername(gameId, playerSocketId) {
 // Deletes the game if their departure makes it empty
 function removePlayerFromGames(playerSocketId) {
 
+	console.log('REMOVING A PLAYER FROM A GAME');
+
 	//look through each game
 	_.each(activeGames, function(game, gameId) {
 		//if they were in this game
@@ -119,12 +122,14 @@ function removePlayerFromGames(playerSocketId) {
 
 // -----------------------------------------------------------[ ADD CHAT TO GAME ]
 function chatToGame(gameId, sender, msg) {
-	activeGames[gameId].chatLog.push({
-		sender: sender,
-		message: msg
-	});
-	//emit an event that alerts the sidebar to scroll to the bottom
-	server.to(gameId).emit('chat');
+	if (activeGames[gameId]) {
+		activeGames[gameId].chatLog.push({
+			sender: sender,
+			message: msg
+		});
+		//emit an event that alerts the sidebar to scroll to the bottom
+		server.to(gameId).emit('chat');
+	}
 }
 
 
@@ -231,12 +236,12 @@ server.on('connection', function(socket){
 	socket.on('userAction', function(gameId, action) {
 
 		//handle the action 
-		var actionResults = gameFlow.handleUserAction(activeGames[gameId], action);
+		var actionResults = userActions.handleUserAction(activeGames[gameId], action);
 		var actionDescription = actionResults.actionDescription;
 		activeGames[gameId] = actionResults.game;
-
+		
 		//tell everyone what happened if we need to
-		if (actionDescription) {
+		if (actionDescription && actionDescription !== '') {
 			chatToGame(gameId, 'server', actionDescription);
 		}
 

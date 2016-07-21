@@ -4,7 +4,7 @@ var Player = function(username, position) {
 	this.username = username;
 	this.position = position;
 	this.isFirstPlayer = false;
-	this.justPassed = false;
+	this.status = 'waiting';
 	this.actions = {
 		message: 'Waiting for players to finalize decklists.',
 		buttons: []

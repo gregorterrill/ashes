@@ -6,7 +6,10 @@
 	height:140px;
 	position:relative;
 	background-size:100px 140px;
+	background-position:center center;
+	background-repeat:no-repeat;
 	border-radius:6px;
+	border:2px solid transparent;
 }
 
 .stack--empty {
@@ -90,7 +93,7 @@ export default {
 							store.socket.emit('userAction', store.state.gameId, {
 								playerSocketId: store.socketId,
 								actionVerb: 'move',
-								object: store.state.players[store.socketId].deck[Math.floor(Math.random() * store.state.players[store.socketId].deck.length)],
+								object: store.state.players[store.socketId].deck[(3 * i) + 1],
 								targetType: 'stack',
 								target: 'hand',
 								targetOwnerSocketId: store.socketId

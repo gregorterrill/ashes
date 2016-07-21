@@ -15,10 +15,6 @@ html, body {
 $red: #963535;
 $green: #185400;
 
-.targeted {
-	outline:2px solid $red;
-}
-
 // -----------------------------------------------------------[ LINKS / BUTTONS ]
 
 a {
@@ -248,6 +244,10 @@ x:-o-prefocus, .select-container::after {
 	right:0;
 	top:18px;
 	font-size:0.825rem;
+}
+
+.selected {
+	border-color:red !important;
 }
 
 // -----------------------------------------------------------[ LAYOUT ]

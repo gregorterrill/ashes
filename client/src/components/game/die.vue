@@ -1,11 +1,14 @@
 <style lang="sass">
 .die {
+	background-position:center center;
+	background-repeat:no-repeat;
 	position:relative;
 	width:29px;
 	height:29px;
 	display:inline-block;
 	margin-right: 2px;
 	border-radius:4px;
+	border:2px solid transparent;
 
 	&.die--exhausted::after {
 		content: "";

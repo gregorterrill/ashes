@@ -188,7 +188,7 @@ function removeTokenFromCard(game, tokenType, tokenQuantity, card, cardOwnerSock
 	if (card.currentLocation.name === 'spellboard' || card.currentLocation.name === 'battlefield') {
 		game.players[cardOwnerSocketId][card.currentLocation.name].slots[card.currentLocation.position].tokens[tokenType] -= tokenQuantity;
 		//don't allow tokens to go negative
-		if (activeGames[gameId].players[cardOwnerSocketId][card.currentLocation.name].slots[card.currentLocation.position].tokens[tokenType] < 0) {
+		if (games.players[cardOwnerSocketId][card.currentLocation.name].slots[card.currentLocation.position].tokens[tokenType] < 0) {
 			game.players[cardOwnerSocketId][card.currentLocation.name].slots[card.currentLocation.position].tokens[tokenType] = 0;
 		}
 	} else if (card.currentLocation.name === 'unit') {
@@ -211,6 +211,7 @@ module.exports.shuffle = shuffle;
 module.exports.getDieRoll = getDieRoll;
 module.exports.getCardData = getCardData;
 module.exports.setFirstPlayer = setFirstPlayer;
+module.exports.getFirstPlayer = getFirstPlayer;
 module.exports.removeTokenFromCard = removeTokenFromCard;
 module.exports.addTokenToCard = addTokenToCard;
 module.exports.moveCardTo = moveCardTo;

@@ -6,10 +6,13 @@
 	height:140px;
 	position:relative;
 	background-image:url('../img/back-standard.jpg');
+	background-position:center center;
+	background-repeat:no-repeat;
 	background-size:100px 140px;
 	border-radius:6px;
 	text-align:center;
 	padding-top:20px;
+	border:2px solid transparent;
 }
 
 .card__token {
@@ -35,7 +38,7 @@
 </style>
 
 <template>
-	<div @click.stop="openContext" class="card" :style="{ backgroundImage: 'url(' + imageUri + ')' }" @mouseover="turnPreviewOn" @mouseleave="turnPreviewOff" >
+	<div @click.stop="openContext" class="card{{ isSelected ? ' selected': '' }}" :style="{ backgroundImage: 'url(' + imageUri + ')' }" @mouseover="turnPreviewOn" @mouseleave="turnPreviewOff" >
 		<div v-show="(cardData.tokens.wound >= 1)" class="card__token card__token--wound">{{ cardData.tokens.wound }}</div>
 		<div v-show="(cardData.tokens.status >= 1)" class="card__token card__token--status">{{ cardData.tokens.status }}</div>
 		<div v-show="(cardData.tokens.exhaustion >= 1)" class="card__token card__token--exhaustion">{{ cardData.tokens.exhaustion }}</div>
@@ -53,6 +56,13 @@ export default {
 		}
 	},
 	computed: {
+
+		isSelected: function() {
+
+			//TODO
+			return false;
+
+		},
 
 		contextActions: function() {
 

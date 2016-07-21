@@ -11,7 +11,8 @@ var _ = require('underscore');
 var utils = require('../helpers/utils.js');
 var cards = require('../data/cards.json');
 var Card = require('../models/card.js');
-var gameFlow = require('./game-flow.js');
+var userActions = require('./user-actions.js');
+var flow = require('./game-flow.js');
 
 // -----------------------------------------------------------[ VALIDATE DECKLIST ]
 // Check the decklist, adding conjurations if needed
@@ -205,6 +206,9 @@ function buildDeck(decklist, game, playerSocketId) {
 	game.players[playerSocketId].battlefield.limit = pheonixbornData.battlefield;
 	game.players[playerSocketId].spellboard.limit = pheonixbornData.spellboard;
 
+	//update player status
+	game.players[playerSocketId].status = 'decklistValid';
+
 	return game;
 }
 
@@ -228,9 +232,10 @@ function validateFirstFive(game, playerSocketId) {
 	}
 
 	if (valid) {
-		game = gameFlow.updatePlayerActions(game, 'firstFiveValid', playerSocketId);
+		game.players[playerSocketId].status = 'firstFiveChosen';
+		game = userActions.updatePlayerActions(game, 'firstFiveValid', playerSocketId);
 	} else {
-		game = gameFlow.updatePlayerActions(game, 'firstFiveInvalid', playerSocketId);
+		game = userActions.updatePlayerActions(game, 'firstFiveInvalid', playerSocketId);
 	}
 
 	return {
@@ -247,11 +252,6 @@ function advanceGameStatusWhenReady(game) {
 	//determine what to check based on current game status
 	switch (game.status) {
 
-		case 'inPlay':
-			//if it's in play already, why are we even here?
-			return false;
-			break;
-
 		case 'waiting':
 			//if we have fewer than the player cap, we're still waiting
 			var numPlayers = _.keys(game.players).length;
@@ -263,7 +263,7 @@ function advanceGameStatusWhenReady(game) {
 				//if we have the player cap, check if everyone's validated their decklists
 				var numReadyPlayers = 0;
 				_.each(game.players, function(player, playerSocketId) {
-					if (player.deck && player.deck.length === 30) {
+					if (player.status === 'decklistValid' && player.deck && player.deck.length === 30) {
 						numReadyPlayers++;
 					}
 				});
@@ -276,7 +276,7 @@ function advanceGameStatusWhenReady(game) {
 						game.status = 'firstFive';
 						
 						//tell the players we need some action
-						game = gameFlow.updatePlayerActions(game, 'requestFirstFive');
+						game = userActions.updatePlayerActions(game, 'requestFirstFive');
 					}
 				}
 			}
@@ -286,17 +286,14 @@ function advanceGameStatusWhenReady(game) {
 			//check if everyone's submitted their first five
 			var allFirstFivesValidated = true;
 			_.each(game.players, function(playerData, playerSocketId) {
-				if (game.players[playerSocketId].actions.status !== 'waitingFirstFive') {
+				if (game.players[playerSocketId].status !== 'firstFiveChosen') {
 					allFirstFivesValidated = false;
 				}
 			});
 
+			//start game rounds if everyone is ready
 			if (allFirstFivesValidated) {
-				//move on to first round
-				game.status = 'inPlay';
-
-				//tell the players we need some action
-				game = gameFlow.updatePlayerActions(game, 'preparePhase');
+				game = flow.advancePhase(game);
 			}
 			break;
 
